@@ -1,0 +1,422 @@
+import { useEffect, useState } from 'react'
+import DemoCanvas from './DemoCanvas.jsx'
+
+// Bilingual helper: <T zh="..." en="..." />
+const T = ({ zh, en }) => (
+  <>
+    <span className="zh">{zh}</span>
+    <span className="en">{en}</span>
+  </>
+)
+
+export default function App() {
+  const [lang, setLang] = useState(() => {
+    try { return localStorage.getItem('bap-lang') || 'zh' } catch { return 'zh' }
+  })
+
+  // language -> <html> class
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle('zh', lang === 'zh')
+    root.classList.toggle('en', lang === 'en')
+    root.setAttribute('lang', lang)
+    try { localStorage.setItem('bap-lang', lang) } catch {}
+  }, [lang])
+
+  // nav shadow on scroll
+  useEffect(() => {
+    const nav = document.getElementById('nav')
+    const onScroll = () => {
+      if (nav) nav.style.boxShadow = window.scrollY > 12 ? '0 8px 30px -12px rgba(0,0,0,.6)' : 'none'
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // reveal on scroll
+  useEffect(() => {
+    const items = document.querySelectorAll('.reveal')
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(el => el.classList.add('in'))
+      return
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) }
+      })
+    }, { threshold: 0.12 })
+    items.forEach(el => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <>
+      {/* ============ NAV ============ */}
+      <header className="nav" id="nav">
+        <div className="nav__inner">
+          <a className="brand" href="#home" aria-label="BAP home">
+            <span className="brand__mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" width="28" height="28">
+                <circle cx="16" cy="16" r="6" fill="url(#bg)" />
+                <circle cx="16" cy="16" r="13" fill="none" stroke="url(#bg)" strokeWidth="2" opacity="0.6" />
+                <circle cx="27" cy="16" r="2.4" fill="#2bd4ff" />
+                <circle cx="9" cy="25" r="2" fill="#9d7bff" />
+                <defs>
+                  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stopColor="#2bd4ff" />
+                    <stop offset="1" stopColor="#9d7bff" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <span className="brand__name">BAP</span>
+          </a>
+
+          <nav className="nav__links" aria-label="primary">
+            <a href="#what"><T zh="是什么" en="What is BAP" /></a>
+            <a href="#showcase"><T zh="作品" en="Showcase" /></a>
+            <a href="#start"><T zh="上手" en="Get Started" /></a>
+            <a href="#dev"><T zh="开发者" en="Developers" /></a>
+            <a href="#community"><T zh="社区" en="Community" /></a>
+          </nav>
+
+          <div className="nav__tools">
+            <button className="lang" onClick={() => setLang(l => (l === 'zh' ? 'en' : 'zh'))} aria-label="toggle language">
+              {lang === 'zh' ? 'EN' : '中文'}
+            </button>
+            <a className="ghost-btn" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">
+              <T zh="GitHub" en="GitHub" />
+            </a>
+          </div>
+        </div>
+      </header>
+
+      {/* ============ HERO + LIVE DEMO ============ */}
+      <section className="hero" id="home">
+        <div className="hero__scrim" />
+        <div className="hero__content">
+          <div className="hero__copy">
+            <p className="eyebrow">
+              <span className="zh">Backdrop Augmentation Protocol · 背景增强协议</span>
+              <span className="en">Backdrop Augmentation Protocol</span>
+            </p>
+            <h1 className="hero__title">
+              <span className="zh">创作自由，作品互通，组合随心</span>
+              <span className="en">Create Freely.<br />Connect Seamlessly.<br />Compose Your Way.</span>
+            </h1>
+            <p className="hero__lead">
+              <span className="zh">BAP 是一套开放的互操作协议，让 Wallpaper Engine 壁纸与组件能够自由组合、互相增强。壁纸独立可用，组件是可选增强——而非依赖。</span>
+              <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
+            </p>
+            <p className="hero__note">
+              <span className="zh">⚠ BAP 是独立的开源社区项目，不代表 Wallpaper Engine 官方。</span>
+              <span className="en">⚠ BAP is an independent open-source community project and is not affiliated with Wallpaper Engine.</span>
+            </p>
+            <div className="hero__cta">
+              <a className="btn primary" href="#demo"><T zh="体验组合效果 ↓" en="Try the combo ↓" /></a>
+              <a className="btn outline" href="#what"><T zh="了解 BAP" en="What is BAP" /></a>
+            </div>
+          </div>
+
+          <DemoCanvas />
+        </div>
+
+        <a className="scroll-cue" href="#what" aria-label="scroll">
+          <span />
+        </a>
+      </section>
+
+      {/* ============ WHAT IS BAP ============ */}
+      <section className="section reveal" id="what">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="协议体系" en="The protocol" /></p>
+            <h2><T zh="BAP 是什么？" en="What is BAP?" /></h2>
+            <p className="sec-lead">
+              <span className="zh">BAP 定义了一套开放约定，让「宿主壁纸」与「增强组件」在不必绑定同一作者、同一账号或同一 SDK 的前提下互相发现、组合与增强。</span>
+              <span className="en">BAP defines open conventions so that "host wallpapers" and "augmenting components" can discover, combine, and enhance each other — without binding to the same author, account, or SDK.</span>
+            </p>
+          </header>
+
+          <div className="pillars">
+            <article className="pillar reveal">
+              <div className="pillar__icon" style={{ '--c': '#2bd4ff' }}>
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 9h18" /></svg>
+              </div>
+              <h3><span className="zh">Host · 宿主壁纸</span><span className="en">Host</span></h3>
+              <p>
+                <span className="zh">独立可运行的背景作品。不依赖任何组件即可使用，是组合体验的「画布」。</span>
+                <span className="en">A standalone background work. Usable with zero components — the canvas of the combined experience.</span>
+              </p>
+            </article>
+            <article className="pillar reveal">
+              <div className="pillar__icon" style={{ '--c': '#9d7bff' }}>
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 3v18M3 12h18" /><circle cx="12" cy="12" r="3" /></svg>
+              </div>
+              <h3><span className="zh">Component · 增强组件</span><span className="en">Component</span></h3>
+              <p>
+                <span className="zh">可叠加在宿主之上的增强层（时钟、音频、信息、特效）。同样可独立运行，也能与任意兼容 Host 组合。</span>
+                <span className="en">An augmentation layer (clock, audio, info, FX) layered onto a host. Runs on its own and combines with any compatible host.</span>
+              </p>
+            </article>
+            <article className="pillar reveal">
+              <div className="pillar__icon" style={{ '--c': '#5ce0c4' }}>
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 12a8 8 0 0 1 14-5" /><path d="M20 12a8 8 0 0 1-14 5" /><circle cx="12" cy="12" r="2" fill="currentColor" /></svg>
+              </div>
+              <h3><span className="zh">Companion · 可选增强</span><span className="en">Companion</span></h3>
+              <p>
+                <span className="zh">可选的本地协调层，帮助组件发现并连接 Host。它不是使用 BAP 壁纸的必要前提。</span>
+                <span className="en">An optional local coordinator that helps components find and connect to hosts. Not a requirement to use BAP wallpapers.</span>
+              </p>
+            </article>
+          </div>
+
+          {/* architecture diagram */}
+          <div className="diagram reveal">
+            <div className="diagram__col">
+              <div className="node node--host">
+                <span className="zh">宿主壁纸 Host</span><span className="en">Host wallpaper</span>
+                <small><span className="zh">独立运行</span><span className="en">runs alone</span></small>
+              </div>
+              <div className="stack">
+                <div className="node node--comp"><span className="zh">组件 A</span><span className="en">Component A</span></div>
+                <div className="node node--comp"><span className="zh">组件 B</span><span className="en">Component B</span></div>
+                <div className="node node--comp dim"><span className="zh">组件 C…</span><span className="en">Component C…</span></div>
+              </div>
+              <div className="node node--companion"><span className="zh">Companion（可选）</span><span className="en">Companion (optional)</span></div>
+            </div>
+            <div className="diagram__note">
+              <h4><span className="zh">增强，而非依赖</span><span className="en">Augmentation, not dependency</span></h4>
+              <p>
+                <span className="zh">壁纸移除所有组件后依然完整可用；组件离开某个 Host 也能独立存在。组合是「加分项」，不是「前提条件」。这也是 BAP 官网不会把「安装 Companion」描述成使用所有壁纸的必要步骤的原因。</span>
+                <span className="en">A wallpaper stays complete without any component; a component exists on its own without a specific host. Combination is a bonus, never a prerequisite — which is why this site never frames "install Companion" as required for BAP wallpapers.</span>
+              </p>
+            </div>
+          </div>
+
+          {/* open-protocol principles */}
+          <div className="principles">
+            <h3 className="principles__title"><T zh="开放协议原则" en="Open-protocol principles" /></h3>
+            <ul>
+              <li><span className="zh">不要求第三方采用官方 SDK</span><span className="en">No requirement to adopt the official SDK</span></li>
+              <li><span className="zh">不强制统一视觉风格或发布账号</span><span className="en">No enforced visual style or publishing account</span></li>
+              <li><span className="zh">兼容 ≠ 必须使用官方 SDK ≠ 官方出品</span><span className="en">Compatible ≠ must use official SDK ≠ official product</span></li>
+              <li><span className="zh">作品独立发布、独立维护、独立署名</span><span className="en">Works are published, maintained, and credited independently</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ SHOWCASE ============ */}
+      <section className="section section--alt reveal" id="showcase">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="真实作品" en="Showcase" /></p>
+            <h2><T zh="看看组合能做什么" en="See what combining looks like" /></h2>
+            <p className="sec-lead">
+              <span className="zh">以下为基于首批官方作品的演示组合。每个组合都是「一个 Host + 若干 Component」的真实运行效果。</span>
+              <span className="en">These are demo combinations based on the first official works. Each combo is a real "one Host + several Components" running effect.</span>
+            </p>
+          </header>
+
+          <div className="cards">
+            <article className="card reveal">
+              <div className="card__preview card__preview--a"><span className="card__tag">Host + Clock + Audio</span></div>
+              <div className="card__body">
+                <h3><span className="zh">极光 · 沉浸式桌面</span><span className="en">Aurora · immersive desktop</span></h3>
+                <p><span className="zh">流动极光作为 Host，叠加时钟与音频可视化，桌面即刻拥有律动。</span><span className="en">Flowing aurora as the host, layered with clock and audio visualizer for a living desktop.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/" target="_blank" rel="noopener"><span className="zh">在 Steam 创意工坊查看 →</span><span className="en">View on Steam Workshop →</span></a>
+              </div>
+            </article>
+            <article className="card reveal">
+              <div className="card__preview card__preview--b"><span className="card__tag">Host + Weather + Frame</span></div>
+              <div className="card__body">
+                <h3><span className="zh">星云 · 信息桌面</span><span className="en">Nebula · info desktop</span></h3>
+                <p><span className="zh">深空星云作底，挂接天气信息与边框，安静而不单调。</span><span className="en">Deep-space nebula base with weather info and a frame — calm yet never empty.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/" target="_blank" rel="noopener"><span className="zh">在 Steam 创意工坊查看 →</span><span className="en">View on Steam Workshop →</span></a>
+              </div>
+            </article>
+            <article className="card reveal">
+              <div className="card__preview card__preview--c"><span className="card__tag">Host + Particles</span></div>
+              <div className="card__body">
+                <h3><span className="zh">网格 · 轻量组合</span><span className="en">Mesh · lightweight combo</span></h3>
+                <p><span className="zh">节点网格承担主体，仅叠加粒子层即可完成一次轻量增强。</span><span className="en">A node mesh carries the scene; a single particle layer completes a lightweight augmentation.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/" target="_blank" rel="noopener"><span className="zh">在 Steam 创意工坊查看 →</span><span className="en">View on Steam Workshop →</span></a>
+              </div>
+            </article>
+          </div>
+          <p className="showcase__foot">
+            <span className="zh">展示与推荐不等于官方制作、维护或背书。官方与独立兼容作品的边界见运营约定。</span>
+            <span className="en">Featuring or recommending a work is not an endorsement. Boundaries between official and independent works follow our operations policy.</span>
+          </p>
+        </div>
+      </section>
+
+      {/* ============ GET STARTED ============ */}
+      <section className="section reveal" id="start">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="普通用户" en="Get started" /></p>
+            <h2><T zh="三条上手路径" en="Three ways to begin" /></h2>
+            <p className="sec-lead">
+              <span className="zh">教程以「你要完成的任务」组织，而非照搬开发者文档。</span>
+              <span className="en">Tutorials are organized by the task you want to finish — not by copying the developer README.</span>
+            </p>
+          </header>
+
+          <div className="paths">
+            <div className="path reveal">
+              <span className="path__num">1</span>
+              <h3><T zh="使用一张壁纸" en="Use a wallpaper" /></h3>
+              <ol>
+                <li><span className="zh">在 Steam 订阅喜欢的 BAP 壁纸</span><span className="en">Subscribe to a BAP wallpaper on Steam</span></li>
+                <li><span className="zh">它独立即可运行，无需任何组件</span><span className="en">It runs on its own — no component needed</span></li>
+                <li><span className="zh">在 Wallpaper Engine 中设为桌面</span><span className="en">Set it as your desktop in Wallpaper Engine</span></li>
+              </ol>
+            </div>
+            <div className="path reveal">
+              <span className="path__num">2</span>
+              <h3><span className="zh">独立运行一个组件</span><span className="en">Run a component alone</span></h3>
+              <ol>
+                <li><span className="zh">安装可选 Companion（GitHub Releases）</span><span className="en">Install the optional Companion (GitHub Releases)</span></li>
+                <li><span className="zh">选择一个组件，它可脱离特定壁纸独立显示</span><span className="en">Pick a component — it can show without a specific wallpaper</span></li>
+                <li><span className="zh">按需开关，零绑定</span><span className="en">Toggle freely, zero lock-in</span></li>
+              </ol>
+            </div>
+            <div className="path reveal">
+              <span className="path__num">3</span>
+              <h3><span className="zh">组合壁纸与组件</span><span className="en">Combine wallpaper + component</span></h3>
+              <ol>
+                <li><span className="zh">确认双方都标注 BAP 兼容</span><span className="en">Make sure both are tagged BAP-compatible</span></li>
+                <li><span className="zh">在 Companion 中连接到 Host</span><span className="en">Connect to the host via Companion</span></li>
+                <li><span className="zh">组合效果即时呈现，可随时拆回独立态</span><span className="en">The combo appears instantly and can be split back anytime</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <div className="start-actions">
+            <a className="btn primary" href="https://store.steampowered.com/" target="_blank" rel="noopener"><T zh="前往 Steam 订阅" en="Subscribe on Steam" /></a>
+            <a className="btn outline" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="下载可选 Companion" en="Download Companion (optional)" /></a>
+            <a className="btn ghost" href="#faq"><T zh="常见问题 FAQ" en="FAQ" /></a>
+          </div>
+
+          <div className="faq" id="faq">
+            <h3><T zh="常见问题" en="FAQ" /></h3>
+            <details><summary><span className="zh">组件不显示怎么办？</span><span className="en">My component isn't showing.</span></summary>
+              <p><span className="zh">确认 Companion 已安装并正在运行，且 Host 与组件均为 BAP 兼容版本。多数情况为版本不匹配。</span><span className="en">Make sure Companion is installed and running, and that both host and component are BAP-compatible versions. Most cases are version mismatches.</span></p>
+            </details>
+            <details><summary><span className="zh">必须用 Companion 才能用 BAP 壁纸吗？</span><span className="en">Do I need Companion to use BAP wallpapers?</span></summary>
+              <p><span className="zh">不需要。壁纸本身独立可用；Companion 只是让组件更方便地与 Host 组合的可选项。</span><span className="en">No. Wallpapers work on their own; Companion is only an optional convenience for combining components with a host.</span></p>
+            </details>
+            <details><summary><span className="zh">第三方作品是官方的吗？</span><span className="en">Are third-party works official?</span></summary>
+              <p><span className="zh">不是。展示或推荐不等于官方制作或背书，作品由各自作者独立发布与署名。</span><span className="en">No. Featuring is not endorsement; works are published and credited independently by their authors.</span></p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ DEVELOPERS ============ */}
+      <section className="section section--alt reveal" id="dev">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="开发者" en="Developers" /></p>
+            <h2><T zh="接入协议" en="Build with BAP" /></h2>
+            <p className="sec-lead">
+              <span className="zh">规范权威来源为 spec 仓库，官方 SDK 仅为参考实现，不是兼容性强制前提。</span>
+              <span className="en">The authoritative spec lives in the spec repo; the official SDK is a reference implementation, not a compatibility requirement.</span>
+            </p>
+          </header>
+
+          <div className="dev-grid">
+            <div className="dev-card reveal">
+              <h3><span className="zh">Host 快速开始</span><span className="en">Host quick start</span></h3>
+              <p><span className="zh">声明你的壁纸为 BAP Host，暴露标准接入点，即可被任意兼容组件发现。</span><span className="en">Declare your wallpaper a BAP host, expose the standard entry point, and any compatible component can find it.</span></p>
+              <pre><code>{`# host manifest (bap.json)
+{
+  "role": "host",
+  "protocol": "bap/0.1",
+  "id": "your.wallpaper.id"
+}`}</code></pre>
+            </div>
+            <div className="dev-card reveal">
+              <h3><span className="zh">Component 快速开始</span><span className="en">Component quick start</span></h3>
+              <p><span className="zh">以组件角色发布，声明可组合能力；无需依赖某个 Host 即可独立运行。</span><span className="en">Publish with the component role and declare combinable capabilities; run independently of any host.</span></p>
+              <pre><code>{`# component manifest (bap.json)
+{
+  "role": "component",
+  "protocol": "bap/0.1",
+  "augments": ["host"]
+}`}</code></pre>
+            </div>
+            <div className="dev-card reveal">
+              <h3><span className="zh">SDK / API / Conformance</span><span className="en">SDK / API / Conformance</span></h3>
+              <p><span className="zh">参考 SDK、API 文档与一致性（Conformance）校验，帮助你的作品通过兼容测试。</span><span className="en">Reference SDK, API docs, and conformance checks help your work pass compatibility tests.</span></p>
+              <a className="card__link" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">打开规范仓库 →</span><span className="en">Open spec repo →</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ COMMUNITY ============ */}
+      <section className="section reveal" id="community">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="社区与共建" en="Community" /></p>
+            <h2><T zh="开放创作，独立署名" en="Open creation, independent credit" /></h2>
+            <p className="sec-lead">
+              <span className="zh">BAP 是开源协议。你可以独立创作、独立发布、保持署名，也可以与我们共研。</span>
+              <span className="en">BAP is an open-source protocol. Create independently, publish independently, keep your credit — or co-build with us.</span>
+            </p>
+          </header>
+          <div className="community">
+            <a className="community__item reveal" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">
+              <h3><span className="zh">开源仓库</span><span className="en">Source repos</span></h3>
+              <p><span className="zh">协议、SDK 与示例均公开</span><span className="en">Protocol, SDK, and examples are public</span></p>
+            </a>
+            <a className="community__item reveal" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">
+              <h3><span className="zh">交流渠道</span><span className="en">Channels</span></h3>
+              <p><span className="zh">讨论、答疑与共建入口</span><span className="en">Discussion, Q&amp;A, and contribution</span></p>
+            </a>
+            <a className="community__item reveal" href="#what">
+              <h3><span className="zh">合作原则</span><span className="en">Contribution principles</span></h3>
+              <p><span className="zh">开放、互操作、独立创作</span><span className="en">Open, interoperable, independent</span></p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FOOTER ============ */}
+      <footer className="footer">
+        <div className="wrap footer__grid">
+          <div className="footer__brand">
+            <span className="brand__name">BAP</span>
+            <p><T zh="创作自由，作品互通，组合随心。" en="Create Freely. Connect Seamlessly. Compose Your Way." /></p>
+            <p className="footer__disclaim"><T zh="独立开源社区项目，不代表 Wallpaper Engine 官方。" en="Independent open-source community project, not affiliated with Wallpaper Engine." /></p>
+          </div>
+          <div className="footer__col">
+            <h4><T zh="平台职责边界" en="Platform boundaries" /></h4>
+            <ul>
+              <li><strong>Steam</strong> — <span className="zh">作品订阅分发</span><span className="en">subscription &amp; distribution</span></li>
+              <li><strong>GitHub</strong> — <span className="zh">规范 / 源码 / Release</span><span className="en">spec / source / releases</span></li>
+              <li><strong>BAP 官网</strong> — <span className="zh">品牌与共同认知</span><span className="en">brand &amp; shared understanding</span></li>
+            </ul>
+          </div>
+          <div className="footer__col">
+            <h4><T zh="链接" en="Links" /></h4>
+            <ul>
+              <li><a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="https://steamcommunity.com/" target="_blank" rel="noopener">Steam Workshop</a></li>
+              <li><a href="#what">What is BAP</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="wrap footer__legal">
+          <span>© <span id="year">{new Date().getFullYear()}</span> BAP Contributors</span>
+          <span className="zh">本站为初版 MVP，内容随首批官方作品正式发布而更新。</span>
+          <span className="en">This is an MVP. Content updates as the first official works ship.</span>
+        </div>
+      </footer>
+    </>
+  )
+}
