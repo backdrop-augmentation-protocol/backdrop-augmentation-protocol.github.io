@@ -81,7 +81,19 @@ export default function App() {
             <a href="#community"><T zh="社区" en="Community" /></a>
           </nav>
 
-          <div className="nav__tools">
+          <div className="nav__right">
+            <div className="nav__quick" aria-label="quick actions">
+              <a className="nav__quick-btn steam" href="https://store.steampowered.com/" target="_blank" rel="noopener">
+                <svg className="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M9 12l2 2 4-4" /></svg>
+                <T zh="Steam 订阅" en="Steam" />
+              </a>
+              <a className="nav__quick-btn" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">
+                <T zh="下载 Companion" en="Companion" />
+              </a>
+              <a className="nav__quick-btn" href="#faq">
+                <T zh="常见问题" en="FAQ" />
+              </a>
+            </div>
             <button className="lang" onClick={() => setLang(l => (l === 'zh' ? 'en' : 'zh'))} aria-label="toggle language">
               {lang === 'zh' ? 'EN' : '中文'}
             </button>
