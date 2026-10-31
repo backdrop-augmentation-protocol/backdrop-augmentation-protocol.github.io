@@ -307,12 +307,6 @@ export default function App() {
             </div>
           </div>
 
-          <div className="start-actions">
-            <a className="btn primary" href="https://store.steampowered.com/" target="_blank" rel="noopener"><T zh="前往 Steam 订阅" en="Subscribe on Steam" /></a>
-            <a className="btn outline" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="下载可选 Companion" en="Download Companion (optional)" /></a>
-            <a className="btn ghost" href="#faq"><T zh="常见问题 FAQ" en="FAQ" /></a>
-          </div>
-
           <div className="faq" id="faq">
             <h3><T zh="常见问题" en="FAQ" /></h3>
             <details><summary><span className="zh">组件不显示怎么办？</span><span className="en">My component isn't showing.</span></summary>
