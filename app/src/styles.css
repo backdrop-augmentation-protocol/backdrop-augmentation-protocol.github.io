@@ -256,7 +256,7 @@ html.en .zh { display: none; }
 
 /* ============ FOOTER ============ */
 .footer { border-top: 1px solid var(--border); padding: 54px 22px 30px; background: var(--bg-2); }
-.footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 30px; }
+.footer__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; }
 .footer__brand p { color: var(--muted); font-size: 14px; max-width: 34ch; }
 .footer__disclaim { color: #ffd28a; font-size: 12.5px; }
 .footer__col h4 { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }

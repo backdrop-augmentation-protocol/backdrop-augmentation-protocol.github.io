@@ -407,14 +407,6 @@ export default function App() {
             <p className="footer__disclaim"><T zh="独立开源社区项目，不代表 Wallpaper Engine 官方。" en="Independent open-source community project, not affiliated with Wallpaper Engine." /></p>
           </div>
           <div className="footer__col">
-            <h4><T zh="平台职责边界" en="Platform boundaries" /></h4>
-            <ul>
-              <li><strong>Steam</strong> — <span className="zh">作品订阅分发</span><span className="en">subscription &amp; distribution</span></li>
-              <li><strong>GitHub</strong> — <span className="zh">规范 / 源码 / Release</span><span className="en">spec / source / releases</span></li>
-              <li><strong>BAP 官网</strong> — <span className="zh">品牌与共同认知</span><span className="en">brand &amp; shared understanding</span></li>
-            </ul>
-          </div>
-          <div className="footer__col">
             <h4><T zh="链接" en="Links" /></h4>
             <ul>
               <li><a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">GitHub</a></li>
