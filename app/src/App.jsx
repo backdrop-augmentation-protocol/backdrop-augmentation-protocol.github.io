@@ -76,9 +76,9 @@ export default function App() {
           <nav className="nav__links" aria-label="primary">
             <a href="#what"><T zh="是什么" en="What is BAP" /></a>
             <a href="#showcase"><T zh="作品" en="Showcase" /></a>
-            <a href="#start"><T zh="上手" en="Get Started" /></a>
-            <a href="#dev"><T zh="开发者" en="Developers" /></a>
-            <a href="#community"><T zh="社区" en="Community" /></a>
+            <a className="ext" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="文档" en="Docs" /></a>
+            <a className="ext" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="路线图" en="Roadmap" /></a>
+            <a className="ext" href="https://github.com/sponsors" target="_blank" rel="noopener"><T zh="赞助" en="Sponsor" /></a>
           </nav>
 
           <div className="nav__right">
