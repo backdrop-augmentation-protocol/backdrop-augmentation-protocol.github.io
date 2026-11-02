@@ -220,53 +220,58 @@ export default function DemoCanvas() {
   }, [])
 
   return (
-    <>
-      <canvas ref={canvasRef} className="hero__canvas" aria-hidden="true" />
-      <aside className="demo-panel" id="demo" aria-label="live BAP demo">
-        <div className="demo-panel__head">
-          <span className="dot" />
-          <span className="zh">实时演示：本站即一个 BAP Host</span>
-          <span className="en">Live demo: this site is a BAP Host</span>
-        </div>
-        <div className="demo-panel__body">
-          <div className="demo-group">
-            <label className="demo-label">
-              <span className="zh">宿主壁纸（Host）</span>
-              <span className="en">Host wallpaper</span>
-            </label>
-            <div className="seg">
-              {HOSTS.map(h => (
-                <button key={h} className={host === h ? 'active' : ''} onClick={() => setHost(h)}>
-                  <span className="zh">{HOST_LABELS[h].zh}</span>
-                  <span className="en">{HOST_LABELS[h].en}</span>
-                </button>
-              ))}
-            </div>
+    <div className="demo-win" id="demo" aria-label="live BAP demo">
+      <div className="demo-win__bar">
+        <span className="tl tl--r" aria-hidden="true" />
+        <span className="tl tl--y" aria-hidden="true" />
+        <span className="tl tl--g" aria-hidden="true" />
+        <span className="demo-win__title">
+          <span className="zh">BAP 实时演示 — 一个 Host 与若干 Components</span>
+          <span className="en">BAP Live — one Host, several Components</span>
+        </span>
+        <span className="demo-win__live"><span className="dot" /><span className="zh">运行中</span><span className="en">Live</span></span>
+      </div>
+      <div className="demo-win__stage">
+        <canvas ref={canvasRef} aria-hidden="true" />
+      </div>
+      <div className="demo-win__panel">
+        <div className="demo-group">
+          <label className="demo-label">
+            <span className="zh">宿主壁纸（Host）</span>
+            <span className="en">Host wallpaper</span>
+          </label>
+          <div className="seg">
+            {HOSTS.map(h => (
+              <button key={h} className={host === h ? 'active' : ''} onClick={() => setHost(h)}>
+                <span className="zh">{HOST_LABELS[h].zh}</span>
+                <span className="en">{HOST_LABELS[h].en}</span>
+              </button>
+            ))}
           </div>
-          <div className="demo-group">
-            <label className="demo-label">
-              <span className="zh">增强组件（Components）</span>
-              <span className="en">Components</span>
-            </label>
-            <div className="toggles">
-              {COMPS.map(c => (
-                <button
-                  key={c}
-                  className={'tg' + (comps[c] ? ' active' : '')}
-                  onClick={() => setComps(prev => ({ ...prev, [c]: !prev[c] }))}
-                >
-                  <span className="zh">{COMP_LABELS[c].zh}</span>
-                  <span className="en">{COMP_LABELS[c].en}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <p className="demo-hint">
-            <span className="zh">关闭所有组件，壁纸依旧独立运行——这正是「增强而非依赖」。</span>
-            <span className="en">Turn off every component and the wallpaper still runs alone — that is "Augmentation, not dependency."</span>
-          </p>
         </div>
-      </aside>
-    </>
+        <div className="demo-group">
+          <label className="demo-label">
+            <span className="zh">增强组件（Components）</span>
+            <span className="en">Components</span>
+          </label>
+          <div className="toggles">
+            {COMPS.map(c => (
+              <button
+                key={c}
+                className={'tg' + (comps[c] ? ' active' : '')}
+                onClick={() => setComps(prev => ({ ...prev, [c]: !prev[c] }))}
+              >
+                <span className="zh">{COMP_LABELS[c].zh}</span>
+                <span className="en">{COMP_LABELS[c].en}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="demo-hint">
+          <span className="zh">关闭所有组件，壁纸依旧独立运行——这正是「增强而非依赖」。</span>
+          <span className="en">Turn off every component and the wallpaper still runs alone — that is "Augmentation, not dependency."</span>
+        </p>
+      </div>
+    </div>
   )
 }

@@ -27,7 +27,7 @@ export default function App() {
   useEffect(() => {
     const nav = document.getElementById('nav')
     const onScroll = () => {
-      if (nav) nav.style.boxShadow = window.scrollY > 12 ? '0 8px 30px -12px rgba(0,0,0,.6)' : 'none'
+      if (nav) nav.style.boxShadow = window.scrollY > 12 ? '0 10px 30px -18px rgba(30,58,95,.25)' : 'none'
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
@@ -60,12 +60,12 @@ export default function App() {
               <svg viewBox="0 0 32 32" width="28" height="28">
                 <circle cx="16" cy="16" r="6" fill="url(#bg)" />
                 <circle cx="16" cy="16" r="13" fill="none" stroke="url(#bg)" strokeWidth="2" opacity="0.6" />
-                <circle cx="27" cy="16" r="2.4" fill="#2bd4ff" />
-                <circle cx="9" cy="25" r="2" fill="#9d7bff" />
+                <circle cx="27" cy="16" r="2.4" fill="#38bdf8" />
+                <circle cx="9" cy="25" r="2" fill="#8b5cf6" />
                 <defs>
                   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#2bd4ff" />
-                    <stop offset="1" stopColor="#9d7bff" />
+                    <stop offset="0" stopColor="#38bdf8" />
+                    <stop offset="1" stopColor="#8b5cf6" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -104,39 +104,34 @@ export default function App() {
         </div>
       </header>
 
-      {/* ============ HERO + LIVE DEMO ============ */}
+      {/* ============ HERO (centered) + LIVE DEMO WINDOW ============ */}
       <section className="hero" id="home">
-        <div className="hero__scrim" />
+        <div className="hero__glow hero__glow--a" aria-hidden="true" />
+        <div className="hero__glow hero__glow--b" aria-hidden="true" />
         <div className="hero__content">
-          <div className="hero__copy">
-            <p className="eyebrow">
-              <span className="zh">Backdrop Augmentation Protocol · 背景增强协议</span>
-              <span className="en">Backdrop Augmentation Protocol</span>
-            </p>
-            <h1 className="hero__title">
-              <span className="zh">创作自由，作品互通，组合随心</span>
-              <span className="en">Create Freely.<br />Connect Seamlessly.<br />Compose Your Way.</span>
-            </h1>
-            <p className="hero__lead">
-              <span className="zh">BAP 是一套开放的互操作协议，让 Wallpaper Engine 壁纸与组件能够自由组合、互相增强。壁纸独立可用，组件是可选增强——而非依赖。</span>
-              <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
-            </p>
-            <p className="hero__note">
-              <span className="zh">⚠ BAP 是独立的开源社区项目，不代表 Wallpaper Engine 官方。</span>
-              <span className="en">⚠ BAP is an independent open-source community project and is not affiliated with Wallpaper Engine.</span>
-            </p>
-            <div className="hero__cta">
-              <a className="btn primary" href="#demo"><T zh="体验组合效果 ↓" en="Try the combo ↓" /></a>
-              <a className="btn outline" href="#what"><T zh="了解 BAP" en="What is BAP" /></a>
-            </div>
+          <p className="eyebrow">
+            <span className="zh">开放互操作协议 · Open Interoperability Protocol</span>
+            <span className="en">Open Interoperability Protocol</span>
+          </p>
+          <h1 className="hero__title">
+            <span className="zh">创作自由，作品互通，<em>组合随心</em></span>
+            <span className="en">Create Freely.<br />Connect Seamlessly.<br /><em>Compose Your Way.</em></span>
+          </h1>
+          <p className="hero__lead">
+            <span className="zh">BAP 是一套开放的互操作协议，让 Wallpaper Engine 壁纸与组件能够自由组合、互相增强。壁纸独立可用，组件是可选增强——而非依赖。</span>
+            <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
+          </p>
+          <div className="hero__cta">
+            <a className="btn primary" href="#demo"><T zh="体验组合效果 ↓" en="Try the combo ↓" /></a>
+            <a className="btn outline" href="#what"><T zh="了解 BAP" en="What is BAP" /></a>
           </div>
+          <p className="hero__note">
+            <span className="zh">BAP 是独立的开源社区项目，不代表 Wallpaper Engine 官方。</span>
+            <span className="en">BAP is an independent open-source community project and is not affiliated with Wallpaper Engine.</span>
+          </p>
 
           <DemoCanvas />
         </div>
-
-        <a className="scroll-cue" href="#what" aria-label="scroll">
-          <span />
-        </a>
       </section>
 
       {/* ============ WHAT IS BAP ============ */}
@@ -153,7 +148,7 @@ export default function App() {
 
           <div className="pillars">
             <article className="pillar reveal">
-              <div className="pillar__icon" style={{ '--c': '#2bd4ff' }}>
+              <div className="pillar__icon" style={{ '--c': '#0ea5e9' }}>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 9h18" /></svg>
               </div>
               <h3><span className="zh">Host · 宿主壁纸</span><span className="en">Host</span></h3>
@@ -163,7 +158,7 @@ export default function App() {
               </p>
             </article>
             <article className="pillar reveal">
-              <div className="pillar__icon" style={{ '--c': '#9d7bff' }}>
+              <div className="pillar__icon" style={{ '--c': '#8b5cf6' }}>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 3v18M3 12h18" /><circle cx="12" cy="12" r="3" /></svg>
               </div>
               <h3><span className="zh">Component · 增强组件</span><span className="en">Component</span></h3>
@@ -173,7 +168,7 @@ export default function App() {
               </p>
             </article>
             <article className="pillar reveal">
-              <div className="pillar__icon" style={{ '--c': '#5ce0c4' }}>
+              <div className="pillar__icon" style={{ '--c': '#14b8a6' }}>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 12a8 8 0 0 1 14-5" /><path d="M20 12a8 8 0 0 1-14 5" /><circle cx="12" cy="12" r="2" fill="currentColor" /></svg>
               </div>
               <h3><span className="zh">Companion · 可选增强</span><span className="en">Companion</span></h3>
@@ -199,7 +194,7 @@ export default function App() {
               <div className="node node--companion"><span className="zh">Companion（可选）</span><span className="en">Companion (optional)</span></div>
             </div>
             <div className="diagram__note">
-              <h4><span className="zh">增强，而非依赖</span><span className="en">Augmentation, not dependency</span></h4>
+              <h4><T zh="增强，而非依赖" en="Augmentation, not dependency" /></h4>
               <p>
                 <span className="zh">壁纸移除所有组件后依然完整可用；组件离开某个 Host 也能独立存在。组合是「加分项」，不是「前提条件」。这也是 BAP 官网不会把「安装 Companion」描述成使用所有壁纸的必要步骤的原因。</span>
                 <span className="en">A wallpaper stays complete without any component; a component exists on its own without a specific host. Combination is a bonus, never a prerequisite — which is why this site never frames "install Companion" as required for BAP wallpapers.</span>
@@ -208,7 +203,7 @@ export default function App() {
           </div>
 
           {/* open-protocol principles */}
-          <div className="principles">
+          <div className="principles reveal">
             <h3 className="principles__title"><T zh="开放协议原则" en="Open-protocol principles" /></h3>
             <ul>
               <li><span className="zh">不要求第三方采用官方 SDK</span><span className="en">No requirement to adopt the official SDK</span></li>
@@ -388,6 +383,24 @@ export default function App() {
               <h3><span className="zh">合作原则</span><span className="en">Contribution principles</span></h3>
               <p><span className="zh">开放、互操作、独立创作</span><span className="en">Open, interoperable, independent</span></p>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ CLOSING CTA ============ */}
+      <section className="cta-band reveal">
+        <div className="wrap">
+          <h2>
+            <span className="zh">从一张壁纸开始，构建互通的桌面生态</span>
+            <span className="en">Start from one wallpaper. Build an interoperable desktop.</span>
+          </h2>
+          <p>
+            <span className="zh">BAP 由全球创作者共同维护，规范、SDK 与示例全部开放。无论你是想发布作品还是参与共建，这里都有你的位置。</span>
+            <span className="en">BAP is maintained by creators worldwide with open specs, SDKs, and examples. Whether you publish works or help build the protocol, you belong here.</span>
+          </p>
+          <div className="cta-band__actions">
+            <a className="btn primary" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="阅读完整文档 →" en="Read the docs →" /></a>
+            <a className="btn outline" href="#demo"><T zh="回到演示" en="Back to the demo" /></a>
           </div>
         </div>
       </section>
