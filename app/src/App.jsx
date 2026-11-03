@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import SdkFlowDemo from './SdkFlowDemo.jsx'
+import WallpaperDemo from './WallpaperDemo.jsx'
 
 // Bilingual helper: <T zh="..." en="..." />
 const T = ({ zh, en }) => (
@@ -124,7 +124,7 @@ export default function App() {
             <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
           </p>
           <div className="hero__cta">
-            <a className="btn primary" href="#demo"><T zh="观看真实握手流程 ↓" en="See the real handshake ↓" /></a>
+            <a className="btn primary" href="#demo"><T zh="查看壁纸实际效果 ↓" en="See it in action ↓" /></a>
             <a className="btn outline" href="#what"><T zh="了解 BAP" en="What is BAP" /></a>
           </div>
           <p className="hero__note">
@@ -138,12 +138,12 @@ export default function App() {
               <span className="tl tl--y" aria-hidden="true" />
               <span className="tl tl--g" aria-hidden="true" />
               <span className="demo-win__title">
-                <span className="zh">BAP 真实握手演示 — host-sdk ⇄ Companion (C#)</span>
-                <span className="en">BAP live handshake — host-sdk ⇄ Companion (C#)</span>
+                <span className="zh">BAP 官方示例壁纸 — 实际运行效果</span>
+                <span className="en">BAP official demo wallpaper — live</span>
               </span>
-              <span className="demo-win__live"><span className="dot" /><span className="zh">真实协议</span><span className="en">real protocol</span></span>
+              <span className="demo-win__live"><span className="dot" /><span className="zh">实机演示</span><span className="en">live demo</span></span>
             </div>
-            <SdkFlowDemo />
+            <WallpaperDemo />
           </div>
         </div>
       </section>
