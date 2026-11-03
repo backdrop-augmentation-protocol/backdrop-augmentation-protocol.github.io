@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import DemoCanvas from './DemoCanvas.jsx'
+import SdkFlowDemo from './SdkFlowDemo.jsx'
 
 // Bilingual helper: <T zh="..." en="..." />
 const T = ({ zh, en }) => (
@@ -124,7 +124,7 @@ export default function App() {
             <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
           </p>
           <div className="hero__cta">
-            <a className="btn primary" href="#demo"><T zh="体验组合效果 ↓" en="Try the combo ↓" /></a>
+            <a className="btn primary" href="#demo"><T zh="观看真实握手流程 ↓" en="See the real handshake ↓" /></a>
             <a className="btn outline" href="#what"><T zh="了解 BAP" en="What is BAP" /></a>
           </div>
           <p className="hero__note">
@@ -132,7 +132,19 @@ export default function App() {
             <span className="en">BAP is an independent open-source community project and is not affiliated with Wallpaper Engine.</span>
           </p>
 
-          <DemoCanvas />
+          <div className="demo-win" id="demo">
+            <div className="demo-win__bar">
+              <span className="tl tl--r" aria-hidden="true" />
+              <span className="tl tl--y" aria-hidden="true" />
+              <span className="tl tl--g" aria-hidden="true" />
+              <span className="demo-win__title">
+                <span className="zh">BAP 真实握手演示 — host-sdk ⇄ Companion (C#)</span>
+                <span className="en">BAP live handshake — host-sdk ⇄ Companion (C#)</span>
+              </span>
+              <span className="demo-win__live"><span className="dot" /><span className="zh">真实协议</span><span className="en">real protocol</span></span>
+            </div>
+            <SdkFlowDemo />
+          </div>
         </div>
       </section>
 
@@ -333,30 +345,46 @@ export default function App() {
 
           <div className="dev-grid">
             <div className="dev-card reveal">
-              <h3><span className="zh">Host 快速开始</span><span className="en">Host quick start</span></h3>
-              <p><span className="zh">声明你的壁纸为 BAP Host，暴露标准接入点，即可被任意兼容组件发现。</span><span className="en">Declare your wallpaper a BAP host, expose the standard entry point, and any compatible component can find it.</span></p>
-              <pre><code>{`# host manifest (bap.json)
-{
-  "role": "host",
-  "protocol": "bap/0.1",
-  "id": "your.wallpaper.id"
-}`}</code></pre>
+              <h3><span className="zh">Host · host-sdk（TS）</span><span className="en">Host · host-sdk (TS)</span></h3>
+              <p><span className="zh">在 Wallpaper Engine 壁纸中挂载从 Companion 获取的自包含嵌入文档，无需另建壁纸项目。</span><span className="en">Inside a Wallpaper Engine wallpaper, mount the self-contained embedded document fetched from the Companion — no extra wallpaper project needed.</span></p>
+              <pre><code>{`// host-sdk · 壁纸内挂载组件
+host.mount({
+  id: manifest.id,
+  srcdoc: embeddedHtml,
+  container,
+});
+
+// iframe sandbox="allow-scripts"
+// 握手与能力协商 · 单组件故障隔离`}</code></pre>
             </div>
             <div className="dev-card reveal">
-              <h3><span className="zh">Component 快速开始</span><span className="en">Component quick start</span></h3>
-              <p><span className="zh">以组件角色发布，声明可组合能力；无需依赖某个 Host 即可独立运行。</span><span className="en">Publish with the component role and declare combinable capabilities; run independently of any host.</span></p>
-              <pre><code>{`# component manifest (bap.json)
-{
-  "role": "component",
-  "protocol": "bap/0.1",
-  "augments": ["host"]
-}`}</code></pre>
+              <h3><span className="zh">Component · component-sdk</span><span className="en">Component · component-sdk</span></h3>
+              <p><span className="zh">双模式组件：Standalone 独立运行，Embedded 经 iframe 运行在兼容 Host 中。</span><span className="en">Dual-mode components: run standalone, or embedded via iframe inside a compatible host.</span></p>
+              <pre><code>{`import { StandaloneShell } from
+  '@backdrop-augmentation-protocol/component-sdk';
+
+new StandaloneShell({ manifest, render(root, runtime) {
+  root.textContent = runtime.getConfig('label') ?? 'Hello BAP';
+} }).start();`}</code></pre>
             </div>
             <div className="dev-card reveal">
-              <h3><span className="zh">SDK / API / Conformance</span><span className="en">SDK / API / Conformance</span></h3>
-              <p><span className="zh">参考 SDK、API 文档与一致性（Conformance）校验，帮助你的作品通过兼容测试。</span><span className="en">Reference SDK, API docs, and conformance checks help your work pass compatibility tests.</span></p>
-              <a className="card__link" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">打开规范仓库 →</span><span className="en">Open spec repo →</span></a>
+              <h3><span className="zh">Companion 授权 · C#</span><span className="en">Companion approval · C#</span></h3>
+              <p><span className="zh">Companion Server 仅监听本机回环；Desktop 通过命名管道审批 Host 会话。</span><span className="en">Companion Server binds to loopback only; the Desktop app approves host sessions over a named pipe.</span></p>
+              <pre><code>{`// Companion.Desktop (C#)
+var requests = await auth.GetPendingAsync(ct);
+await auth.DecideAsync(
+    sessionId, approve: true, permissions,
+    remember: true);
+
+// NamedPipeServerStream · CurrentUserOnly`}</code></pre>
             </div>
+          </div>
+
+          <div className="dev-links reveal">
+            <a href="./sdk/host-sdk/README.zh-CN.md" target="_blank" rel="noopener"><span className="zh">host-sdk 说明 →</span><span className="en">host-sdk docs →</span></a>
+            <a href="./sdk/component-sdk/README.zh-CN.md" target="_blank" rel="noopener"><span className="zh">component-sdk 说明 →</span><span className="en">component-sdk docs →</span></a>
+            <a href="./sdk/companion-client.js" target="_blank" rel="noopener"><span className="zh">握手客户端示例 client.js →</span><span className="en">Handshake client example →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">规范仓库（spec）→</span><span className="en">Spec repo →</span></a>
           </div>
         </div>
       </section>
