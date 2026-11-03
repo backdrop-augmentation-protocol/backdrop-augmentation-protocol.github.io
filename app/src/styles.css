@@ -167,14 +167,6 @@ html.en .zh { display: none; }
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(90deg, #06111dcc, transparent 55%, #06111d55);
 }
-/* companion status pill — same look as the real host */
-.wp-status {
-  position: absolute; left: 18px; top: 16px; z-index: 4;
-  color: #d8f2ff; background: #07111dcc; padding: 6px 10px;
-  border: 1px solid #47718e; border-radius: 6px;
-  font: 11.5px "Segoe UI", system-ui, sans-serif;
-  max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
 /* component containers — placement mirrors examples/host-wallpaper/index.html */
 .wp-component { position: absolute; z-index: 2; }
 .wp-component.wp-calendar { right: 3%; top: 6%; width: min(300px, 40%); }
@@ -229,7 +221,6 @@ html.en .zh { display: none; }
 }
 @media (max-width: 720px) {
   .wp-stage { height: 380px; }
-  .wp-status { display: none; }
   .wp-component.wp-calendar { width: min(250px, 52%); }
   .wp-panel { flex-direction: column; gap: 16px; }
 }

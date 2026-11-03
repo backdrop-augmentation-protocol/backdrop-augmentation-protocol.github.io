@@ -84,8 +84,6 @@ export default function WallpaperDemo() {
     v.volume = volume
   }, [muted, volume])
 
-  const running = [timeOn && 'time-widget: running', calOn && 'calendar-widget: running'].filter(Boolean)
-
   return (
     <div className="wp-demo">
       <div className="wp-stage" role="img" aria-label="BAP host wallpaper running with optional components">
@@ -100,10 +98,6 @@ export default function WallpaperDemo() {
           preload="auto"
         />
         <div className="wp-shade" aria-hidden="true" />
-
-        <div className="wp-status">
-          Companion: connected{running.length ? `; ${running.join('; ')}` : ''}
-        </div>
 
         {calOn && <CalendarWidget now={now} />}
         {timeOn && <TimeWidget now={now} />}
