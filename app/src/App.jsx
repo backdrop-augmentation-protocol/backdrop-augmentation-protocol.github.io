@@ -57,18 +57,7 @@ export default function App() {
         <div className="nav__inner">
           <a className="brand" href="#home" aria-label="BAP home">
             <span className="brand__mark" aria-hidden="true">
-              <svg viewBox="0 0 32 32" width="28" height="28">
-                <circle cx="16" cy="16" r="6" fill="url(#bg)" />
-                <circle cx="16" cy="16" r="13" fill="none" stroke="url(#bg)" strokeWidth="2" opacity="0.6" />
-                <circle cx="27" cy="16" r="2.4" fill="#38bdf8" />
-                <circle cx="9" cy="25" r="2" fill="#8b5cf6" />
-                <defs>
-                  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#38bdf8" />
-                    <stop offset="1" stopColor="#8b5cf6" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              <img src="./icon-256.png" alt="" width="30" height="30" />
             </span>
             <span className="brand__name">BAP</span>
           </a>
@@ -200,7 +189,7 @@ export default function App() {
 
           <div className="pillars">
             <article className="pillar reveal">
-              <div className="pillar__icon" style={{ '--c': '#0ea5e9' }}>
+              <div className="pillar__icon" style={{ '--c': '#12a8dc' }}>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 9h18" /></svg>
               </div>
               <h3><span className="zh">Host · 宿主壁纸</span><span className="en">Host</span></h3>
@@ -210,7 +199,7 @@ export default function App() {
               </p>
             </article>
             <article className="pillar reveal">
-              <div className="pillar__icon" style={{ '--c': '#8b5cf6' }}>
+              <div className="pillar__icon" style={{ '--c': '#795bfc' }}>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 3v18M3 12h18" /><circle cx="12" cy="12" r="3" /></svg>
               </div>
               <h3><span className="zh">Component · 增强组件</span><span className="en">Component</span></h3>
@@ -220,7 +209,7 @@ export default function App() {
               </p>
             </article>
             <article className="pillar reveal">
-              <div className="pillar__icon" style={{ '--c': '#14b8a6' }}>
+              <div className="pillar__icon" style={{ '--c': '#1d4df0' }}>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 12a8 8 0 0 1 14-5" /><path d="M20 12a8 8 0 0 1-14 5" /><circle cx="12" cy="12" r="2" fill="currentColor" /></svg>
               </div>
               <h3><span className="zh">Companion · 可选增强</span><span className="en">Companion</span></h3>
