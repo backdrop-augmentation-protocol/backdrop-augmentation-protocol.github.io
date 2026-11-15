@@ -5,7 +5,14 @@ const acts = [
   { tag: ['02 / THE WORKS', '02 / 独立作品'], title: ['Made separately. Ready to meet.', '独立创作的作品，自由加入组合。'], body: ['Clock, Calendar and Focus are independent works. BAP Companion helps you bring them together in a preset.', 'Clock、Calendar 与 Focus 各自独立创作，再通过 BAP Companion 自由加入桌面组合。'] },
   { tag: ['03 / YOUR DESKTOP', '03 / 你的桌面'], title: ['Choose what belongs in your scene.', '由你决定，哪些作品加入桌面。'], body: ['BAP Companion organizes installed components, instances and presets. Your host remains the canvas.', 'BAP Companion 管理已安装组件、实例与预设；动态壁纸仍是桌面的画布。'] },
   { tag: ['04 / IN YOUR HANDS', '04 / 随心调整'], title: ['Arrange it. Tune it. Make it yours.', '重新摆放、细致调整，成为你的桌面。'], body: ['Change a component’s position, scale or opacity, then see your composition settle into place.', '调整组件位置、大小与透明度，让桌面组合逐渐成为你喜欢的样子。'] },
-  { tag: ['05 / WHAT COMES NEXT', '05 / 持续生长'], title: ['A desktop with room for what’s next.', '为下一件新作品，留好位置。'], body: ['As compatible works arrive, your desktop can grow with them—one independent creation at a time.', '当更多兼容作品到来，你的桌面也能继续扩展，一件独立创作接一件。'] },
+  { tag: ['05 / MORE WORKS', '05 / \u66f4\u591a\u4f5c\u54c1'], title: ['Start with Aurora. More works can join.', '\u4ece Aurora \u7cfb\u5217\u5f00\u59cb\uff0c\u66f4\u591a\u517c\u5bb9\u4f5c\u54c1\u4f1a\u9646\u7eed\u52a0\u5165\u3002'], body: ['Hosts and components are independent works you can combine.', 'Host \u548c Component \u5404\u81ea\u72ec\u7acb\uff0c\u53ef\u4ee5\u81ea\u7531\u7ec4\u5408\u3002'] },
+]
+
+const futureWorks = [
+  { title:'BAP Aurora', kind:'Host', image:'./works/aurora-scene.png', alt:'BAP Aurora northern lights wallpaper' },
+  { title:'BAP Aurora Clock', kind:'Component', image:'./works/aurora-clock.png', alt:'Aurora Clock preview' },
+  { title:'BAP Aurora Calendar', kind:'Component', image:'./works/aurora-calendar.png', alt:'Aurora Calendar preview' },
+  { title:'BAP Aurora Focus', kind:'Component', image:'./works/aurora-focus.png', alt:'Aurora Focus preview' },
 ]
 
 function LiveClock({ zh }) {
@@ -107,7 +114,21 @@ export default function Scrollytelling({ lang = 'zh' }) {
           <div className="story-widget story-widget--clock visible"><LiveClock zh={zh}/></div>
           <div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/></div>
           <div className={'story-widget story-widget--focus' + (focusOn ? ' visible' : '') + (act === 3 ? ' featured' : '') + (focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*scale/112}%`,'--focus-opacity':opacity/100}}><LiveFocus zh={zh}/></div>
-          <div className={'story-future' + (act >= 4 ? ' visible' : '')}><div className="story-future__sun"/><div><small className="en">THE NEXT CHAPTER - CONCEPT</small><small className="zh">{'\u540e\u7eed\u4e3b\u9898 - \u8bbe\u8ba1\u6982\u5ff5'}</small><strong>BAP Daybreak</strong><span className="en">A future theme direction · warm light, new horizons</span><span className="zh">未来主题方向 · 暖金晨光，远山云雾</span><em><span className="en">BAP Lock Screen Clock - planned</span><span className="zh">BAP Lock Screen Clock - {'\u8ba1\u5212\u4e2d'}</span></em></div><div className="story-future__brand"><img src="./icon-256.png" alt=""/><b>BAP</b><span className="en">Create Freely. Connect Seamlessly. Compose Your Way.</span><span className="zh">{'\u521b\u4f5c\u81ea\u7531 \u00b7 \u4f5c\u54c1\u4e92\u901a \u00b7 \u7ec4\u5408\u968f\u5fc3'}</span></div></div>
+          <div className={'story-future' + (act >= 4 ? ' visible' : '')}>
+            <div className="story-future__intro">
+              <p><span className="en">BAP WORKS</span><span className="zh">BAP {'\u4f5c\u54c1'}</span></p>
+              <h3><span className="en">Start with Aurora. Add more as new works arrive.</span><span className="zh">{'\u4ece Aurora \u5f00\u59cb\uff0c\u65b0\u4f5c\u54c1\u4f1a\u9646\u7eed\u52a0\u5165'}</span></h3>
+              <div className="story-future__summary"><span className="en">Hosts and components are independent works you can combine.</span><span className="zh">{'Host \u548c Component \u5404\u81ea\u72ec\u7acb\uff0c\u53ef\u4ee5\u81ea\u7531\u7ec4\u5408\u3002'}</span></div>
+            </div>
+            <div className="story-future__works">
+              {futureWorks.map(work => <article className="future-work" key={work.title}>
+                <div className="future-work__image"><img src={work.image} alt={work.alt}/><span className="future-work__kind">{work.kind}</span></div>
+                <strong>{work.title}</strong><small><span className="en">Coming soon</span><span className="zh">{'\u5f85\u53d1\u5e03'}</span></small>
+              </article>)}
+              <div className="future-work future-work--more"><div className="future-work__more-mark" aria-hidden="true">&hellip;</div><strong><span className="en">More works</span><span className="zh">{'\u66f4\u591a\u4f5c\u54c1'}</span></strong><small><span className="en">As they arrive</span><span className="zh">{'\u6301\u7eed\u52a0\u5165'}</span></small></div>
+            </div>
+            <div className="story-future__brand"><img src="./icon-256.png" alt=""/><b>BAP</b><span className="en">Create Freely. Connect Seamlessly. Compose Your Way.</span><span className="zh">{'\u521b\u4f5c\u81ea\u7531 \u00b7 \u4f5c\u54c1\u4e92\u901a \u00b7 \u7ec4\u5408\u968f\u5fc3'}</span></div>
+          </div>
           <div className="story-desktop__caption"><span>BAP AURORA</span><i/> <span>WALLPAPER ENGINE</span></div>
         </div>
         <div className={'story-miniworks' + (act === 1 ? ' visible' : '')}><span>INDEPENDENT WORKS</span><div><img src="./works/aurora-clock.png" alt=""/><img src="./works/aurora-calendar.png" alt=""/><img src="./works/aurora-focus.png" alt=""/></div><small>Aurora Clock · Calendar · Focus</small></div>
@@ -120,7 +141,6 @@ export default function Scrollytelling({ lang = 'zh' }) {
       <p className="story-step__tag"><span className="en">{item.tag[0]}</span><span className="zh">{item.tag[1]}</span></p>
       <h3><span className="en">{item.title[0]}</span><span className="zh">{item.title[1]}</span></h3>
       <p className="story-step__body"><span className="en">{item.body[0]}</span><span className="zh">{item.body[1]}</span></p>
-      {i === 4 && <p className="story-step__note"><span className="zh">Daybreak 为未来主题方向；跨作品组合须以实际兼容性为准。</span><span className="en">Daybreak is a future theme direction. Composition depends on actual compatibility.</span></p>}
     </article>)}</div>
   </div>
 }
