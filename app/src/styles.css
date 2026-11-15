@@ -767,3 +767,17 @@ html.en .zh { display: none; }
   .story-frame.act-0 .live-focus__dial small,.story-frame.act-0 .live-focus__foot { display:none; }
   .story-frame.act-0 .live-focus__actions button { padding:2px 3px;font-size:5px; }
 }
+
+/* Small fidelity fixes based on the Aurora embedded component layouts. */
+.live-calendar__grid { grid-template-rows:none;grid-auto-rows:minmax(0,1fr); }
+.live-calendar__grid b { min-width:0;white-space:nowrap;font-size:clamp(6px,.32vw,8px);line-height:1; }
+.story-frame.act-0 .live-focus__body,.story-frame.act-2 .live-focus__body { gap:4%;padding:2% 0; }
+.story-frame.act-0 .live-focus__dial,.story-frame.act-2 .live-focus__dial { box-sizing:border-box;width:39%;flex:0 0 39%; }
+.story-frame.act-0 .live-focus__dial strong,.story-frame.act-2 .live-focus__dial strong { line-height:1.1; }
+.story-frame.act-0 .live-focus__dial small,.story-frame.act-2 .live-focus__dial small { line-height:1.2; }
+.live-focus { container-type:inline-size; }
+.live-focus__dial { overflow:hidden; }
+.live-focus__dial strong { font-size:clamp(13px,9cqw,26px); }
+.live-focus__dial small { max-width:88%;font-size:clamp(5px,3.1cqw,8px);line-height:1.1; }
+.live-focus__dial span { font-size:clamp(6px,3.4cqw,9px); }
+.story-frame.act-2 .story-widget--focus.visible { width:32%; } .story-frame.act-0 .live-focus__dial,.story-frame.act-2 .live-focus__dial { width:43%;flex-basis:43%; }
