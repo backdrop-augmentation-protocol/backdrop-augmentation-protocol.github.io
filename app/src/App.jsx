@@ -64,18 +64,17 @@ export default function App() {
 
           <nav className="nav__links" aria-label="primary">
             <a href="#showcase"><T zh="作品" en="Showcase" /></a>
-            <a className="ext" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="文档" en="Docs" /></a>
-            <a className="ext" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="路线图" en="Roadmap" /></a>
-            <a className="ext" href="https://github.com/sponsors" target="_blank" rel="noopener"><T zh="赞助" en="Sponsor" /></a>
+            <a className="ext" href="https://github.com/backdrop-augmentation-protocol/spec" target="_blank" rel="noopener"><T zh="协议规范" en="Protocol" /></a>
+            <a className="ext" href="https://github.com/backdrop-augmentation-protocol/examples" target="_blank" rel="noopener"><T zh="示例" en="Examples" /></a>
           </nav>
 
           <div className="nav__right">
             <div className="nav__quick" aria-label="quick actions">
-              <a className="nav__quick-btn steam" href="https://store.steampowered.com/" target="_blank" rel="noopener">
+              <a className="nav__quick-btn steam" href="#showcase">
                 <svg className="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M9 12l2 2 4-4" /></svg>
-                <T zh="Steam 订阅" en="Steam" />
+                <T zh="官方作品" en="Official works" />
               </a>
-              <a className="nav__quick-btn" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">
+              <a className="nav__quick-btn" href="https://github.com/backdrop-augmentation-protocol/companion/releases/latest" target="_blank" rel="noopener">
                 <T zh="下载 Companion" en="Companion" />
               </a>
               <a className="nav__quick-btn" href="#faq">
@@ -100,7 +99,7 @@ export default function App() {
         <div className="hero__glow hero__glow--b" aria-hidden="true" />
         <div className="hero__content">
           <p className="eyebrow">
-            <span className="zh">开放互操作协议 · Open Interoperability Protocol</span>
+            <span className="zh">为 Wallpaper Engine 打造的开放式桌面体验</span>
             <span className="en">Open Interoperability Protocol</span>
           </p>
           <h1 className="hero__title">
@@ -108,12 +107,12 @@ export default function App() {
             <span className="en">Create Freely.<br />Connect Seamlessly.<br /><em>Compose Your Way.</em></span>
           </h1>
           <p className="hero__lead">
-            <span className="zh">BAP 是一套开放的互操作协议，让 Wallpaper Engine 壁纸与组件能够自由组合、互相增强。壁纸独立可用，组件是可选增强——而非依赖。</span>
+            <span className="zh">让喜欢的动态壁纸与独立组件自在相遇。每件作品都能独立运行，也能按你的喜好组合成独一无二的桌面。</span>
             <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
           </p>
           <div className="hero__cta">
-            <a className="btn primary" href="#video"><T zh="观看真实工作流 ↓" en="See the real workflow ↓" /></a>
-            <a className="btn outline" href="#story"><T zh="了解工作原理" en="How it works" /></a>
+            <a className="btn primary" href="#story"><T zh="看看桌面如何组合 ↓" en="Explore the experience ↓" /></a>
+            <a className="btn outline" href="#showcase"><T zh="浏览官方作品" en="Explore the works" /></a>
           </div>
           <p className="hero__note">
             <span className="zh">BAP 是独立的开源社区项目，不代表 Wallpaper Engine 官方。</span>
@@ -122,56 +121,18 @@ export default function App() {
         </div>
       </section>
 
-      {/* ============ REAL WORKFLOW VIDEO (placeholder until real recording exists) ============ */}
-      <section className="section section--alt reveal" id="video">
-        <div className="wrap">
-          <header className="sec-head">
-            <p className="kicker"><T zh="真实工作流" en="Real workflow" /></p>
-            <h2><T zh="真实操作实录" en="A real recording, not a mock-up" /></h2>
-            <p className="sec-lead">
-              <span className="zh">以真实 WE 桌面与 BAPC 界面录制实际操作，展示当前版本已实测的流程。实录完成后将替换下方占位。</span>
-              <span className="en">A real recording of the actual WE desktop and BAPC UI, demonstrating flows verified in the current version. It will replace the placeholder below once ready.</span>
-            </p>
-          </header>
-
-          <div className="video-slot reveal">
-            <div className="video-slot__screen">
-              <span className="video-slot__badge"><T zh="实录制作中" en="Recording in preparation" /></span>
-              <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-                <polygon points="10 8 16 12 10 16 10 8" /><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
-              </svg>
-              <p className="video-slot__will">
-                <T zh="这段实录将展示（均为已实测功能）：" en="This recording will show (all verified features):" />
-              </p>
-              <ol className="video-slot__list">
-                <li><T zh="Host 在 Wallpaper Engine 中独立运行" en="Host running standalone in Wallpaper Engine" /></li>
-                <li><T zh="BAPC 发现已安装组件并管理预设" en="BAPC discovering installed components and managing presets" /></li>
-                <li><T zh="加入 / 移出预设、启用 / 禁用组件" en="Adding / removing from presets, enabling / disabling" /></li>
-                <li><T zh="桌面动态加载与移除组件" en="Components loading and leaving the desktop dynamically" /></li>
-                <li><T zh="调整组件位置、尺寸与属性" en="Adjusting position, size, and properties" /></li>
-                <li><T zh="Host 基础功能全程不受影响" en="Host base experience unaffected throughout" /></li>
-              </ol>
-            </div>
-            <p className="video-slot__note">
-              <span className="zh">本站不使用视觉模拟冒充实机操作；未实测的流程（如 Workshop 订阅自动化）不会出现在演示中。</span>
-              <span className="en">This site never passes off visual mock-ups as real footage; unverified flows (such as automated Workshop subscription) will not appear in demos.</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* ============ SCROLLYTELLING (5 acts) ============ */}
       <section className="section reveal" id="story">
         <div className="wrap">
           <header className="sec-head">
-            <p className="kicker"><T zh="工作原理 · 滚动叙事" en="How it works · scrollytelling" /></p>
-            <h2><T zh="为什么 BAP 不同于单体壁纸" en="Why BAP differs from a monolithic wallpaper" /></h2>
+            <p className="kicker"><T zh="自由组合，创造属于你的桌面" en="A desktop composed your way" /></p>
+            <h2><T zh="从一张壁纸，展开更多可能" en="One wallpaper. More ways to make it yours." /></h2>
             <p className="sec-lead">
-              <span className="zh">以下五幕为原理示意，帮助你理解独立作品如何被订阅、组合与持续扩展；界面为概念表达，非实机截图。</span>
-              <span className="en">The five acts below are an illustration of how independently published works get subscribed, composed, and extended. UI panels are conceptual, not real screenshots.</span>
+              <span className="zh">从完整的极光背景，到独立作品加入桌面，再到由你亲手调整。每一步都为自己的桌面添上新的可能。</span>
+              <span className="en">Follow Aurora from a complete wallpaper to independent works arranged on your desktop, then shape the composition your way.</span>
             </p>
           </header>
-          <Scrollytelling />
+      <Scrollytelling lang={lang} />
         </div>
       </section>
 
@@ -263,46 +224,60 @@ export default function App() {
             <p className="kicker"><T zh="真实作品" en="Showcase" /></p>
             <h2><T zh="看看组合能做什么" en="See what combining looks like" /></h2>
             <p className="sec-lead">
-              <span className="zh">以下为展示方向的概念组合，尚未正式发行。首批官方作品在 Steam 发布后，此区将仅展示真实可订阅作品并附真实 Workshop 链接。</span>
-              <span className="en">The combos below are concept directions, not yet released. Once the first official works ship on Steam, this section will feature only real, subscribable works with genuine Workshop links.</span>
+              <span className="zh">Aurora 首批官方作品现已进入发行准备。作品将独立发布；目前尚未开放 Workshop 订阅。</span>
+              <span className="en">The first official Aurora works are preparing for release. Each work will be published independently; Workshop subscriptions are not available yet.</span>
             </p>
           </header>
 
           <div className="cards">
             <article className="card reveal">
-              <div className="card__preview card__preview--a">
-                <span className="card__tag">Host + Clock + Audio</span>
-                <span className="card__badge"><T zh="概念 · 筹备中" en="Concept · in preparation" /></span>
+              <div className="card__preview card__preview--a card__preview--image">
+                <img src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights" />
+                <span className="card__tag">BAP Aurora · Host</span>
+                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
               </div>
               <div className="card__body">
-                <h3><span className="zh">极光 · 沉浸式桌面</span><span className="en">Aurora · immersive desktop</span></h3>
-                <p><span className="zh">流动极光作为 Host，叠加时钟与音频可视化，桌面即刻拥有律动。</span><span className="en">Flowing aurora as the host, layered with clock and audio visualizer for a living desktop.</span></p>
+                <h3>BAP Aurora</h3>
+                <p><span className="zh">青蓝与紫色光流在深蓝夜幕中缓缓移动。一张完整的动态壁纸，也是一切组合的起点。</span><span className="en">Blue and violet light moves across the night. A complete wallpaper, and the starting point for every composition.</span></p>
               </div>
             </article>
             <article className="card reveal">
-              <div className="card__preview card__preview--b">
-                <span className="card__tag">Host + Weather + Frame</span>
-                <span className="card__badge"><T zh="概念 · 筹备中" en="Concept · in preparation" /></span>
+              <div className="card__preview card__preview--b card__preview--image">
+                <img src="./works/aurora-clock.png" alt="Official BAP Aurora Clock preview" />
+                <span className="card__tag">BAP Aurora Clock</span>
+                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
               </div>
               <div className="card__body">
-                <h3><span className="zh">星云 · 信息桌面</span><span className="en">Nebula · info desktop</span></h3>
-                <p><span className="zh">深空星云作底，挂接天气信息与边框，安静而不单调。</span><span className="en">Deep-space nebula base with weather info and a frame — calm yet never empty.</span></p>
+                <h3><span className="zh">独立时钟组件</span><span className="en">An independent clock component</span></h3>
+                <p><span className="zh">可单独运行，也可加入兼容的 Host。采用清晰克制的 Aurora 视觉语言。</span><span className="en">Runs on its own or joins a compatible host, in Aurora’s calm visual language.</span></p>
               </div>
             </article>
             <article className="card reveal">
-              <div className="card__preview card__preview--c">
-                <span className="card__tag">Host + Particles</span>
-                <span className="card__badge"><T zh="概念 · 筹备中" en="Concept · in preparation" /></span>
+              <div className="card__preview card__preview--c card__preview--image">
+                <img src="./works/aurora-calendar.png" alt="Official BAP Aurora Calendar preview" />
+                <span className="card__tag">BAP Aurora Calendar</span>
+                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
               </div>
               <div className="card__body">
-                <h3><span className="zh">网格 · 轻量组合</span><span className="en">Mesh · lightweight combo</span></h3>
-                <p><span className="zh">节点网格承担主体，仅叠加粒子层即可完成一次轻量增强。</span><span className="en">A node mesh carries the scene; a single particle layer completes a lightweight augmentation.</span></p>
+                <h3><span className="zh">一眼掌握日期</span><span className="en">Your calendar at a glance</span></h3>
+                <p><span className="zh">独立运行的交互式日历，可加入兼容 Host，并按自己的桌面布局调整。</span><span className="en">An interactive calendar that runs independently, joins compatible hosts and fits your layout.</span></p>
+              </div>
+            </article>
+            <article className="card reveal">
+              <div className="card__preview card__preview--c card__preview--image">
+                <img src="./works/aurora-focus.png" alt="Official BAP Aurora Focus preview" />
+                <span className="card__tag">BAP Aurora Focus</span>
+                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
+              </div>
+              <div className="card__body">
+                <h3><span className="zh">留出专注时间</span><span className="en">Make room to focus</span></h3>
+                <p><span className="zh">独立专注计时器，可按习惯选择时长，并搭配兼容的动态壁纸。</span><span className="en">An independent focus timer with flexible sessions, ready to join a compatible wallpaper.</span></p>
               </div>
             </article>
           </div>
           <p className="showcase__foot">
-            <span className="zh">展示与推荐不等于官方制作、维护或背书。官方与独立兼容作品的边界见运营约定。</span>
-            <span className="en">Featuring or recommending a work is not an endorsement. Boundaries between official and independent works follow our operations policy.</span>
+            <span className="zh">Aurora 全系列仍在发行准备中，开放订阅后即可在此找到作品入口。</span>
+            <span className="en">The Aurora collection is preparing for release. Work links will be available here when subscriptions open.</span>
           </p>
         </div>
       </section>
@@ -314,8 +289,8 @@ export default function App() {
             <p className="kicker"><T zh="普通用户" en="Get started" /></p>
             <h2><T zh="三条上手路径" en="Three ways to begin" /></h2>
             <p className="sec-lead">
-              <span className="zh">教程以「你要完成的任务」组织，而非照搬开发者文档。</span>
-              <span className="en">Tutorials are organized by the task you want to finish — not by copying the developer README.</span>
+              <span className="zh">从你想做的事开始，按步骤完成第一次组合。</span>
+              <span className="en">Start with what you want to do and follow the steps to your first composition.</span>
             </p>
           </header>
 
@@ -342,9 +317,12 @@ export default function App() {
               <span className="path__num">3</span>
               <h3><span className="zh">组合壁纸与组件</span><span className="en">Combine wallpaper + component</span></h3>
               <ol>
-                <li><span className="zh">订阅兼容的 Host 与组件作品（可来自不同作者）</span><span className="en">Subscribe to a compatible host and components (from different authors)</span></li>
-                <li><span className="zh">可选安装 BAP Companion：它发现已安装组件并管理预设、启用 / 禁用与属性</span><span className="en">Optionally install BAP Companion: it discovers installed components and manages presets, enable/disable, and properties</span></li>
-                <li><span className="zh">Host 在 WE 中动态加载组件；随时移除，背景体验保持完整</span><span className="en">The host loads components dynamically in WE; remove them anytime — the background experience stays intact</span></li>
+                <li><span className="zh">在 Workshop 分别订阅 BAP 兼容壁纸与组件；作品可来自不同作者</span><span className="en">Subscribe to a BAP compatible wallpaper and components separately on Workshop; works can come from different creators</span></li>
+                <li><span className="zh">在 Wallpaper Engine 中启用 Host，并确认它支持所选组件</span><span className="en">Set the host in Wallpaper Engine and confirm it supports the components you choose</span></li>
+                <li><span className="zh">安装并启动可选的 BAP Companion，在 Host 授权提示中批准所需连接</span><span className="en">Install and launch the optional BAP Companion, then approve the requested host connection</span></li>
+                <li><span className="zh">在「预设」中添加组件，选择要使用的作品并调整顺序</span><span className="en">Add components in Presets, choose the works you want, and arrange their order</span></li>
+                <li><span className="zh">在「桌面」中查看运行实例，调整可用的位置、大小、透明度与组件属性</span><span className="en">In Desktop, inspect running instances and adjust available position, scale, opacity, and component properties</span></li>
+                <li><span className="zh">组件不显示时，先检查 Host 授权、双方兼容性和作品版本</span><span className="en">If a component is missing, check host approval, compatibility, and work versions</span></li>
               </ol>
             </div>
           </div>
@@ -383,49 +361,25 @@ export default function App() {
             <div className="dev-card reveal">
               <h3><span className="zh">Host · host-sdk（TS）</span><span className="en">Host · host-sdk (TS)</span></h3>
               <p><span className="zh">在 Wallpaper Engine 壁纸中挂载从 Companion 获取的自包含嵌入文档，无需另建壁纸项目。</span><span className="en">Inside a Wallpaper Engine wallpaper, mount the self-contained embedded document fetched from the Companion — no extra wallpaper project needed.</span></p>
-              <pre><code>{`// host-sdk · 壁纸内挂载组件
-host.mount({
-  id: manifest.id,
-  srcdoc: embeddedHtml,
-  container,
-});
-
-// iframe sandbox="allow-scripts"
-// 握手与能力协商 · 单组件故障隔离`}</code></pre>
             </div>
             <div className="dev-card reveal">
               <h3><span className="zh">Component · component-sdk</span><span className="en">Component · component-sdk</span></h3>
               <p><span className="zh">双模式组件：Standalone 独立运行，Embedded 经 iframe 运行在兼容 Host 中。</span><span className="en">Dual-mode components: run standalone, or embedded via iframe inside a compatible host.</span></p>
-              <pre><code>{`import { StandaloneShell } from
-  '@backdrop-augmentation-protocol/component-sdk';
-
-new StandaloneShell({ manifest, render(root, runtime) {
-  root.textContent = runtime.getConfig('label') ?? 'Hello BAP';
-} }).start();`}</code></pre>
             </div>
             <div className="dev-card reveal">
               <h3><span className="zh">Companion 授权 · C#</span><span className="en">Companion approval · C#</span></h3>
               <p><span className="zh">Companion Server 仅监听本机回环；Desktop 通过命名管道审批 Host 会话。</span><span className="en">Companion Server binds to loopback only; the Desktop app approves host sessions over a named pipe.</span></p>
-              <pre><code>{`// Companion.Desktop (C#)
-var requests = await auth.GetPendingAsync(ct);
-await auth.DecideAsync(
-    sessionId, approve: true, permissions,
-    remember: true);
-
-// NamedPipeServerStream · CurrentUserOnly`}</code></pre>
             </div>
           </div>
 
           <div className="dev-links reveal">
-            <a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">规范仓库（spec · 权威来源）→</span><span className="en">Spec repo (authoritative) →</span></a>
-            <a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">host-sdk 仓库 →</span><span className="en">host-sdk repo →</span></a>
-            <a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">component-sdk 仓库 →</span><span className="en">component-sdk repo →</span></a>
-            <a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><span className="zh">Companion 源码与 Releases →</span><span className="en">Companion source &amp; releases →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol/spec" target="_blank" rel="noopener"><span className="zh">协议规范与 Schema →</span><span className="en">Protocol specification &amp; schemas →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol/host-sdk" target="_blank" rel="noopener"><span className="zh">Host SDK →</span><span className="en">Host SDK →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol/component-sdk" target="_blank" rel="noopener"><span className="zh">Component SDK →</span><span className="en">Component SDK →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol/conformance" target="_blank" rel="noopener"><span className="zh">一致性测试 →</span><span className="en">Conformance suite →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol/examples" target="_blank" rel="noopener"><span className="zh">端到端示例 →</span><span className="en">End-to-end examples →</span></a>
+            <a href="https://github.com/backdrop-augmentation-protocol/companion" target="_blank" rel="noopener"><span className="zh">BAP Companion →</span><span className="en">BAP Companion →</span></a>
           </div>
-          <p className="dev-note reveal">
-            <span className="zh">规范、Schema 与 SDK/API 文档以对应源仓库为唯一权威来源，将经版本感知的 CI 构建同步发布到本站；官网不另行维护可能漂移的副本，草案内容会明确标记。</span>
-            <span className="en">Specs, schemas, and SDK/API docs live solely in their source repos and will be published here via version-aware CI builds; this site keeps no drifting copies, and drafts are clearly marked.</span>
-          </p>
         </div>
       </section>
 
@@ -445,9 +399,9 @@ await auth.DecideAsync(
               <h3><span className="zh">开源仓库</span><span className="en">Source repos</span></h3>
               <p><span className="zh">协议、SDK 与示例均公开</span><span className="en">Protocol, SDK, and examples are public</span></p>
             </a>
-            <a className="community__item reveal" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">
-              <h3><span className="zh">交流渠道</span><span className="en">Channels</span></h3>
-              <p><span className="zh">讨论、答疑与共建入口</span><span className="en">Discussion, Q&amp;A, and contribution</span></p>
+            <a className="community__item reveal" href="https://github.com/backdrop-augmentation-protocol/examples" target="_blank" rel="noopener">
+              <h3><span className="zh">参与共建</span><span className="en">Build with us</span></h3>
+              <p><span className="zh">从跨作品示例开始探索</span><span className="en">Explore end-to-end examples</span></p>
             </a>
             <a className="community__item reveal" href="#what">
               <h3><span className="zh">合作原则</span><span className="en">Contribution principles</span></h3>
@@ -469,8 +423,8 @@ await auth.DecideAsync(
             <span className="en">BAP is maintained by creators worldwide with open specs, SDKs, and examples. Whether you publish works or help build the protocol, you belong here.</span>
           </p>
           <div className="cta-band__actions">
-            <a className="btn primary" href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener"><T zh="阅读完整文档 →" en="Read the docs →" /></a>
-            <a className="btn outline" href="#story"><T zh="回到工作原理" en="How it works" /></a>
+            <a className="btn primary" href="https://github.com/backdrop-augmentation-protocol/spec" target="_blank" rel="noopener"><T zh="阅读协议规范 →" en="Read the protocol →" /></a>
+            <a className="btn outline" href="#story"><T zh="看看如何自由组合" en="Explore the experience" /></a>
           </div>
         </div>
       </section>
@@ -487,15 +441,15 @@ await auth.DecideAsync(
             <h4><T zh="链接" en="Links" /></h4>
             <ul>
               <li><a href="https://github.com/backdrop-augmentation-protocol" target="_blank" rel="noopener">GitHub</a></li>
-              <li><a href="https://steamcommunity.com/" target="_blank" rel="noopener">Steam Workshop</a></li>
+              <li><a href="https://steamcommunity.com/app/431960/workshop/" target="_blank" rel="noopener">Steam Workshop</a></li>
               <li><a href="#what">What is BAP</a></li>
             </ul>
           </div>
         </div>
         <div className="wrap footer__legal">
           <span>© <span id="year">{new Date().getFullYear()}</span> BAP Contributors</span>
-          <span className="zh">本站为初版 MVP，内容随首批官方作品正式发布而更新。</span>
-          <span className="en">This is an MVP. Content updates as the first official works ship.</span>
+          <span className="zh">自由创作，自在组合。</span>
+          <span className="en">Create freely. Compose your way.</span>
         </div>
       </footer>
     </>

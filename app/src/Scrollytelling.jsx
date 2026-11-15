@@ -1,228 +1,124 @@
 import { useEffect, useRef, useState } from 'react'
 
-/**
- * Scrollytelling: 5 acts explaining why BAP differs from a monolithic
- * wallpaper with built-in widgets. This is an EXPLANATION layer (原理示意),
- * clearly marked — not a mock of the real product UI, and never presented
- * as a live recording (per planning doc §10).
- */
-
-const ACTS = [
-  {
-    tag: { zh: '第一幕 · 独立完整的 Host', en: 'Act 1 · An independent Host' },
-    title: { zh: '从一张完整壁纸开始', en: 'Start from one complete wallpaper' },
-    body: {
-      zh: 'Host 是一件独立作品：没有 Companion、没有任何组件，它在 Wallpaper Engine 中照常播放、照常交互。这是所有组合的起点。',
-      en: 'A host is a standalone work: with no Companion and no components, it plays and interacts normally inside Wallpaper Engine. This is where every combination starts.',
-    },
-  },
-  {
-    tag: { zh: '第二幕 · 组件来自独立创作者', en: 'Act 2 · Components from independent creators' },
-    title: { zh: '组件不是壁纸里的内置开关', en: 'Components are not built-in toggles' },
-    body: {
-      zh: '时钟、日历等组件由不同作者单独发布到 Steam Workshop，可以单独安装、更新，甚至作为独立壁纸运行。普通单体壁纸也能内置时钟——但那不是生态。',
-      en: 'Clock, calendar, and other components are published separately on Steam Workshop by different authors — installed and updated on their own, or run as standalone wallpapers. A monolithic wallpaper can ship a built-in clock; that is not an ecosystem.',
-    },
-  },
-  {
-    tag: { zh: '第三幕 · BAPC 组合与配置', en: 'Act 3 · Compose & configure with BAPC' },
-    title: { zh: '由用户决定怎样组合', en: 'The user decides how to compose' },
-    body: {
-      zh: '可选的 BAP Companion（BAPC）发现已安装的组件并管理预设；Host 在 Wallpaper Engine 中动态挂载组件。BAPC 负责管理与配置，WE 负责渲染——Companion 不是第二套壁纸引擎。',
-      en: 'The optional BAP Companion (BAPC) discovers installed components and manages presets; the host mounts them dynamically inside Wallpaper Engine. BAPC manages, WE renders — Companion is not a second wallpaper engine.',
-    },
-  },
-  {
-    tag: { zh: '第四幕 · 动态启停与更换', en: 'Act 4 · Enable, disable, swap' },
-    title: { zh: '组合不是一次性打包', en: 'Composing is not a one-time bundle' },
-    body: {
-      zh: '在 BAPC 中禁用或移除组件，桌面即时响应；背景与其余功能保持完整。Host 作者不需要为每一次组合变更重新发布作品。',
-      en: 'Disable or remove a component in BAPC and the desktop reacts instantly, while the background and everything else stay intact. Host authors never re-release for each combination change.',
-    },
-  },
-  {
-    tag: { zh: '第五幕 · 持续演化的生态', en: 'Act 5 · An evolving ecosystem' },
-    title: { zh: '今天的桌面，还能承接明天的新作品', en: "Today's desktop can host tomorrow's works" },
-    body: {
-      zh: '此后出现的新组件，只要与你的 Host 兼容（协议与能力匹配），就能用同样的流程加入已有桌面——不必等原作者逐个适配。组合始终以真实兼容条件为边界。',
-      en: 'New components released later can join your existing desktop through the same flow — as long as they are compatible with your host (protocol and capabilities match), with no waiting on the original author. Composition is always bounded by real compatibility.',
-    },
-  },
+const acts = [
+  { tag: ['01 / THE CANVAS', '01 / 桌面组合'], title: ['A world of its own, ready to become yours.', '让动态壁纸，成为你的桌面风景。'], body: ['Aurora sets the scene. Add independent works when you want more; the wallpaper always runs on its own.', 'Aurora 自成流动风景；想要更多，再加入独立组件。动态壁纸始终完整运行。'] },
+  { tag: ['02 / THE WORKS', '02 / 独立作品'], title: ['Made separately. Ready to meet.', '独立创作的作品，自由加入组合。'], body: ['Clock, Calendar and Focus are independent works. BAP Companion helps you bring them together in a preset.', 'Clock、Calendar 与 Focus 各自独立创作，再通过 BAP Companion 自由加入桌面组合。'] },
+  { tag: ['03 / YOUR DESKTOP', '03 / 你的桌面'], title: ['Choose what belongs in your scene.', '由你决定，哪些作品加入桌面。'], body: ['BAP Companion organizes installed components, instances and presets. Your host remains the canvas.', 'BAP Companion 管理已安装组件、实例与预设；动态壁纸仍是桌面的画布。'] },
+  { tag: ['04 / IN YOUR HANDS', '04 / 随心调整'], title: ['Arrange it. Tune it. Make it yours.', '重新摆放、细致调整，成为你的桌面。'], body: ['Change a component’s position, scale or opacity, then see your composition settle into place.', '调整组件位置、大小与透明度，让桌面组合逐渐成为你喜欢的样子。'] },
+  { tag: ['05 / WHAT COMES NEXT', '05 / 持续生长'], title: ['A desktop with room for what’s next.', '为下一件新作品，留好位置。'], body: ['As compatible works arrive, your desktop can grow with them—one independent creation at a time.', '当更多兼容作品到来，你的桌面也能继续扩展，一件独立创作接一件。'] },
 ]
 
-function ClockWidget() {
+function LiveClock({ zh }) {
   const [now, setNow] = useState(() => new Date())
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(t)
-  }, [])
-  return (
-    <div className="wp-component wp-time">
-      <div className="wp-time__card">
-        <div className="wp-time__badge">BAP TIME WIDGET</div>
-        <div className="wp-time__clock">
-          {new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false }).format(now)}
-        </div>
-        <div className="wp-time__date">{new Intl.DateTimeFormat(undefined, { dateStyle: 'full' }).format(now)}</div>
-      </div>
-    </div>
-  )
+  useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
+  const time = new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US', { hour:'2-digit', minute:'2-digit', hour12:false }).format(now)
+  const date = new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US', { weekday:'short', month:'short', day:'numeric' }).format(now)
+  return <div className="live-clock"><div className="live-clock__face"><span className="live-dot"/>{zh ? '极光 / 本地时间' : 'AURORA / LOCAL TIME'}</div><div className="live-clock__time">{time}<i style={{'--hour':`${(now.getHours()%12+now.getMinutes()/60)*30}deg`,'--minute':`${(now.getMinutes()+now.getSeconds()/60)*6}deg`}}><b/><em/></i></div><div className="live-clock__date">{date}</div><div className="live-clock__rule"/><div className="live-clock__foot">{zh ? '本地时间' : 'LOCAL TIME'}<span>◆</span></div></div>
 }
 
-function CalWidget({ dim }) {
+function LiveCalendar({ zh }) {
+  const [shown, setShown] = useState(() => new Date())
   const now = new Date()
-  const first = new Date(now.getFullYear(), now.getMonth(), 1)
+  const first = new Date(shown.getFullYear(), shown.getMonth(), 1)
   const offset = (first.getDay() + 6) % 7
-  const days = Array.from({ length: 42 }, (_, i) => {
-    const day = new Date(now.getFullYear(), now.getMonth(), i - offset + 1)
-    return {
-      key: i,
-      d: day.getDate(),
-      cls:
-        'wp-day' +
-        (day.getMonth() !== now.getMonth() ? ' outside' : '') +
-        (day.toDateString() === now.toDateString() ? ' today' : ''),
-    }
-  })
-  return (
-    <div className={'wp-component wp-calendar' + (dim ? ' ss-dim' : '')}>
-      <section className="wp-cal" aria-hidden="true">
-        <div className="wp-cal__topline">
-          <div className="wp-cal__eyebrow">BAP CALENDAR</div>
-        </div>
-        <div className="wp-cal__heading">
-          <span className="wp-cal__month">{new Intl.DateTimeFormat(undefined, { month: 'long' }).format(now)}</span>
-          <span className="wp-cal__year">{now.getFullYear()}</span>
-        </div>
-        <div className="wp-cal__grid">
-          {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
-            <span key={i} className="wp-cal__weekday">{d}</span>
-          ))}
-          {days.map((x) => (
-            <span key={x.key} className={x.cls}>{x.d}</span>
-          ))}
-        </div>
-      </section>
-    </div>
-  )
+  const days = Array.from({length:42},(_,index)=>new Date(shown.getFullYear(),shown.getMonth(),index-offset+1))
+  const month = new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{month:'short',year:'numeric'}).format(shown)
+  const week = Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{weekday:'short'}).format(new Date(2024,0,8+i)))
+  const shift = amount => setShown(value=>new Date(value.getFullYear(),value.getMonth()+amount,1))
+  return <div className="live-calendar"><div className="live-calendar__top"><b>{zh?'极光 / 日历':'AURORA / CALENDAR'}</b><button onClick={()=>setShown(new Date(now.getFullYear(),now.getMonth(),1))}>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{month:'short',day:'numeric'}).format(now)}</button></div><div className="live-calendar__heading"><strong>{month}</strong><nav><button onClick={()=>shift(-1)} aria-label={zh?'上个月':'Previous month'}>‹</button><button onClick={()=>shift(1)} aria-label={zh?'下个月':'Next month'}>›</button></nav></div><small>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{month:'short',day:'numeric',weekday:'short'}).format(now)}</small><div className="live-calendar__grid">{week.map((day,i)=><b key={`w${i}`}>{day}</b>)}{days.map((day,i)=><span key={i} className={(day.getMonth()===shown.getMonth()?'':'adjacent')+(day.toDateString()===now.toDateString()?' today':'')}>{day.getDate()}</span>)}</div><div className="live-calendar__foot">{zh?'自由创作 · 随心组合':'CREATE FREELY · COMPOSE YOUR WAY'}</div></div>
 }
 
-export default function Scrollytelling() {
-  const [act, setAct] = useState(0)
-  const stepRefs = useRef([])
+function LiveFocus({ zh }) {
+  const [minutes,setMinutes]=useState(25), [remaining,setRemaining]=useState(25*60), [running,setRunning]=useState(false)
+  useEffect(()=>{if(!running)return;const timer=setInterval(()=>setRemaining(value=>Math.max(0,value-1)),1000);return()=>clearInterval(timer)},[running])
+  useEffect(()=>{if(remaining===0)setRunning(false)},[remaining])
+  const clock=`${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}`
+  const toggle=()=>{if(remaining===0)setRemaining(minutes*60);setRunning(value=>!value)}
+  return <div className="live-focus"><div className="live-focus__top"><span>AURORA / FOCUS</span><small>{running?(zh?'专注中':'FOCUSING'):remaining===0?(zh?'已完成':'DONE'):(zh?'就绪':'READY')}</small></div><div className="live-focus__body"><div className="live-focus__dial"><span>{zh?'专注':'FOCUS'}</span><strong>{clock}</strong><small>{zh?'留一点时间，专注当下。':'A little room to breathe.'}</small></div><div className="live-focus__actions"><div>{[15,25,45,60].map(value=><button className={minutes===value?'selected':''} key={value} onClick={()=>{setMinutes(value);setRemaining(value*60);setRunning(false)}}>{value}m</button>)}</div><button className="focus-start" onClick={toggle}>{running?(zh?'暂停':'Pause'):remaining===0?(zh?'重新开始':'Start again'):(zh?'开始专注':'Start focus')}</button><button onClick={()=>{setRemaining(minutes*60);setRunning(false)}}>{zh?'重置':'Reset'}</button></div></div><div className="live-focus__foot">{zh?'专注模式':'FOCUS MODE'} <span>CREATE FREELY</span></div></div>
+}
 
-  useEffect(() => {
-    const els = stepRefs.current.filter(Boolean)
-    if (!('IntersectionObserver' in window)) return
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setAct(Number(e.target.dataset.act))
-        })
-      },
-      { rootMargin: '-42% 0px -42% 0px', threshold: 0 }
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
-
-  const mounted = act >= 2
-  const calOff = act >= 3
-
-  return (
-    <div className="story">
-      {/* sticky explanatory stage */}
-      <div className="story__stage" role="img" aria-label="Illustrated desktop showing how BAP composes independently published components">
-        <div className="demo-win ss-win">
-          <div className="demo-win__bar">
-            <span className="tl tl--r" aria-hidden="true" />
-            <span className="tl tl--y" aria-hidden="true" />
-            <span className="tl tl--g" aria-hidden="true" />
-            <span className="demo-win__title">
-              <span className="zh">桌面 · Wallpaper Engine</span>
-              <span className="en">Desktop · Wallpaper Engine</span>
-            </span>
-            <span className="ss-badge">
-              <span className="zh">原理示意</span>
-              <span className="en">illustration</span>
-            </span>
-          </div>
-          <div className="ss-desktop">
-            <video className="wp-video ss-video" autoPlay loop muted playsInline preload="metadata" aria-hidden="true">
-              <source src="./demo/flower.webm" type="video/webm" />
-              <source src="./demo/flower.mp4" type="video/mp4" />
-            </video>
-            <div className="wp-shade" aria-hidden="true" />
-            {mounted && <ClockWidget />}
-            {mounted && <CalWidget dim={calOff} />}
-          </div>
-        </div>
-
-        {/* workshop source cards (act 2+) */}
-        <div className={'ss-card ss-card--t' + (act >= 1 ? ' on' : '')}>
-          <span className="ss-card__src">Steam Workshop</span>
-          <strong>BAP Time Widget</strong>
-          <span className="ss-card__by"><span className="zh">独立作者 @aurora · 可单独订阅</span><span className="en">independent author @aurora · subscribable</span></span>
-        </div>
-        <div className={'ss-card ss-card--c' + (act >= 1 ? ' on' : '')}>
-          <span className="ss-card__src">Steam Workshop</span>
-          <strong>BAP Calendar Widget</strong>
-          <span className="ss-card__by"><span className="zh">独立作者 @mika · 独立更新</span><span className="en">independent author @mika · updated separately</span></span>
-        </div>
-        <div className={'ss-card ss-card--n' + (act >= 4 ? ' on' : '')}>
-          <span className="ss-card__src"><span className="zh">新作品 · 新作者</span><span className="en">new work · new author</span></span>
-          <strong>BAP Audio Visualizer</strong>
-          <span className="ss-card__by"><span className="zh">作者 @nova · 兼容你的 Host</span><span className="en">by @nova · compatible with your host</span></span>
-        </div>
-
-        {/* BAPC concept panel (act 3+) */}
-        <div className={'ss-bapc' + (act >= 2 ? ' on' : '')}>
-          <div className="ss-bapc__head">
-            <strong>BAPC</strong>
-            <span className="ss-bapc__mark"><span className="zh">概念示意</span><span className="en">concept UI</span></span>
-          </div>
-          <div className="ss-bapc__preset"><span className="zh">预设：我的桌面</span><span className="en">Preset: my desktop</span></div>
-          <div className="ss-bapc__row">
-            <span>BAP Time Widget</span>
-            <span className={'ss-toggle' + (act >= 2 ? ' on' : '')} />
-          </div>
-          <div className="ss-bapc__row">
-            <span className={calOff ? 'ss-bapc__off' : ''}>BAP Calendar Widget</span>
-            <span className={'ss-toggle' + (act >= 2 && !calOff ? ' on' : '')} />
-          </div>
-          {act >= 4 && (
-            <div className="ss-bapc__row ss-bapc__row--new">
-              <span>BAP Audio Visualizer</span>
-              <span className="ss-toggle on" />
-            </div>
-          )}
-        </div>
+function CompanionPanel({ act, zh, focusOn, setFocusOn, focusMoved, setFocusMoved, presetName, setPresetName, scale, setScale, opacity, setOpacity }) {
+  const desktopPage = act >= 3
+  const components = ['Clock', 'Calendar', 'Focus']
+  return <div className={`story-control act-${act}`} aria-label="BAP Companion composition panel">
+    <div className="story-control__title">BAP Companion <span>- [] X</span></div>
+    <div className="story-control__sidebar">
+      <div className="control-brand"><span className="control-mark">b</span><b>BAP Companion</b></div>
+      <div className="control-nav">
+        <span>{zh ? '\u5df2\u5b89\u88c5' : 'Installed'}</span>
+        {desktopPage ? <><span>{zh ? '\u9884\u8bbe' : 'Presets'}</span><b>{zh ? '\u684c\u9762' : 'Desktop'}</b></> : <><b>{zh ? '\u9884\u8bbe' : 'Presets'}</b><span>{zh ? '\u684c\u9762' : 'Desktop'}</span></>}
+        <span>{zh ? '\u8bbe\u7f6e' : 'Settings'}</span>
       </div>
-
-      {/* scrolling steps */}
-      <div className="story__steps">
-        {ACTS.map((a, i) => (
-          <div
-            key={i}
-            data-act={i}
-            ref={(el) => (stepRefs.current[i] = el)}
-            className={'story-step' + (i === act ? ' active' : '')}
-          >
-            <p className="story-step__tag">
-              <span className="zh">{a.tag.zh}</span>
-              <span className="en">{a.tag.en}</span>
-            </p>
-            <h3>
-              <span className="zh">{a.title.zh}</span>
-              <span className="en">{a.title.en}</span>
-            </h3>
-            <p className="story-step__body">
-              <span className="zh">{a.body.zh}</span>
-              <span className="en">{a.body.en}</span>
-            </p>
-          </div>
-        ))}
-      </div>
+      <div className="control-status">BAP<br/><small>{zh ? 'Companion \u5df2\u5c31\u7eea' : 'Companion ready'}</small></div>
     </div>
-  )
+    <div className="story-control__main">
+      <div className="control-banner"><strong>{desktopPage ? (zh ? '\u684c\u9762' : 'Desktop') : (zh ? '\u7ec4\u5408\u9884\u8bbe' : 'Compose a preset')}</strong><span>{desktopPage ? (zh ? '\u5237\u65b0\u5c5e\u6027' : 'Refresh properties') : 'BAP Aurora'}</span></div>
+      {desktopPage ? <div className="control-dual">
+        <section><b>ACTIVE HOST</b><div className="control-host">BAP Aurora <small>Connected</small></div><b>DESKTOP COMPONENTS</b>
+          {components.map(name => <div className={'story-control__item' + (name === 'Focus' && !focusOn ? ' is-off' : '')} key={name}>
+            <img src={`./works/aurora-${name.toLowerCase()}.png`} alt=""/><div><strong>Aurora {name}</strong><small>{name === 'Focus' && !focusOn ? 'Disabled' : 'Running / Instance 01'}</small></div>
+          </div>)}
+        </section>
+        <section><b>COMPONENT PROPERTIES</b><div className="control-property"><strong>Aurora Focus</strong><small>Layout and appearance</small>
+          <label>Scale <input aria-label="Aurora Focus scale" type="range" min="80" max="140" value={scale} onChange={e=>setScale(Number(e.target.value))}/><em>{scale}%</em></label>
+          <label>Opacity <input aria-label="Aurora Focus opacity" type="range" min="35" max="100" value={opacity} onChange={e=>setOpacity(Number(e.target.value))}/><em>{opacity}%</em></label>
+        </div></section>
+      </div> : <div className="control-presets">
+        <section><b>PRESETS</b><div className="preset-entry selected">{presetName || (zh ? '\u5f53\u524d\u9884\u8bbe' : 'Current preset')}</div><button onClick={()=>setPresetName(zh ? '\u6211\u7684\u9884\u8bbe' : 'My preset')}>+ {zh ? '\u65b0\u5efa\u9884\u8bbe' : 'New preset'}</button></section>
+        <section><b>SELECTED COMPONENTS</b>
+          {components.map(name => <div className={'story-control__item' + (name === 'Focus' && !focusOn ? ' is-off' : '')} key={name}>
+            <img src={`./works/aurora-${name.toLowerCase()}.png`} alt=""/><div><strong>Aurora {name}</strong><small>{name === 'Focus' && !focusOn ? 'Not in this preset' : 'Ready / Instance 01'}</small></div>
+            {name === 'Focus' && <button className={'story-switch' + (focusOn ? ' on' : '')} onClick={()=>setFocusOn(v=>!v)} aria-label="toggle Aurora Focus"/>}
+          </div>)}
+          <div className="control-actions"><button onClick={()=>setFocusMoved(v=>!v)}>Move</button><button onClick={()=>setFocusOn(false)}>Remove</button><button onClick={()=>setFocusOn(true)}>Add component</button></div>
+        </section>
+      </div>}
+      <div className="story-control__foot"><span className="live-dot"/> Connected to BAP Aurora</div>
+    </div>
+  </div>
+}
+export default function Scrollytelling({ lang = 'zh' }) {
+  const zh = lang === 'zh'
+  const [act, setAct] = useState(0)
+  const [focusOn, setFocusOn] = useState(true)
+  const [focusMoved, setFocusMoved] = useState(false)
+  const [presetName, setPresetName] = useState('')
+  const [scale, setScale] = useState(112)
+  const [opacity, setOpacity] = useState(82)
+  const refs = useRef([])
+  useEffect(() => {
+    const nodes = refs.current.filter(Boolean)
+    if (!('IntersectionObserver' in window)) return
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) setAct(Number(entry.target.dataset.act))
+    }), { rootMargin: '-44% 0px -44% 0px', threshold: 0 })
+    nodes.forEach(node => observer.observe(node))
+    return () => observer.disconnect()
+  }, [])
+  return <div className="story story--cinematic">
+    <div className="story__stage" aria-label="Aurora desktop composition changes as you scroll">
+      <div className={`story-frame act-${act}`}>
+        <div className="story-frame__glow"/>
+        <div className={`story-desktop act-${act}`}>
+          <img className="story-aurora" src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights wallpaper"/>
+          <div className="story-vignette"/>
+          <div className="story-widget story-widget--clock visible"><LiveClock zh={zh}/></div>
+          <div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/></div>
+          <div className={'story-widget story-widget--focus' + (focusOn ? ' visible' : '') + (act === 3 ? ' featured' : '') + (focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*scale/112}%`,'--focus-opacity':opacity/100}}><LiveFocus zh={zh}/></div>
+          <div className={'story-future' + (act >= 4 ? ' visible' : '')}><div className="story-future__sun"/><div><small className="en">THE NEXT CHAPTER - CONCEPT</small><small className="zh">{'\u540e\u7eed\u4e3b\u9898 - \u8bbe\u8ba1\u6982\u5ff5'}</small><strong>BAP Daybreak</strong><span className="en">A future theme direction · warm light, new horizons</span><span className="zh">未来主题方向 · 暖金晨光，远山云雾</span><em><span className="en">BAP Lock Screen Clock - planned</span><span className="zh">BAP Lock Screen Clock - {'\u8ba1\u5212\u4e2d'}</span></em></div><div className="story-future__brand"><img src="./icon-256.png" alt=""/><b>BAP</b><span className="en">Create Freely. Connect Seamlessly. Compose Your Way.</span><span className="zh">{'\u521b\u4f5c\u81ea\u7531 \u00b7 \u4f5c\u54c1\u4e92\u901a \u00b7 \u7ec4\u5408\u968f\u5fc3'}</span></div></div>
+          <div className="story-desktop__caption"><span>BAP AURORA</span><i/> <span>WALLPAPER ENGINE</span></div>
+        </div>
+        <div className={'story-miniworks' + (act === 1 ? ' visible' : '')}><span>INDEPENDENT WORKS</span><div><img src="./works/aurora-clock.png" alt=""/><img src="./works/aurora-calendar.png" alt=""/><img src="./works/aurora-focus.png" alt=""/></div><small>Aurora Clock · Calendar · Focus</small></div>
+        <CompanionPanel act={act} zh={zh} focusOn={focusOn} setFocusOn={setFocusOn} focusMoved={focusMoved} setFocusMoved={setFocusMoved} presetName={presetName} setPresetName={setPresetName} scale={scale} setScale={setScale} opacity={opacity} setOpacity={setOpacity}/>
+        <div className="story-frame__number">0{act + 1}<span> / 05</span></div>
+      </div>
+      <div className="story-progress" aria-hidden="true"><span style={{transform:`scaleX(${(act + 1) / acts.length})`}}/></div>
+    </div>
+    <div className="story__steps">{acts.map((item, i) => <article key={item.tag[0]} data-act={i} ref={node => refs.current[i] = node} className={'story-step' + (act === i ? ' active' : '')}>
+      <p className="story-step__tag"><span className="en">{item.tag[0]}</span><span className="zh">{item.tag[1]}</span></p>
+      <h3><span className="en">{item.title[0]}</span><span className="zh">{item.title[1]}</span></h3>
+      <p className="story-step__body"><span className="en">{item.body[0]}</span><span className="zh">{item.body[1]}</span></p>
+      {i === 4 && <p className="story-step__note"><span className="zh">Daybreak 为未来主题方向；跨作品组合须以实际兼容性为准。</span><span className="en">Daybreak is a future theme direction. Composition depends on actual compatibility.</span></p>}
+    </article>)}</div>
+  </div>
 }
