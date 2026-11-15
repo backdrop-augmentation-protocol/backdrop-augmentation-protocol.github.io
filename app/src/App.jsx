@@ -107,17 +107,13 @@ export default function App() {
             <span className="en">Create Freely.<br />Connect Seamlessly.<br /><em>Compose Your Way.</em></span>
           </h1>
           <p className="hero__lead">
-            <span className="zh">让喜欢的动态壁纸与独立组件自在相遇。每件作品都能独立运行，也能按你的喜好组合成独一无二的桌面。</span>
-            <span className="en">BAP is an open interoperability protocol that lets Wallpaper Engine wallpapers and components combine and augment each other. Wallpapers work on their own; components are optional enhancements — not dependencies.</span>
+            <span className="zh">一个基于Wallpaper Engine的壁纸增强拓展系统，旨在让普通用户随心组合壁纸与组件，让壁纸创作者们自由创作互通、兼容的作品。</span>
+            <span className="en">A wallpaper extension system built on Wallpaper Engine, for users to combine wallpapers and components, and creators to make interoperable, compatible works.</span>
           </p>
           <div className="hero__cta">
             <a className="btn primary" href="#story"><T zh="看看桌面如何组合 ↓" en="Explore the experience ↓" /></a>
             <a className="btn outline" href="#showcase"><T zh="浏览官方作品" en="Explore the works" /></a>
           </div>
-          <p className="hero__note">
-            <span className="zh">BAP 是独立的开源社区项目，不代表 Wallpaper Engine 官方。</span>
-            <span className="en">BAP is an independent open-source community project and is not affiliated with Wallpaper Engine.</span>
-          </p>
         </div>
       </section>
 
@@ -435,7 +431,6 @@ export default function App() {
           <div className="footer__brand">
             <span className="brand__name">BAP</span>
             <p><T zh="创作自由，作品互通，组合随心。" en="Create Freely. Connect Seamlessly. Compose Your Way." /></p>
-            <p className="footer__disclaim"><T zh="独立开源社区项目，不代表 Wallpaper Engine 官方。" en="Independent open-source community project, not affiliated with Wallpaper Engine." /></p>
           </div>
           <div className="footer__col">
             <h4><T zh="链接" en="Links" /></h4>
