@@ -115,11 +115,6 @@ export default function Scrollytelling({ lang = 'zh' }) {
           <div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/></div>
           <div className={'story-widget story-widget--focus' + (focusOn ? ' visible' : '') + (act === 3 ? ' featured' : '') + (focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*scale/112}%`,'--focus-opacity':opacity/100}}><LiveFocus zh={zh}/></div>
           <div className={'story-future' + (act >= 4 ? ' visible' : '')}>
-            <div className="story-future__intro">
-              <p><span className="en">BAP WORKS</span><span className="zh">BAP {'\u4f5c\u54c1'}</span></p>
-              <h3><span className="en">Start with Aurora. Add more as new works arrive.</span><span className="zh">{'\u4ece Aurora \u5f00\u59cb\uff0c\u65b0\u4f5c\u54c1\u4f1a\u9646\u7eed\u52a0\u5165'}</span></h3>
-              <div className="story-future__summary"><span className="en">Hosts and components are independent works you can combine.</span><span className="zh">{'Host \u548c Component \u5404\u81ea\u72ec\u7acb\uff0c\u53ef\u4ee5\u81ea\u7531\u7ec4\u5408\u3002'}</span></div>
-            </div>
             <div className="story-future__works">
               {futureWorks.map(work => <article className="future-work" key={work.title}>
                 <div className="future-work__image"><img src={work.image} alt={work.alt}/><span className="future-work__kind">{work.kind}</span></div>
@@ -127,13 +122,10 @@ export default function Scrollytelling({ lang = 'zh' }) {
               </article>)}
               <div className="future-work future-work--more"><div className="future-work__more-mark" aria-hidden="true">&hellip;</div><strong><span className="en">More works</span><span className="zh">{'\u66f4\u591a\u4f5c\u54c1'}</span></strong><small><span className="en">As they arrive</span><span className="zh">{'\u6301\u7eed\u52a0\u5165'}</span></small></div>
             </div>
-            <div className="story-future__brand"><img src="./icon-256.png" alt=""/><b>BAP</b><span className="en">Create Freely. Connect Seamlessly. Compose Your Way.</span><span className="zh">{'\u521b\u4f5c\u81ea\u7531 \u00b7 \u4f5c\u54c1\u4e92\u901a \u00b7 \u7ec4\u5408\u968f\u5fc3'}</span></div>
           </div>
-          <div className="story-desktop__caption"><span>BAP AURORA</span><i/> <span>WALLPAPER ENGINE</span></div>
         </div>
         <div className={'story-miniworks' + (act === 1 ? ' visible' : '')}><span>INDEPENDENT WORKS</span><div><img src="./works/aurora-clock.png" alt=""/><img src="./works/aurora-calendar.png" alt=""/><img src="./works/aurora-focus.png" alt=""/></div><small>Aurora Clock · Calendar · Focus</small></div>
         <CompanionPanel act={act} zh={zh} focusOn={focusOn} setFocusOn={setFocusOn} focusMoved={focusMoved} setFocusMoved={setFocusMoved} presetName={presetName} setPresetName={setPresetName} scale={scale} setScale={setScale} opacity={opacity} setOpacity={setOpacity}/>
-        <div className="story-frame__number">0{act + 1}<span> / 05</span></div>
       </div>
       <div className="story-progress" aria-hidden="true"><span style={{transform:`scaleX(${(act + 1) / acts.length})`}}/></div>
     </div>
