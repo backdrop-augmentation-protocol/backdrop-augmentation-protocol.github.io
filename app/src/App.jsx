@@ -121,12 +121,8 @@ export default function App() {
       <section className="section reveal" id="story">
         <div className="wrap">
           <header className="sec-head">
-            <p className="kicker"><T zh="自由组合，创造属于你的桌面" en="A desktop composed your way" /></p>
+            <p className="kicker"><T zh="发现BAP的不同" en="Discover what makes BAP different" /></p>
             <h2><T zh="从一张壁纸，展开更多可能" en="One wallpaper. More ways to make it yours." /></h2>
-            <p className="sec-lead">
-              <span className="zh">从完整的极光背景，到独立作品加入桌面，再到由你亲手调整。每一步都为自己的桌面添上新的可能。</span>
-              <span className="en">Follow Aurora from a complete wallpaper to independent works arranged on your desktop, then shape the composition your way.</span>
-            </p>
           </header>
       <Scrollytelling lang={lang} />
         </div>

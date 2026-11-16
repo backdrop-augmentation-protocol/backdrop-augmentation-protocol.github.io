@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 const acts = [
-  { tag: ['01 / THE CANVAS', '01 / 桌面组合'], title: ['A world of its own, ready to become yours.', '让动态壁纸，成为你的桌面风景。'], body: ['Aurora sets the scene. Add independent works when you want more; the wallpaper always runs on its own.', 'Aurora 自成流动风景；想要更多，再加入独立组件。动态壁纸始终完整运行。'] },
-  { tag: ['02 / THE WORKS', '02 / 独立作品'], title: ['Made separately. Ready to meet.', '独立创作的作品，自由加入组合。'], body: ['Clock, Calendar and Focus are independent works. BAP Companion helps you bring them together in a preset.', 'Clock、Calendar 与 Focus 各自独立创作，再通过 BAP Companion 自由加入桌面组合。'] },
+  { title: ['A new desktop experience.', '崭新的桌面体验。'], body: ['BAP uses runtime injection. Components are mounted dynamically onto a complete wallpaper instead of being bundled into the wallpaper itself.', 'BAP采用运行时注入机制。组件不再集成在壁纸作品中，而是在原有完整壁纸上动态挂载，带给你不一样的桌面体验。'] },
+  { title: ['Works connect across creators.', '跨作品互联互通。'], body: ['BAP defines a shared protocol so wallpapers can work together. One component can be mounted on different wallpapers, and one wallpaper can host multiple components.', 'BAP通过协议统一的规范，让壁纸间互联互通。「同个组件挂载于不同壁纸」与「同个壁纸挂载多种组件」成为可能。'] },
   { tag: ['03 / YOUR DESKTOP', '03 / 你的桌面'], title: ['Choose what belongs in your scene.', '由你决定，哪些作品加入桌面。'], body: ['BAP Companion organizes installed components, instances and presets. Your host remains the canvas.', 'BAP Companion 管理已安装组件、实例与预设；动态壁纸仍是桌面的画布。'] },
   { tag: ['04 / IN YOUR HANDS', '04 / 随心调整'], title: ['Arrange it. Tune it. Make it yours.', '重新摆放、细致调整，成为你的桌面。'], body: ['Change a component’s position, scale or opacity, then see your composition settle into place.', '调整组件位置、大小与透明度，让桌面组合逐渐成为你喜欢的样子。'] },
   { tag: ['05 / MORE WORKS', '05 / \u66f4\u591a\u4f5c\u54c1'], title: ['Start with Aurora. More works can join.', '\u4ece Aurora \u7cfb\u5217\u5f00\u59cb\uff0c\u66f4\u591a\u517c\u5bb9\u4f5c\u54c1\u4f1a\u9646\u7eed\u52a0\u5165\u3002'], body: ['Hosts and components are independent works you can combine.', 'Host \u548c Component \u5404\u81ea\u72ec\u7acb\uff0c\u53ef\u4ee5\u81ea\u7531\u7ec4\u5408\u3002'] },
@@ -89,12 +89,19 @@ function CompanionPanel({ act, zh, focusOn, setFocusOn, focusMoved, setFocusMove
 export default function Scrollytelling({ lang = 'zh' }) {
   const zh = lang === 'zh'
   const [act, setAct] = useState(0)
+  const [scenePhase, setScenePhase] = useState(0)
   const [focusOn, setFocusOn] = useState(true)
   const [focusMoved, setFocusMoved] = useState(false)
   const [presetName, setPresetName] = useState('')
   const [scale, setScale] = useState(112)
   const [opacity, setOpacity] = useState(82)
   const refs = useRef([])
+  const storyRef = useRef(null)
+  const sceneRef = useRef({ act: 0, phase: 0 })
+  const lastInputRef = useRef(0)
+  const touchStartRef = useRef(null)
+  sceneRef.current = { act, phase: scenePhase }
+  useEffect(() => { setScenePhase(0) }, [act])
   useEffect(() => {
     const nodes = refs.current.filter(Boolean)
     if (!('IntersectionObserver' in window)) return
@@ -104,16 +111,77 @@ export default function Scrollytelling({ lang = 'zh' }) {
     nodes.forEach(node => observer.observe(node))
     return () => observer.disconnect()
   }, [])
-  return <div className="story story--cinematic">
+  useEffect(() => {
+    const root = storyRef.current
+    if (!root) return
+    const moveScene = direction => {
+      const { act: currentAct, phase } = sceneRef.current
+      if (currentAct > 1) return false
+      const maxPhase = currentAct === 0 ? 3 : 2
+      if (performance.now() - lastInputRef.current < 380) return true
+      const nextPhase = phase + direction
+      lastInputRef.current = performance.now()
+      if (nextPhase >= 0 && nextPhase <= maxPhase) {
+        sceneRef.current = { act: currentAct, phase: nextPhase }
+        setScenePhase(nextPhase)
+        return true
+      }
+      const nextAct = currentAct + direction
+      if (nextAct >= 0 && nextAct < refs.current.length) {
+        refs.current[nextAct]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        return true
+      }
+      return false
+    }
+    const onWheel = event => {
+      const direction = Math.sign(event.deltaY)
+      if (!direction) return
+      if (moveScene(direction)) event.preventDefault()
+    }
+    const onTouchStart = event => { touchStartRef.current = event.touches[0]?.clientY ?? null }
+    const onTouchMove = event => {
+      if (touchStartRef.current === null) return
+      const distance = touchStartRef.current - event.touches[0].clientY
+      const { act: currentAct, phase } = sceneRef.current
+      const maxPhase = currentAct === 0 ? 3 : 2
+      const hasScene = currentAct <= 1 && (distance > 0 ? phase < maxPhase || currentAct < 4 : phase > 0 || currentAct > 0)
+      if (hasScene && Math.abs(distance) > 48) event.preventDefault()
+    }
+    const onTouchEnd = event => {
+      if (touchStartRef.current === null) return
+      const end = event.changedTouches[0]?.clientY
+      const delta = end === undefined ? 0 : touchStartRef.current - end
+      touchStartRef.current = null
+      if (Math.abs(delta) > 48) moveScene(Math.sign(delta))
+    }
+    root.addEventListener('wheel', onWheel, { passive: false })
+    root.addEventListener('touchstart', onTouchStart, { passive: true })
+    root.addEventListener('touchmove', onTouchMove, { passive: false })
+    root.addEventListener('touchend', onTouchEnd, { passive: true })
+    return () => {
+      root.removeEventListener('wheel', onWheel)
+      root.removeEventListener('touchstart', onTouchStart)
+      root.removeEventListener('touchmove', onTouchMove)
+      root.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [])
+  const showClock = act !== 0 || scenePhase >= 1
+  const showCalendar = act !== 0 || scenePhase >= 2
+  const showFocus = act < 2 ? act === 1 || scenePhase >= 3 : focusOn
+  const visualScale = act < 2 ? 112 : scale
+  const visualOpacity = act < 2 ? 82 : opacity
+  return <div className="story story--cinematic" ref={storyRef} data-scene-act={act} data-scene-phase={scenePhase}>
     <div className="story__stage" aria-label="Aurora desktop composition changes as you scroll">
       <div className={`story-frame act-${act}`}>
         <div className="story-frame__glow"/>
-        <div className={`story-desktop act-${act}`}>
-          <img className="story-aurora" src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights wallpaper"/>
+        <div className={`story-desktop act-${act} ${act === 1 ? `phase-${scenePhase}` : ''}`}>
+          <img className={'story-aurora story-aurora--base' + (act === 1 && scenePhase > 0 ? ' is-away' : '')} src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights wallpaper"/>
+          <img className={'story-aurora story-aurora--alt-one' + (act === 1 && scenePhase === 1 ? ' is-active' : '')} src="./works/background-placeholder-01.svg" alt="" aria-hidden="true"/>
+          <img className={'story-aurora story-aurora--alt-two' + (act === 1 && scenePhase === 2 ? ' is-active' : '')} src="./works/background-placeholder-02.svg" alt="" aria-hidden="true"/>
           <div className="story-vignette"/>
-          <div className="story-widget story-widget--clock visible"><LiveClock zh={zh}/></div>
-          <div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/></div>
-          <div className={'story-widget story-widget--focus' + (focusOn ? ' visible' : '') + (act === 3 ? ' featured' : '') + (focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*scale/112}%`,'--focus-opacity':opacity/100}}><LiveFocus zh={zh}/></div>
+          <div className={'story-widget story-widget--clock' + (showClock ? ' visible' : '')}><LiveClock zh={zh}/></div>
+          <div className={'story-widget story-widget--calendar' + (showCalendar ? ' visible' : '')}><LiveCalendar zh={zh}/></div>
+          <div className={'story-widget story-widget--focus' + (showFocus ? ' visible' : '') + (act === 3 ? ' featured' : '') + (act >= 2 && focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*visualScale/112}%`,'--focus-opacity':visualOpacity/100}}><LiveFocus zh={zh}/></div>
           <div className={'story-future' + (act >= 4 ? ' visible' : '')}>
             <div className="story-future__works">
               {futureWorks.map(work => <article className="future-work" key={work.title}>
@@ -129,8 +197,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       </div>
       <div className="story-progress" aria-hidden="true"><span style={{transform:`scaleX(${(act + 1) / acts.length})`}}/></div>
     </div>
-    <div className="story__steps">{acts.map((item, i) => <article key={item.tag[0]} data-act={i} ref={node => refs.current[i] = node} className={'story-step' + (act === i ? ' active' : '')}>
-      <p className="story-step__tag"><span className="en">{item.tag[0]}</span><span className="zh">{item.tag[1]}</span></p>
+    <div className="story__steps">{acts.map((item, i) => <article key={item.title[0]} data-act={i} ref={node => refs.current[i] = node} className={'story-step' + (act === i ? ' active' : '')}>
       <h3><span className="en">{item.title[0]}</span><span className="zh">{item.title[1]}</span></h3>
       <p className="story-step__body"><span className="en">{item.body[0]}</span><span className="zh">{item.body[1]}</span></p>
     </article>)}</div>

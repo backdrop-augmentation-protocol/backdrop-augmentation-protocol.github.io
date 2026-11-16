@@ -846,3 +846,28 @@ html.en .zh { display: none; }
 }
 @media(max-width:560px){.story-frame.act-4 .story-frame__number{display:none;}}
 @media(max-width:560px){.story-future__intro p{font-size:7px}.story-future__intro h3{font-size:16px}.future-work strong{font-size:7px}}
+
+/* First two acts use discrete native wheel/swipe steps. */
+.story-aurora--base,.story-aurora--alt-one,.story-aurora--alt-two { z-index:0;opacity:1;transition:opacity .85s ease,transform 2s cubic-bezier(.2,.7,.15,1); }
+.story-aurora--base.is-away,.story-aurora--alt-one,.story-aurora--alt-two { opacity:0; }
+.story-aurora--alt-one.is-active,.story-aurora--alt-two.is-active { opacity:1; }
+.story-aurora--alt-one,.story-aurora--alt-two { filter:saturate(.92); }
+.story-desktop.act-1 { opacity:1;filter:none;transform:none; }
+.story-control.act-1 { display:none!important; }
+.story-frame.act-1 .story-widget--clock { left:5%;top:7%;bottom:auto;width:26%; }
+.story-frame.act-1 .story-widget--calendar { right:5%;top:6%;width:20%; }
+.story-frame.act-1 .story-widget--focus { left:5%;right:auto;bottom:8%;width:26%; }
+.story-frame.act-1 .story-widget--focus.visible { width:32%; }
+.story-frame.act-0 .story-widget--clock:not(.visible),.story-frame.act-0 .story-widget--calendar:not(.visible),.story-frame.act-0 .story-widget--focus:not(.visible) { pointer-events:none; }
+@media(max-width:900px) {
+  .story-frame.act-1 .story-widget--clock { width:29%; }
+  .story-frame.act-1 .story-widget--calendar { width:23%; }
+  .story-frame.act-1 .story-widget--focus { width:30%; }
+}
+@media(max-width:560px) {
+  .story-frame.act-1 .story-widget--clock { left:3%;top:7%;bottom:auto;width:41%; }
+  .story-frame.act-1 .story-widget--calendar { right:3%;top:7%;width:30%; }
+  .story-frame.act-1 .story-widget--focus { left:3%;right:auto;bottom:7%;width:43%; }
+  .story-frame.act-1 .story-widget--focus.visible { width:43%; }
+}
+.story-frame.act-1 .story-desktop { opacity:1;filter:none;transform:none; }
