@@ -1560,3 +1560,23 @@ html.en .zh { display: none; }
   .story-control.act-3,.quickstart__visual--panel .story-control { aspect-ratio:1.38; }
   .story-control.act-3 .control-status { display:none; }
 }
+
+/* Keep the Daybreak preview legible at the size of the desktop composition. */
+@media (max-width:560px) {
+  .daybreak-progress,.daybreak-analog { width:48%;aspect-ratio:1.62; }
+  .daybreak-progress { top:5%;left:3%; }
+  .daybreak-analog { top:auto;right:3%;bottom:5%; }
+  .daybreak-progress header { font-size:max(5px,3cqw); }
+  .daybreak-progress header time { font-size:max(5px,3cqw); }
+  .daybreak-progress__body { height:76%; }
+  .daybreak-progress__ring strong { font-size:9cqw; }
+  .daybreak-progress__ring small,.daybreak-progress__stats small { font-size:max(5px,2.7cqw); }
+  .daybreak-progress__stats>strong { font-size:10cqw; }
+  .daybreak-progress__stats>span { font-size:max(5px,2.9cqw); }
+  .daybreak-analog { grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); }
+  .daybreak-analog__details { gap:3px;overflow:visible; }
+  .daybreak-analog__details>span { font-size:max(5px,3cqw); }
+  .daybreak-analog__details>strong { font-size:6cqw; }
+  .daybreak-analog__details hr { margin:0; }
+  .daybreak-analog__details>small { display:block;font-size:max(5px,3.3cqw);line-height:1.15;white-space:normal; }
+}
