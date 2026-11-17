@@ -5,14 +5,14 @@ const acts = [
   { title: ['Works connect across creators.', '跨作品互联互通。'], body: ['BAP defines a shared protocol so wallpapers can work together. One component can be mounted on different wallpapers, and one wallpaper can host multiple components.', 'BAP通过协议统一的规范，让壁纸间互联互通。「同个组件挂载于不同壁纸」与「同个壁纸挂载多种组件」成为可能。'] },
   { tag: ['03 / YOUR DESKTOP', '03 / 你的桌面'], title: ['A desktop made your way.', '高度自定义的桌面。'], body: ['Components and wallpapers are independent. Replace what does not fit, then combine works from different creators to make a desktop that feels like yours.', '组件与壁纸相互独立，哪不满意换哪里。订阅各个创作者的作品，组合和搭配出只属于你独一无二的桌面。'] },
   { tag: ['04 / IN YOUR HANDS', '04 / 随心调整'], title: ['Simple, convenient controls.', '简易方便的操作入口。'], body: ['With BAP Companion, you can browse wallpapers, bind component instances and wallpapers to presets, and adjust wallpaper and component properties with ease.', '通过 BAP Companion，「查看壁纸列表」、「绑定组件实例与壁纸到预设方案」、「调整桌面壁纸与组件的属性」都能轻松实现。'] },
-  { tag: ['05 / MORE WORKS', '05 / \u66f4\u591a\u4f5c\u54c1'], title: ['Start with Aurora. More works can join.', '\u4ece Aurora \u7cfb\u5217\u5f00\u59cb\uff0c\u66f4\u591a\u517c\u5bb9\u4f5c\u54c1\u4f1a\u9646\u7eed\u52a0\u5165\u3002'], body: ['Hosts and components are independent works you can combine.', 'Host \u548c Component \u5404\u81ea\u72ec\u7acb\uff0c\u53ef\u4ee5\u81ea\u7531\u7ec4\u5408\u3002'] },
+  { title: ['Build for the future.', '\u6218\u672a\u6765\u3002'], body: ['An evolving foundation and an expanding protocol ecosystem bring better experiences and more wallpapers and components to enjoy. Stay tuned for what comes next.', '\u6301\u7eed\u6f14\u5316\u7684\u57fa\u7840\u8bbe\u65bd\uff0c\u6301\u7eed\u62d3\u5c55\u7684\u534f\u8bae\u751f\u6001\uff0c\u5e26\u7ed9\u4f60\u66f4\u4f18\u7684\u4f7f\u7528\u4f53\u9a8c\u3001\u66f4\u591a\u7f8e\u89c2\u6216\u8005\u6709\u8da3\u7684\u58c1\u7eb8\u548c\u7ec4\u4ef6\u3002\u4fdd\u6301\u671f\u5f85\uff0c\u53d1\u73b0\u672a\u6765\u66f4\u591a\u53ef\u80fd\u3002'] },
 ]
 
 const futureWorks = [
-  { title:'BAP Aurora', kind:'Host', image:'./works/aurora-scene.png', alt:'BAP Aurora northern lights wallpaper' },
-  { title:'BAP Aurora Clock', kind:'Component', image:'./works/aurora-clock.png', alt:'Aurora Clock preview' },
-  { title:'BAP Aurora Calendar', kind:'Component', image:'./works/aurora-calendar.png', alt:'Aurora Calendar preview' },
-  { title:'BAP Aurora Focus', kind:'Component', image:'./works/aurora-focus.png', alt:'Aurora Focus preview' },
+  { title:'BAP Aurora', image:'./works/aurora-scene.png', alt:'BAP Aurora northern lights wallpaper' },
+  { title:'BAP Aurora Clock', image:'./works/aurora-clock.png', alt:'Aurora Clock preview' },
+  { title:'BAP Aurora Calendar', image:'./works/aurora-calendar.png', alt:'Aurora Calendar preview' },
+  { title:'BAP Aurora Focus', image:'./works/aurora-focus.png', alt:'Aurora Focus preview' },
 ]
 
 function LiveClock({ zh }) {
@@ -288,8 +288,8 @@ export default function Scrollytelling({ lang = 'zh' }) {
           <div className={'story-future' + (act >= 4 ? ' visible' : '')}>
             <div className="story-future__works">
               {futureWorks.map(work => <article className="future-work" key={work.title}>
-                <div className="future-work__image"><img src={work.image} alt={work.alt}/><span className="future-work__kind">{work.kind}</span></div>
-                <strong>{work.title}</strong><small><span className="en">Coming soon</span><span className="zh">{'\u5f85\u53d1\u5e03'}</span></small>
+                <div className="future-work__image"><img src={work.image} alt={work.alt}/></div>
+                <strong>{work.title}</strong>
               </article>)}
               <div className="future-work future-work--more"><div className="future-work__more-mark" aria-hidden="true">&hellip;</div><strong><span className="en">More works</span><span className="zh">{'\u66f4\u591a\u4f5c\u54c1'}</span></strong><small><span className="en">As they arrive</span><span className="zh">{'\u6301\u7eed\u52a0\u5165'}</span></small></div>
             </div>
