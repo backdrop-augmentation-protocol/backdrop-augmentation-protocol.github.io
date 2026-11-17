@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import Scrollytelling, { QuickStartStory } from './Scrollytelling.jsx'
+import CompanionDownloadPage from './CompanionDownloadPage.jsx'
 
-const COMPANION_DOWNLOAD_URL = 'https://github.com/backdrop-augmentation-protocol/companion/releases/latest'
+const COMPANION_DOWNLOAD_URL = './companion.html'
 
 // Bilingual helper: <T zh="..." en="..." />
 const T = ({ zh, en }) => (
@@ -35,6 +36,10 @@ export default function App() {
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  if (window.location.pathname.endsWith('/companion.html')) {
+    return <CompanionDownloadPage lang={lang} onToggleLanguage={() => setLang(l => (l === 'zh' ? 'en' : 'zh'))} />
+  }
 
   // reveal on scroll
   useEffect(() => {

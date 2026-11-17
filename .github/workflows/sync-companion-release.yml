@@ -1,0 +1,31 @@
+name: Sync BAP Companion release
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Refresh Companion release metadata
+        working-directory: app
+        run: npm run sync:companion-release
+      - name: Open update pull request when release changes
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/sync-companion-release
+          delete-branch: true
+          commit-message: 'chore: sync BAP Companion release metadata'
+          title: 'chore: update BAP Companion download'
+          body: 'Updates the Companion version and Windows package from the latest published release. Merge to publish the metadata with the website.'
+          add-paths: app/src/companion-release.json
