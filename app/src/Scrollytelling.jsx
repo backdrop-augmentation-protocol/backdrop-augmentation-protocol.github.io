@@ -21,7 +21,10 @@ const storyWheelCooldownMs = 820
 const storyTouchCooldownMs = 560
 
 const storyAnchorY = root => {
-  if (window.innerWidth <= 900) return window.innerHeight / 2
+  if (window.innerWidth <= 900) {
+    const viewport = window.visualViewport
+    return (viewport?.offsetTop ?? 0) + (viewport?.height ?? window.innerHeight) / 2
+  }
   const stage = root.querySelector('.story__stage')
   const frame = stage?.querySelector('.story-frame')
   const stickyTop = Number.parseFloat(getComputedStyle(stage).top) || 94
@@ -74,7 +77,7 @@ function DaybreakProgress() {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
   const percent = Math.floor((now.getHours() * 60 + now.getMinutes()) / 14.4)
-  const date = new Intl.DateTimeFormat('en-US', { weekday:'long', month:'long', day:'numeric' }).format(now)
+  const date = new Intl.DateTimeFormat('en-US', { weekday:'short', month:'short', day:'numeric' }).format(now)
   const time = new Intl.DateTimeFormat('en-GB', { hour:'2-digit', minute:'2-digit' }).format(now)
   return <div className="daybreak-progress"><header><span><i/> YOUR DAY, IN VIEW</span><time>{date}</time></header><div className="daybreak-progress__body"><div className="daybreak-progress__ring"><svg viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="80"/><circle className="progress" cx="90" cy="90" r="80" style={{strokeDashoffset:502.655*(1-percent/100)}}/></svg><div><strong>{percent}%</strong><small>OF YOUR DAY</small></div></div><div className="daybreak-progress__stats"><small>LOCAL TIME</small><strong>{time}</strong><span>TIME PASSED　{now.getHours()}h {now.getMinutes()}m</span><span>UNTIL MIDNIGHT　{23-now.getHours()}h {59-now.getMinutes()}m</span><div><i style={{width:`${percent}%`}}/></div></div></div></div>
 }
@@ -84,7 +87,7 @@ function DaybreakAnalogClock() {
   useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
   const hour = now.getHours()%12 + now.getMinutes()/60
   const minute = now.getMinutes() + now.getSeconds()/60
-  return <div className="daybreak-analog"><div className="daybreak-analog__dial">{Array.from({length:60},(_,i)=><i key={i} className={i%5===0?'major':''} style={{transform:`translate(-50%,-50%) rotate(${i*6}deg) translateY(-43%)`}}/>)}<i className="hour" style={{transform:`rotate(${hour*30}deg)`}}/><i className="minute" style={{transform:`rotate(${minute*6}deg)`}}/><i className="pin"/></div><div className="daybreak-analog__details"><span><i/> DAYBREAK · LOCAL TIME</span><strong>{new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric'}).format(now)}</strong><hr/><small>A QUIET MOMENT, WELL KEPT</small></div></div>
+  return <div className="daybreak-analog"><div className="daybreak-analog__dial">{Array.from({length:60},(_,i)=><i key={i} className={i%5===0?'major':''} style={{transform:`translate(-50%,-50%) rotate(${i*6}deg) translateY(-43%)`}}/>)}<i className="hour" style={{transform:`rotate(${hour*30}deg)`}}/><i className="minute" style={{transform:`rotate(${minute*6}deg)`}}/><i className="pin"/></div><div className="daybreak-analog__details"><span><i/> DAYBREAK</span><strong>{new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric'}).format(now)}</strong><hr/><small>A QUIET MOMENT, WELL KEPT</small></div></div>
 }
 
 function DemoTimeWidget({ zh }) {
@@ -283,7 +286,8 @@ export default function Scrollytelling({ lang = 'zh' }) {
     const observeAtViewportCenter = () => {
       observer?.disconnect()
       const anchor = storyAnchorY(root)
-      const band = Math.max(40,Math.min(72,Math.round(window.innerHeight*.08)))
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight
+      const band = Math.max(40,Math.min(72,Math.round(viewportHeight*.08)))
       const topInset = Math.max(0,Math.round(anchor-band/2))
       const bottomInset = Math.max(0,Math.round(window.innerHeight-anchor-band/2))
       observer = new IntersectionObserver(onEntries, { rootMargin:`-${topInset}px 0px -${bottomInset}px 0px`, threshold:0 })
@@ -302,9 +306,11 @@ export default function Scrollytelling({ lang = 'zh' }) {
     }
     observeAtViewportCenter()
     window.addEventListener('resize', onResize)
+    window.visualViewport?.addEventListener('resize', onResize)
     return () => {
       observer?.disconnect()
       window.removeEventListener('resize', onResize)
+      window.visualViewport?.removeEventListener('resize', onResize)
       cancelAnimationFrame(alignFrame)
       cancelAnimationFrame(resizeFrame)
       clearTimeout(actTransitionTimerRef.current)

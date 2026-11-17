@@ -769,14 +769,6 @@ html.en .zh { display: none; }
 .live-focus__actions>div { display:flex;flex-wrap:wrap;gap:3px;width:100%;max-width:100%; }
 .live-focus__actions button { white-space:nowrap; }
 .live-calendar__grid { min-height:0;grid-template-rows:repeat(7,minmax(0,1fr)); }
-@media(max-width:560px) {
-  .story-frame.act-0 .story-widget--focus.visible { width:43%; }
-  .story-frame.act-0 .live-focus { aspect-ratio:1.55; }
-  .story-frame.act-0 .live-focus__dial { width:44%;flex-basis:44%; }
-  .story-frame.act-0 .live-focus__dial small,.story-frame.act-0 .live-focus__foot { display:none; }
-  .story-frame.act-0 .live-focus__actions button { padding:2px 3px;font-size:5px; }
-}
-
 /* Small fidelity fixes based on the Aurora embedded component layouts. */
 .live-calendar__grid { grid-template-rows:none;grid-auto-rows:minmax(0,1fr); }
 .live-calendar__grid b { min-width:0;white-space:nowrap;font-size:clamp(6px,.32vw,8px);line-height:1; }
@@ -1269,12 +1261,6 @@ html.en .zh { display: none; }
 .story-frame.act-0 .live-focus__actions>div,.story-frame.act-1 .live-focus__actions>div,.story-frame.act-2 .live-focus__actions>div { display:flex;flex-wrap:wrap;gap:3px;width:100%;max-width:100%; }
 .story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { font-size:clamp(5px,.62vw,8px);padding:4px 6px; }
 @media(max-width:560px) {
-  .story-frame.act-0 .story-widget--focus.visible,.story-frame.act-1 .story-widget--focus.visible,.story-frame.act-2 .story-widget--focus.visible { left:3%;width:32%; }
-  .story-frame.act-0 .live-focus,.story-frame.act-1 .live-focus,.story-frame.act-2 .live-focus { aspect-ratio:1.42; }
-  .story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { padding:2px 3px;font-size:5px; }
-}
-
-@media(max-width:560px) {
   .daybreak-progress header { gap:2px;font-size:clamp(4px,1.8cqw,6px);letter-spacing:.04em; }
   .daybreak-progress header i { width:4px;height:4px;flex:none; }
   .daybreak-progress header time { font-size:clamp(4px,1.8cqw,6px);white-space:nowrap; }
@@ -1298,12 +1284,11 @@ html.en .zh { display: none; }
 }
 
 @media(max-width:360px) {
-  .story-frame { aspect-ratio:1.25/1; }
+  .story-frame { aspect-ratio:1.4/1; }
   .story-control.act-3,.quickstart__visual--panel .story-control.act-3 { aspect-ratio:1.25;max-height:96%; }
   .story-control.act-3 .control-status { display:none; }
   .story-control.act-3 .story-control__sidebar { padding:4% 5%; }
   .story-control.act-3 .control-brand { margin-bottom:8%; }
-  .story--cinematic .story-step { padding:112px 0 30px; }
 }
 
 @media(max-width:560px) {
@@ -1449,3 +1434,119 @@ html.en .zh { display: none; }
 .story-control.act-3 .companion-properties input[type="range"] { height:1.2em;margin:.25em 0; }
 .story-control.act-3 .companion-properties input[type="range"]::-webkit-slider-runnable-track { height:.22em;border-radius:1em; }
 .story-control.act-3 .companion-properties input[type="range"]::-webkit-slider-thumb { width:1em;height:1em;margin-top:-.39em;border-radius:50%; }
+
+/* Canonical mobile composition sizing. Values follow each original widget's desktop scale. */
+@media (max-width: 560px) {
+  .story--cinematic .story-step {
+    box-sizing:border-box;
+    min-height:100vh;
+    min-height:100dvh;
+    padding:32px 0;
+  }
+  .story--cinematic .story-step h3,
+  .story--cinematic .story-step__body { transform:translateY(16px); }
+
+  /* Focus is a scaled 620px embedded widget; keep its internal geometry proportional. */
+  .story-frame.act-0 .story-widget--focus.visible,
+  .story-frame.act-1 .story-widget--focus.visible,
+  .story-frame.act-2 .story-widget--focus.visible { left:3%;right:auto;bottom:8%;width:32%; }
+  .story-frame.act-0 .live-focus,
+  .story-frame.act-1 .live-focus,
+  .story-frame.act-2 .live-focus { aspect-ratio:1.78;padding:5% 6% 4%; }
+  .story-frame.act-0 .live-focus__body,
+  .story-frame.act-1 .live-focus__body,
+  .story-frame.act-2 .live-focus__body { gap:4%;padding:2% 0; }
+  .story-frame.act-0 .live-focus__dial,
+  .story-frame.act-1 .live-focus__dial,
+  .story-frame.act-2 .live-focus__dial { box-sizing:border-box;width:35.5%;flex:0 0 35.5%;padding:4%;border-width:1px; }
+  .story-frame .live-focus { font-size:.82cqw; }
+  .story-frame .live-focus__top { font-size:.8em;letter-spacing:.08em; }
+  .story-frame .live-focus__top small { padding:.35em .6em; }
+  .story-frame.act-0 .live-focus__dial span,.story-frame.act-1 .live-focus__dial span,.story-frame.act-2 .live-focus__dial span { font-size:.68em;line-height:1.1;letter-spacing:.05em; }
+  .story-frame.act-0 .live-focus__dial strong,.story-frame.act-1 .live-focus__dial strong,.story-frame.act-2 .live-focus__dial strong { font-size:3.65em;line-height:1; }
+  .story-frame.act-0 .live-focus__dial small,.story-frame.act-1 .live-focus__dial small,.story-frame.act-2 .live-focus__dial small { max-width:92%;font-size:.83em;line-height:1.15;text-align:center; }
+  .story-frame .live-focus__actions { min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:center;gap:.3em; }
+  .story-frame .live-focus__actions>div { display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));gap:.3em;width:100%;max-width:none; }
+  .story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { min-width:0;padding:.35em .45em;font-size:1em;line-height:1.1;white-space:normal; }
+  .story-frame .live-focus__foot { padding-top:2%;font-size:.4em; }
+
+  /* Daybreak's cards remain a scaled desktop composition; labels can wrap instead of clipping. */
+  .daybreak-progress,.daybreak-analog { width:44%;top:9%; }
+  .daybreak-progress { left:3%;padding:3%; }
+  .daybreak-analog { right:3%;padding:3%; }
+  .daybreak-progress header { gap:2%;font-size:1.35cqw;letter-spacing:.04em; }
+  .daybreak-progress header span { min-width:0;overflow:hidden;text-overflow:ellipsis; }
+  .daybreak-progress header i { width:.7cqw;height:.7cqw;flex:none; }
+  .daybreak-progress header time { font-size:1.45cqw;white-space:nowrap; }
+  .daybreak-progress__body { grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:4%; }
+  .daybreak-progress__ring,.daybreak-progress__stats { min-width:0; }
+  .daybreak-progress__ring strong { font-size:7cqw; }
+  .daybreak-progress__ring small,.daybreak-progress__stats small { font-size:1.25cqw;letter-spacing:.04em; }
+  .daybreak-progress__stats { gap:2%; }
+  .daybreak-progress__stats>strong { font-size:8cqw; }
+  .daybreak-progress__stats>span { min-width:0;font-size:1.35cqw;line-height:1.15;white-space:normal;overflow-wrap:anywhere; }
+  .daybreak-progress__stats>div { height:.6cqw;min-height:1px; }
+  .daybreak-analog { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:4%; }
+  .daybreak-analog__details { min-width:0;gap:7%;overflow:hidden; }
+  .daybreak-analog__details>span { min-width:0;font-size:1.3cqw;letter-spacing:.02em;white-space:nowrap; }
+  .daybreak-analog__details>span i { width:.7cqw;height:.7cqw;flex:none; }
+  .daybreak-analog__details>strong { font-size:4cqw;line-height:1.1;overflow-wrap:anywhere; }
+  .daybreak-analog__details>small { font-size:1.15cqw;letter-spacing:.04em; }
+  .daybreak-analog__dial>i.hour { width:.7cqw; }
+  .daybreak-analog__dial>i.minute { width:.5cqw; }
+  .daybreak-analog__dial>i.pin { width:1.5cqw;height:1.5cqw; }
+  .demo-time-widget { left:4%;bottom:8%; }
+  .demo-time-widget small { font-size:1.2cqw; }
+  .demo-time-widget strong { font-size:8cqw; }
+  .demo-time-widget span { font-size:1.6cqw; }
+
+  /* Companion is rendered as one scaled window. Its catalog follows the app's single scroll list. */
+  .story-control.act-3,.quickstart__visual--panel .story-control {
+    width:96%;left:2%;right:auto;aspect-ratio:1.54;max-height:96%;
+  }
+  .story-control.act-3 { font-size:1.5cqw;border-radius:1.2cqw; }
+  .story-control.act-3 .story-control__title { font-size:1.25cqw; }
+  .story-control.act-3 .story-control__title>img { width:1.3cqw;height:1.3cqw;min-width:0;min-height:0; }
+  .story-control.act-3 .story-control__title>span i { width:.5cqw;height:.5cqw;min-width:0;min-height:0; }
+  .story-control.act-3 .story-control__sidebar { padding:5% 5%; }
+  .story-control.act-3 .control-brand { font-size:1.4cqw;margin-bottom:12%; }
+  .story-control.act-3 .control-brand>img { min-width:0;width:20%; }
+  .story-control.act-3 .control-nav { font-size:1.7cqw;gap:.3em; }
+  .story-control.act-3 .control-nav>div { min-height:2.75em;padding:4% 6%; }
+  .story-control.act-3 .control-status { font-size:1.1cqw; }
+  .story-control.act-3 .control-banner { min-height:13%;gap:2%; }
+  .story-control.act-3 .control-banner strong { font-size:2.3cqw; }
+  .story-control.act-3 .control-banner small { font-size:1.35cqw; }
+  .story-control.act-3 button { padding:.48em .7em;min-height:2em; }
+  .story-control.act-3 .companion-catalog { display:block;overflow-y:auto;overscroll-behavior:contain; }
+  .story-control.act-3 .companion-catalog section { min-height:0;overflow:visible; }
+  .story-control.act-3 .companion-catalog section:first-child,
+  .story-control.act-3 .companion-catalog section:last-child { flex:none; }
+  .story-control.act-3 .companion-catalog h4,
+  .story-control.act-3 .companion-detail h4,
+  .story-control.act-3 .companion-preset-list h4,
+  .story-control.act-3 .companion-preset-content h4,
+  .story-control.act-3 .companion-runtime h4,
+  .story-control.act-3 .companion-properties h4 { font-size:.78em; }
+  .story-control.act-3 .companion-entry { gap:1.5%;padding:1.5%;margin-bottom:1%; }
+  .story-control.act-3 .companion-entry>img { width:18%;min-width:0; }
+  .story-control.act-3 .companion-entry b { font-size:.92em; }
+  .story-control.act-3 .companion-entry small,.story-control.act-3 .companion-detail span { font-size:.76em; }
+  .story-control.act-3 .companion-more-mobile { display:block;font-size:.58em; }
+  .story-control.act-3 .companion-preset-list,
+  .story-control.act-3 .companion-preset-content,
+  .story-control.act-3 .companion-runtime,
+  .story-control.act-3 .companion-properties { padding:3%; }
+  .story-control.act-3 .companion-property-list { min-height:0;overflow-y:auto;overscroll-behavior:contain; }
+  .story-control.act-3 .companion-preset-actions button,
+  .story-control.act-3 .companion-preset-row button { font-size:.56em; }
+  .story-control.act-3 .companion-property-row { font-size:.55em; }
+  .story-control.act-3 .companion-select-field,
+  .story-control.act-3 .companion-toggle-field { font-size:.58em; }
+}
+
+@media (max-width:360px) {
+  .story-frame { aspect-ratio:1.4/1; }
+  .story-control.act-3,.quickstart__visual--panel .story-control { aspect-ratio:1.38; }
+  .story-control.act-3 .control-status { display:none; }
+}
