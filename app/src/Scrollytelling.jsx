@@ -205,27 +205,40 @@ export default function Scrollytelling({ lang = 'zh' }) {
   const touchStartRef = useRef(null)
   const actTransitionRef = useRef(null)
   const actTransitionTimerRef = useRef(null)
+  const settleActTransitionRef = useRef(null)
   sceneRef.current = { act, phase: scenePhase }
   useEffect(() => {
     const nodes = refs.current.filter(Boolean)
     if (!('IntersectionObserver' in window)) return
     let observer
+    let scrollSettleTimer
+    const settlePendingAct = () => {
+      const pending = actTransitionRef.current
+      if (!pending) return
+      actTransitionRef.current = null
+      clearTimeout(actTransitionTimerRef.current)
+      actTransitionTimerRef.current = null
+      sceneRef.current = pending
+      setScenePhase(pending.phase)
+      setAct(pending.act)
+    }
+    settleActTransitionRef.current = settlePendingAct
     const onEntries = entries => {
+      if (actTransitionRef.current) return
       const entry = entries.filter(item => item.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0]
       if (!entry) return
       const nextAct = Number(entry.target.dataset.act)
       const currentAct = sceneRef.current.act
       if (nextAct === currentAct) return
-      const pending = actTransitionRef.current
-      if (pending?.act === nextAct) {
-        actTransitionRef.current = null
-        clearTimeout(actTransitionTimerRef.current)
-        actTransitionTimerRef.current = null
-      }
-      const nextPhase = pending?.act === nextAct ? pending.phase : nextAct < currentAct ? maxScenePhase(nextAct) : 0
+      const nextPhase = nextAct < currentAct ? maxScenePhase(nextAct) : 0
       sceneRef.current = { act: nextAct, phase: nextPhase }
       setScenePhase(nextPhase)
       setAct(nextAct)
+    }
+    const onScroll = () => {
+      if (!actTransitionRef.current) return
+      clearTimeout(scrollSettleTimer)
+      scrollSettleTimer = setTimeout(settlePendingAct, 160)
     }
     const observeAtViewportCenter = () => {
       observer?.disconnect()
@@ -234,11 +247,15 @@ export default function Scrollytelling({ lang = 'zh' }) {
       nodes.forEach(node => observer.observe(node))
     }
     observeAtViewportCenter()
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', observeAtViewportCenter)
     return () => {
       observer?.disconnect()
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', observeAtViewportCenter)
+      clearTimeout(scrollSettleTimer)
       clearTimeout(actTransitionTimerRef.current)
+      settleActTransitionRef.current = null
     }
   }, [])
   useEffect(() => {
@@ -248,7 +265,6 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const { act: currentAct, phase } = sceneRef.current
       if (actTransitionRef.current) return true
       if (performance.now() - lastInputRef.current < 820) return true
-      if (currentAct > 3) return false
       const maxPhase = maxScenePhase(currentAct)
       const nextPhase = phase + direction
       lastInputRef.current = performance.now()
@@ -261,10 +277,14 @@ export default function Scrollytelling({ lang = 'zh' }) {
       if (nextAct >= 0 && nextAct < refs.current.length) {
         actTransitionRef.current = { act: nextAct, phase: direction < 0 ? maxScenePhase(nextAct) : 0 }
         actTransitionTimerRef.current = setTimeout(() => {
-          actTransitionRef.current = null
-          actTransitionTimerRef.current = null
-        }, 1800)
-        refs.current[nextAct]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          settleActTransitionRef.current?.()
+        }, 2000)
+        const target = refs.current[nextAct]
+        if (target && Math.abs(target.getBoundingClientRect().top + target.getBoundingClientRect().height / 2 - window.innerHeight / 2) < 2) {
+          settleActTransitionRef.current?.()
+        } else {
+          target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
         return true
       }
       return false
@@ -280,7 +300,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const distance = touchStartRef.current - event.touches[0].clientY
       const { act: currentAct, phase } = sceneRef.current
       const maxPhase = maxScenePhase(currentAct)
-      const hasScene = currentAct <= 3 && (distance > 0 ? phase < maxPhase || currentAct < 4 : phase > 0 || currentAct > 0)
+      const hasScene = distance > 0 ? currentAct < 4 : currentAct > 0 && (phase > 0 || currentAct > 0)
       if (hasScene && Math.abs(distance) > 48) event.preventDefault()
     }
     const onTouchEnd = event => {
