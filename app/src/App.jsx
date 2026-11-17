@@ -168,6 +168,14 @@ export default function App() {
               <p><span className="zh">不是。只有 Web 类型并且接入了 BAP 协议的作品才支持 BAP 体系下桌面级的「自由组合」。您可以在订阅前查看创意工坊作品描述，确认作品是否支持 BAP；订阅后，也可以通过 BAP Companion 自动发现支持 BAP 的壁纸作品。</span><span className="en">No. Only web-based works that implement the BAP protocol support desktop composition through BAP. Check a Workshop item’s description before subscribing, or use BAP Companion to discover compatible wallpapers after subscribing.</span></p>
             </details>
             <details>
+              <summary><T zh="不启动 Wallpaper Engine 是否仍然可以享受 BAP 的桌面体验？" en="Can I use BAP’s desktop experience without running Wallpaper Engine?" /></summary>
+              <p><span className="zh">不可以。BAP 是基于 Wallpaper Engine 的协议，壁纸的最终渲染仍然基于 Wallpaper Engine。</span><span className="en">No. BAP is a protocol built on Wallpaper Engine, and wallpapers are ultimately rendered by Wallpaper Engine.</span></p>
+            </details>
+            <details>
+              <summary><T zh="BAP 是否支持 Linux 和 macOS 等其他桌面平台？" en="Does BAP support other desktop platforms such as Linux and macOS?" /></summary>
+              <p><span className="zh">不支持。BAP 只支持 Windows 平台。这是因为 Wallpaper Engine 在桌面端只支持 Windows。</span><span className="en">No. BAP supports Windows only because Wallpaper Engine supports Windows only on desktop.</span></p>
+            </details>
+            <details>
               <summary><T zh="BAP 是 Steam 或 Wallpaper Engine 官方推出的项目吗？" en="Is BAP an official Steam or Wallpaper Engine project?" /></summary>
               <p><span className="zh">不是。BAP 是由第三方社区构建的开源项目，与 Steam 或 Wallpaper Engine 官方无关。</span><span className="en">No. BAP is an open-source project built by an independent community and is not affiliated with Steam or the official Wallpaper Engine team.</span></p>
             </details>

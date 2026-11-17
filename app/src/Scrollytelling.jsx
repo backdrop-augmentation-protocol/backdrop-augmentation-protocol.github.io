@@ -364,7 +364,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
 }
 
 const wallpaperUserSteps = [
-  { zh:'在Steam上购买Wallpaper Engine。', en:'Purchase Wallpaper Engine on Steam.' },
+  { zh:'在Steam上购买并启动Wallpaper Engine。', en:'Purchase and launch Wallpaper Engine on Steam.' },
   { zh:'在Steam创意工坊找到Backdrop Augmentation Protocol官方账号，浏览并订阅您感兴趣的壁纸与组件。', en:'Find the official Backdrop Augmentation Protocol account on Steam Workshop, then browse and subscribe to wallpapers and components you like.' },
   { zh:'下载并启动 BAP Companion。', en:'Download and launch BAP Companion.' },
   { zh:'在 BAP Companion 新建预设并绑定对应的壁纸与组件实例。', en:'Create a preset in BAP Companion and bind the wallpaper and component instances you want to use.' },
