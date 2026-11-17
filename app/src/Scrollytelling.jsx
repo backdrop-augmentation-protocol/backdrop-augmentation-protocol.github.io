@@ -17,6 +17,25 @@ const futureWorks = [
 
 const maxScenePhase = actIndex => actIndex === 0 ? 3 : actIndex >= 1 && actIndex <= 3 ? 2 : 0
 
+const storyAnchorY = root => {
+  if (window.innerWidth <= 900) return window.innerHeight / 2
+  const stage = root.querySelector('.story__stage')
+  const frame = stage?.querySelector('.story-frame')
+  const stickyTop = Number.parseFloat(getComputedStyle(stage).top) || 94
+  return stickyTop + (frame?.getBoundingClientRect().height ?? stage?.getBoundingClientRect().height ?? 0) / 2
+}
+
+const alignStoryStep = (root, step) => {
+  if (!step) return 0
+  const rect = step.getBoundingClientRect()
+  const target = Math.max(0,window.scrollY+rect.top+rect.height/2-storyAnchorY(root))
+  if (Math.abs(window.scrollY-target) > 1) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top:target, behavior:reducedMotion ? 'auto' : 'smooth' })
+  }
+  return target
+}
+
 function LiveClock({ zh }) {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
@@ -206,12 +225,15 @@ export default function Scrollytelling({ lang = 'zh' }) {
   const actTransitionRef = useRef(null)
   const actTransitionTimerRef = useRef(null)
   const settleActTransitionRef = useRef(null)
+  const beginActTransitionRef = useRef(null)
   sceneRef.current = { act, phase: scenePhase }
   useEffect(() => {
+    const root = storyRef.current
+    if (!root) return
     const nodes = refs.current.filter(Boolean)
     if (!('IntersectionObserver' in window)) return
     let observer
-    let scrollSettleTimer
+    let alignFrame
     const settlePendingAct = () => {
       const pending = actTransitionRef.current
       if (!pending) return
@@ -223,39 +245,52 @@ export default function Scrollytelling({ lang = 'zh' }) {
       setAct(pending.act)
     }
     settleActTransitionRef.current = settlePendingAct
+    const beginActTransition = (nextAct, direction) => {
+      actTransitionRef.current = { act:nextAct, phase:direction < 0 ? maxScenePhase(nextAct) : 0 }
+      clearTimeout(actTransitionTimerRef.current)
+      cancelAnimationFrame(alignFrame)
+      const target = alignStoryStep(root, refs.current[nextAct])
+      const settleWhenAligned = () => {
+        const step = refs.current[nextAct]
+        const rect = step?.getBoundingClientRect()
+        if (!rect || Math.abs(rect.top+rect.height/2-storyAnchorY(root)) <= 2 || Math.abs(window.scrollY-target) <= 1) {
+          settlePendingAct()
+          return
+        }
+        alignFrame = requestAnimationFrame(settleWhenAligned)
+      }
+      alignFrame = requestAnimationFrame(settleWhenAligned)
+      actTransitionTimerRef.current = setTimeout(settlePendingAct, 1800)
+    }
+    beginActTransitionRef.current = beginActTransition
     const onEntries = entries => {
       if (actTransitionRef.current) return
       const entry = entries.filter(item => item.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0]
       if (!entry) return
-      const nextAct = Number(entry.target.dataset.act)
+      const observedAct = Number(entry.target.dataset.act)
       const currentAct = sceneRef.current.act
-      if (nextAct === currentAct) return
-      const nextPhase = nextAct < currentAct ? maxScenePhase(nextAct) : 0
-      sceneRef.current = { act: nextAct, phase: nextPhase }
-      setScenePhase(nextPhase)
-      setAct(nextAct)
-    }
-    const onScroll = () => {
-      if (!actTransitionRef.current) return
-      clearTimeout(scrollSettleTimer)
-      scrollSettleTimer = setTimeout(settlePendingAct, 160)
+      if (observedAct === currentAct) return
+      const direction = Math.sign(observedAct-currentAct)
+      beginActTransition(currentAct+direction, direction)
     }
     const observeAtViewportCenter = () => {
       observer?.disconnect()
-      const margin = Math.round(window.innerHeight * .44)
-      observer = new IntersectionObserver(onEntries, { rootMargin: `-${margin}px 0px -${margin}px 0px`, threshold: 0 })
+      const anchor = storyAnchorY(root)
+      const band = Math.max(40,Math.min(72,Math.round(window.innerHeight*.08)))
+      const topInset = Math.max(0,Math.round(anchor-band/2))
+      const bottomInset = Math.max(0,Math.round(window.innerHeight-anchor-band/2))
+      observer = new IntersectionObserver(onEntries, { rootMargin:`-${topInset}px 0px -${bottomInset}px 0px`, threshold:0 })
       nodes.forEach(node => observer.observe(node))
     }
     observeAtViewportCenter()
-    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', observeAtViewportCenter)
     return () => {
       observer?.disconnect()
-      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', observeAtViewportCenter)
-      clearTimeout(scrollSettleTimer)
+      cancelAnimationFrame(alignFrame)
       clearTimeout(actTransitionTimerRef.current)
       settleActTransitionRef.current = null
+      beginActTransitionRef.current = null
     }
   }, [])
   useEffect(() => {
@@ -264,9 +299,13 @@ export default function Scrollytelling({ lang = 'zh' }) {
     const storySection = root.closest('#story') ?? root
     const moveScene = direction => {
       const { act: currentAct, phase } = sceneRef.current
+      const maxPhase = maxScenePhase(currentAct)
+      const atBoundary = direction < 0
+        ? currentAct === 0 && phase === 0
+        : currentAct === refs.current.length - 1 && phase === maxPhase
+      if (atBoundary) return false
       if (actTransitionRef.current) return true
       if (performance.now() - lastInputRef.current < 820) return true
-      const maxPhase = maxScenePhase(currentAct)
       const nextPhase = phase + direction
       lastInputRef.current = performance.now()
       if (nextPhase >= 0 && nextPhase <= maxPhase) {
@@ -276,16 +315,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       }
       const nextAct = currentAct + direction
       if (nextAct >= 0 && nextAct < refs.current.length) {
-        actTransitionRef.current = { act: nextAct, phase: direction < 0 ? maxScenePhase(nextAct) : 0 }
-        actTransitionTimerRef.current = setTimeout(() => {
-          settleActTransitionRef.current?.()
-        }, 2000)
-        const target = refs.current[nextAct]
-        if (target && Math.abs(target.getBoundingClientRect().top + target.getBoundingClientRect().height / 2 - window.innerHeight / 2) < 2) {
-          settleActTransitionRef.current?.()
-        } else {
-          target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
+        beginActTransitionRef.current?.(nextAct,direction)
         return true
       }
       return false
@@ -295,10 +325,24 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const direction = Math.sign(event.deltaY)
       if (!direction) return
       const bounds = storySection.getBoundingClientRect()
-      const edgeRoom = Math.min(window.innerHeight * .16, 140)
-      const isStoryInRange = bounds.bottom > -edgeRoom && bounds.top < window.innerHeight + edgeRoom
-      if (!isStoryInRange || event.target?.closest?.('input,select,textarea,[contenteditable="true"]')) return
-      if (moveScene(direction)) event.preventDefault()
+      const anchor = storyAnchorY(root)
+      const isStoryAtAnchor = bounds.top <= anchor && bounds.bottom >= anchor
+      const activeStep = refs.current[sceneRef.current.act]
+      const activeRect = activeStep?.getBoundingClientRect()
+      const isSceneAligned = activeRect && Math.abs(activeRect.top+activeRect.height/2-anchor) <= Math.max(80,Math.min(150,window.innerHeight*.16))
+      if (!isStoryAtAnchor || (!isSceneAligned && !actTransitionRef.current) || event.target?.closest?.('input,select,textarea,[contenteditable="true"]')) return
+      const pending = actTransitionRef.current
+      const leavingStory = pending && (
+        pending.act === 0 && pending.phase === 0 && direction < 0 ||
+        pending.act === refs.current.length - 1 && pending.phase === maxScenePhase(pending.act) && direction > 0
+      )
+      if (leavingStory) {
+        settleActTransitionRef.current?.()
+        return
+      }
+      if (moveScene(direction)) {
+        event.preventDefault()
+      }
     }
     const onTouchStart = event => { touchStartRef.current = event.touches[0]?.clientY ?? null }
     const onTouchMove = event => {
