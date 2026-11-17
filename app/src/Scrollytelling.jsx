@@ -369,7 +369,7 @@ const wallpaperUserSteps = [
   { zh:'下载并启动 BAP Companion。', en:'Download and launch BAP Companion.' },
   { zh:'在 BAP Companion 新建预设并绑定对应的壁纸与组件实例。', en:'Create a preset in BAP Companion and bind the wallpaper and component instances you want to use.' },
   { zh:'在 BAP Companion 的「已安装」界面切换到目标宿主。', en:'In BAP Companion, switch to your host wallpaper from Installed.' },
-  { zh:'最后通过 BAP Companion 的桌面功能对壁纸与组件组合进行实时调整。', en:'Finally, use Desktop in BAP Companion to adjust the wallpaper and component combination in real time.' },
+  { zh:'最后通过 BAP Companion 的「桌面」功能对壁纸与组件组合进行实时调整。', en:'Finally, use Desktop in BAP Companion to adjust the wallpaper and component combination in real time.' },
   { zh:'大功告成！您成功构建了自己的专属桌面。', en:'All set! You have built a desktop of your own.' },
 ]
 
@@ -457,7 +457,7 @@ export function QuickStartStory({ lang = 'zh', companionUrl }) {
     {route === 'wallpaper' && <div className="quickstart__story">
       <QuickStartArtwork step={activeStep} zh={zh} companionUrl={companionUrl}/>
       <div className="quickstart__steps">{wallpaperUserSteps.map((item,index)=><article className={`quickstart__step${activeStep===index?' active':''}`} key={item.zh} ref={node=>stepRefs.current[index]=node} aria-current={activeStep===index?'step':undefined}>
-        <p>{index===2 ? <><span className="zh">下载并启动 </span><span className="en">Download and launch </span><a href={companionUrl} target="_blank" rel="noopener noreferrer">BAP Companion</a><span className="zh">。</span></> : <><span className="zh">{item.zh}</span><span className="en">{item.en}</span></>}</p>
+        <p>{index===0 ? <><span className="zh">在Steam上购买<a href="https://store.steampowered.com/app/431960/Wallpaper_Engine/" target="_blank" rel="noopener noreferrer">Wallpaper Engine</a>。</span><span className="en">Purchase <a href="https://store.steampowered.com/app/431960/Wallpaper_Engine/" target="_blank" rel="noopener noreferrer">Wallpaper Engine</a> on Steam.</span></> : index===1 ? <><span className="zh">在Steam创意工坊找到<a href="https://steamcommunity.com/id/BAP-Official/myworkshopfiles/" target="_blank" rel="noopener noreferrer">Backdrop Augmentation Protocol</a>官方账号，浏览并订阅您感兴趣的壁纸与组件。</span><span className="en">Find the official <a href="https://steamcommunity.com/id/BAP-Official/myworkshopfiles/" target="_blank" rel="noopener noreferrer">Backdrop Augmentation Protocol</a> account on Steam Workshop, then browse and subscribe to wallpapers and components you like.</span></> : index===2 ? <><span className="zh">下载并启动 </span><span className="en">Download and launch </span><a href={companionUrl} target="_blank" rel="noopener noreferrer">BAP Companion</a><span className="zh">。</span></> : <><span className="zh">{item.zh}</span><span className="en">{item.en}</span></>}</p>
       </article>)}</div>
     </div>}
   </div>
