@@ -138,6 +138,38 @@ export default function App() {
         </div>
       </section>
 
+      {/* ============ FAQ ============ */}
+      <section className="section section--alt reveal" id="faq">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="答疑解惑 BAP" en="BAP questions answered" /></p>
+            <h2><T zh="常见问题" en="Frequently asked questions" /></h2>
+          </header>
+          <div className="faq faq--accordion">
+            <details>
+              <summary><T zh="什么是「宿主」和「组件」？" en="What are hosts and components?" /></summary>
+              <p><span className="zh">「宿主」壁纸是独立可运行的背景作品，是桌面组合体验的「舞台」。「组件」是「宿主」壁纸的增强，通过运行时动态挂载到「宿主」壁纸，实现桌面功能与效果的拓展，是桌面组合体验的「舞者」。</span><span className="en">A host wallpaper is a standalone background work: the “stage” for a desktop composition. A component enhances a host by attaching to it at runtime, extending desktop features and effects. It is the “dancer” in the composition.</span></p>
+            </details>
+            <details>
+              <summary><T zh="什么是 BAP Companion？" en="What is BAP Companion?" /></summary>
+              <p><span className="zh">BAP Companion 是运行在桌面系统里的轻量级独立应用，用于组件发现、组件的动态挂载与桌面的自定义管理。</span><span className="en">BAP Companion is a lightweight, standalone desktop application for discovering components, mounting them dynamically, and managing a custom desktop.</span></p>
+            </details>
+            <details>
+              <summary><T zh="什么是组件的「独立模式」和「嵌入模式」？" en="What are a component’s standalone and embedded modes?" /></summary>
+              <p><span className="zh">当您未启动 BAP Companion，而是直接通过 Wallpaper Engine 切换组件作品时，组件便以「独立模式」展示。「独立模式」下，组件的基本功能可以正常使用，样式也能正常显示，但仅限于演示作品。如果需要完整体验，您需要通过 BAP Companion 对桌面的宿主和组件进行管理，此时组件可以在运行时动态挂载到宿主壁纸，组件即处于「嵌入模式」。</span><span className="en">If BAP Companion is not running and you switch directly to a component work in Wallpaper Engine, it appears in standalone mode. Its basic functions and styling work, but this mode is intended for demonstrations. For the full experience, manage the host and components in BAP Companion. Components then attach to the host wallpaper at runtime in embedded mode.</span></p>
+            </details>
+            <details>
+              <summary><T zh="所有 Wallpaper Engine 作品都支持 BAP 吗？" en="Do all Wallpaper Engine works support BAP?" /></summary>
+              <p><span className="zh">不是。只有 Web 类型并且接入了 BAP 协议的作品才支持 BAP 体系下桌面级的「自由组合」。您可以在订阅前查看创意工坊作品描述，确认作品是否支持 BAP；订阅后，也可以通过 BAP Companion 自动发现支持 BAP 的壁纸作品。</span><span className="en">No. Only web-based works that implement the BAP protocol support desktop composition through BAP. Check a Workshop item’s description before subscribing, or use BAP Companion to discover compatible wallpapers after subscribing.</span></p>
+            </details>
+            <details>
+              <summary><T zh="BAP 是 Steam 或 Wallpaper Engine 官方推出的项目吗？" en="Is BAP an official Steam or Wallpaper Engine project?" /></summary>
+              <p><span className="zh">不是。BAP 是由第三方社区构建的开源项目，与 Steam 或 Wallpaper Engine 官方无关。</span><span className="en">No. BAP is an open-source project built by an independent community and is not affiliated with Steam or the official Wallpaper Engine team.</span></p>
+            </details>
+          </div>
+        </div>
+      </section>
+
       {/* ============ SHOWCASE ============ */}
       <section className="section section--alt reveal" id="showcase">
         <div className="wrap">

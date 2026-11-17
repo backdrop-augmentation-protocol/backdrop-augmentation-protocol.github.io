@@ -425,6 +425,13 @@ html.en .zh { display: none; }
 .faq details { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 15px 20px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
 .faq summary { cursor: pointer; font-weight: 700; }
 .faq details p { color: var(--muted); font-size: 14.5px; margin: 10px 0 0; }
+.faq--accordion { max-width: 900px; margin-top: 0; }
+.faq--accordion details { padding: 20px 24px; }
+.faq--accordion summary { display:flex;align-items:center;justify-content:space-between;gap:20px;list-style:none; }
+.faq--accordion summary::-webkit-details-marker { display:none; }
+.faq--accordion summary::after { content:"+";flex:none;color:var(--brand);font-size:22px;font-weight:400;line-height:1;transition:transform .2s; }
+.faq--accordion details[open] summary::after { content:"−"; }
+.faq--accordion details p { line-height:1.8; }
 
 @media (max-width: 820px){ .paths { grid-template-columns: 1fr; } }
 
