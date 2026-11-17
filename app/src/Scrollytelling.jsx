@@ -394,7 +394,7 @@ function QuickStartArtwork({ step, zh, companionUrl }) {
     <div className="story-frame quickstart__frame">
       <div className="story-frame__glow"/>
       <div className={`quickstart__visual quickstart__visual--app${step === 0 ? ' active' : ''}`} aria-hidden={step !== 0}>
-        <div className="quickstart-app-card"><span className="quickstart-app-card__logo"><img src="./works/wallpaper-engine-logo.svg" alt="Wallpaper Engine"/></span><div><small>STEAM APP</small><strong>Wallpaper Engine</strong><span>{zh ? '动态壁纸应用' : 'Live wallpaper app'}</span></div></div>
+        <div className="quickstart-app-card"><span className="quickstart-app-card__logo"><img src="./works/wallpaper-engine-icon.png" alt="Wallpaper Engine"/></span><div><small>STEAM APP</small><strong>Wallpaper Engine</strong><span>{zh ? '动态壁纸应用' : 'Live wallpaper app'}</span></div></div>
       </div>
       <div className={`quickstart__visual quickstart__visual--workshop${step === 1 ? ' active' : ''}`} aria-hidden={step !== 1}><SteamWorkshopPreview/></div>
       <div className={`quickstart__visual quickstart__visual--companion-icon${step === 2 ? ' active' : ''}`} aria-hidden={step !== 2}>

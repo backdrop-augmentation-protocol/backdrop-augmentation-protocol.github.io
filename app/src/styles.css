@@ -873,8 +873,8 @@ html.en .zh { display: none; }
 .quickstart__visual--panel { overflow:visible; }
 .quickstart__visual--panel .story-control { z-index:1; }
 .quickstart-app-card { display:flex;align-items:center;gap:clamp(14px,3vw,32px);padding:clamp(22px,5vw,54px);border:1px solid #4f77a5;border-radius:24px;background:linear-gradient(145deg,#12284a,#101a35 72%);box-shadow:0 26px 70px #020a1880;color:#f2f7ff; }
-.quickstart-app-card__logo { display:grid;place-items:center;flex:none;width:clamp(68px,8vw,104px);height:clamp(68px,8vw,104px);border-radius:16px;background:#1266cc;box-shadow:0 14px 34px #030b1d88; }
-.quickstart-app-card__logo img { display:block;width:76%;height:76%;object-fit:contain;filter:brightness(0) invert(1); }
+.quickstart-app-card__logo { display:block;flex:none;width:clamp(68px,8vw,104px);height:clamp(68px,8vw,104px);border-radius:16px;box-shadow:0 14px 34px #030b1d88;overflow:hidden; }
+.quickstart-app-card__logo img { display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit; }
 .quickstart-app-card>div { display:grid;gap:9px; }
 .quickstart-app-card small { color:#8ab6f5;font-size:clamp(8px,.7vw,11px);font-weight:700;letter-spacing:.16em; }
 .quickstart-app-card strong { font-size:clamp(18px,2.4vw,32px);line-height:1.1; }
