@@ -958,7 +958,7 @@ html.en .zh { display: none; }
 /* ============ COMPANION DOWNLOAD PAGE ============ */
 .companion-page { position:relative;isolation:isolate;min-height:100vh;overflow:hidden;background:radial-gradient(70% 48% at 50% 0%,#e1efff 0%,transparent 72%),var(--bg); }
 .companion-page__visual { position:absolute;z-index:-1;inset:90px 0 0;overflow:hidden;perspective:1500px;opacity:.58;pointer-events:none;mask-image:linear-gradient(180deg,#000 0%,#000 66%,transparent 100%); }
-.companion-page__ui-perspective { position:absolute;top:-2%;left:calc(50% - 350px);width:min(1080px,82vw);height:min(780px,76vw);transform:rotateY(25deg) rotateX(16deg) rotateZ(1deg);transform-origin:center;filter:drop-shadow(0 34px 38px #10274855); }
+.companion-page__ui-perspective { position:absolute;top:-2%;left:calc(50% - 500px);width:min(1080px,82vw);height:min(780px,76vw);transform:rotateY(25deg) rotateX(16deg) rotateZ(1deg);transform-origin:center;filter:drop-shadow(0 34px 38px #10274855); }
 .companion-page__ui-perspective .story-control { top:0;right:0;width:100%;max-width:none;min-width:0;height:100%;max-height:none;opacity:1;transform:none;pointer-events:none;border-color:#284572; }
 .companion-page__ui-perspective .story-control.act-3 { opacity:1;transform:none; }
 .companion-page__nav { max-width:var(--maxw);margin:0 auto;padding:18px 22px;display:flex;align-items:center;gap:20px; }
