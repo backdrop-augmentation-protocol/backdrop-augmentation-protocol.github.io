@@ -71,7 +71,7 @@ function DemoTimeWidget({ zh }) {
   return <div className="demo-time-widget"><small>BAP TIME WIDGET</small><strong>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now)}</strong><span>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(now)}</span></div>
 }
 
-function CompanionPanel({ act, phase, zh }) {
+export function CompanionPanel({ act, phase, zh }) {
   const page = act === 3 ? phase : 2
   const layoutAct = Math.min(act, 3)
   const componentRows = ['Clock', 'Calendar', 'Focus'].map(name => ({ name, image:`./works/aurora-${name.toLowerCase()}.png` }))

@@ -1,4 +1,5 @@
 import release from './companion-release.json'
+import { CompanionPanel } from './Scrollytelling.jsx'
 
 const T = ({ zh, en }) => <><span className="zh">{zh}</span><span className="en">{en}</span></>
 
@@ -13,6 +14,11 @@ export default function CompanionDownloadPage({ lang, onToggleLanguage }) {
   const date = formatDate(release.publishedAt, lang)
   const size = `${(release.asset.size / 1024 / 1024).toFixed(1)} MB`
   return <main className="companion-page">
+    <div className="companion-page__visual" aria-hidden="true">
+      <div className="companion-page__ui-perspective" inert="">
+        <CompanionPanel act={3} phase={2} zh={zh} />
+      </div>
+    </div>
     <header className="companion-page__nav">
       <a className="brand" href="./" aria-label="BAP home">
         <span className="brand__mark"><img src="./icon-256.png" alt="" width="32" height="32" /></span>
