@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" fill="none">
+  <defs>
+    <linearGradient id="night" x1="120" y1="60" x2="1810" y2="1040" gradientUnits="userSpaceOnUse"><stop stop-color="#142039"/><stop offset=".48" stop-color="#32263e"/><stop offset="1" stop-color="#121a2b"/></linearGradient>
+    <radialGradient id="light" cx="0" cy="0" r="1" gradientTransform="matrix(700 0 0 480 860 350)" gradientUnits="userSpaceOnUse"><stop stop-color="#657bb0" stop-opacity=".5"/><stop offset="1" stop-color="#657bb0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="flow" x1="160" y1="800" x2="1760" y2="310" gradientUnits="userSpaceOnUse"><stop stop-color="#7189bb" stop-opacity="0"/><stop offset=".5" stop-color="#8ca2c9" stop-opacity=".5"/><stop offset=".78" stop-color="#d0a7a3" stop-opacity=".3"/><stop offset="1" stop-color="#d0a7a3" stop-opacity="0"/></linearGradient>
+    <filter id="soft" x="-10%" y="-50%" width="120%" height="200%"><feGaussianBlur stdDeviation="48"/></filter>
+  </defs>
+  <path fill="url(#night)" d="M0 0h1920v1080H0z"/><path fill="url(#light)" d="M0 0h1920v1080H0z"/>
+  <path d="M-160 820c290-340 520-300 820-90s570 210 850-100 470-280 600-250" stroke="url(#flow)" stroke-width="210" filter="url(#soft)"/>
+  <path d="M-130 850c300-280 540-260 830-70s560 170 840-110 470-240 600-210" stroke="url(#flow)" stroke-width="58"/>
+  <path d="M0 970c310-180 550-190 820-60s580 100 1100-160" stroke="#a9b8d4" stroke-opacity=".18" stroke-width="2"/>
+</svg>

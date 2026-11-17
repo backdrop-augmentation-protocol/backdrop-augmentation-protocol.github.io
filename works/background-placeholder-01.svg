@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" fill="none">
+  <defs>
+    <linearGradient id="base" x1="110" y1="90" x2="1770" y2="1010" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071827"/><stop offset=".52" stop-color="#102c38"/><stop offset="1" stop-color="#081326"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="220" y1="680" x2="1570" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2a8f94" stop-opacity="0"/><stop offset=".48" stop-color="#59c4a4" stop-opacity=".72"/><stop offset=".75" stop-color="#92e1bf" stop-opacity=".34"/><stop offset="1" stop-color="#68b9c8" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="matrix(780 0 0 390 1210 240)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4082a2" stop-opacity=".38"/><stop offset="1" stop-color="#4082a2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-10%" y="-50%" width="120%" height="200%"><feGaussianBlur stdDeviation="34"/></filter>
+  </defs>
+  <path fill="url(#base)" d="M0 0h1920v1080H0z"/>
+  <path fill="url(#glow)" d="M0 0h1920v1080H0z"/>
+  <path d="M-100 700c290-350 500-280 790-110s570 230 840-80 480-300 570-300" stroke="url(#wave)" stroke-width="185" filter="url(#blur)"/>
+  <path d="M-120 750c310-300 530-230 810-80s570 210 850-80 470-270 580-250" stroke="url(#wave)" stroke-opacity=".68" stroke-width="58"/>
+  <path d="M-80 900c270-200 490-170 780-40s570 150 820-90 490-220 560-190" stroke="#69c5aa" stroke-opacity=".18" stroke-width="3"/>
+</svg>
