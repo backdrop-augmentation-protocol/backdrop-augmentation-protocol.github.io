@@ -161,7 +161,8 @@ export default function App() {
             </details>
             <details>
               <summary><T zh="什么是组件的「独立模式」和「嵌入模式」？" en="What are a component’s standalone and embedded modes?" /></summary>
-              <p><span className="zh">当您未启动 BAP Companion，而是直接通过 Wallpaper Engine 切换组件作品时，组件便以「独立模式」展示。「独立模式」下，组件的基本功能可以正常使用，样式也能正常显示，但仅限于演示作品。如果需要完整体验，您需要通过 BAP Companion 对桌面的宿主和组件进行管理，此时组件可以在运行时动态挂载到宿主壁纸，组件即处于「嵌入模式」。</span><span className="en">If BAP Companion is not running and you switch directly to a component work in Wallpaper Engine, it appears in standalone mode. Its basic functions and styling work, but this mode is intended for demonstrations. For the full experience, manage the host and components in BAP Companion. Components then attach to the host wallpaper at runtime in embedded mode.</span></p>
+              <p><span className="zh">在「独立模式」下，组件可以直接作为 Wallpaper Engine 壁纸运行，基本功能与外观均满足正常使用的要求。但此时您只能单独使用该组件，无法体验 BAP 最具特色的自由组合能力。</span><span className="en">In standalone mode, a component runs directly as a Wallpaper Engine wallpaper. Its core features and appearance are fully usable, but you can only use that component on its own, without BAP’s free composition.</span></p>
+              <p><span className="zh">如果希望将多个组件与宿主壁纸自由搭配，可以使用 BAP Companion 管理桌面组合，组件会被动态挂载到兼容宿主中。此时组件便以「嵌入模式」运行。</span><span className="en">To combine multiple components with a host wallpaper, use BAP Companion to manage the desktop composition. The components are dynamically mounted into a compatible host and run in embedded mode.</span></p>
             </details>
             <details>
               <summary><T zh="所有 Wallpaper Engine 作品都支持 BAP 吗？" en="Do all Wallpaper Engine works support BAP?" /></summary>
