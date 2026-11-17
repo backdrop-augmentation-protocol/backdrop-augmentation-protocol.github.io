@@ -28,13 +28,13 @@ const storyAnchorY = root => {
   return stickyTop + (frame?.getBoundingClientRect().height ?? stage?.getBoundingClientRect().height ?? 0) / 2
 }
 
-const alignStoryStep = (root, step) => {
+const alignStoryStep = (root, step, behaviorOverride) => {
   if (!step) return 0
   const rect = step.getBoundingClientRect()
   const target = Math.max(0,window.scrollY+rect.top+rect.height/2-storyAnchorY(root))
   if (Math.abs(window.scrollY-target) > 1) {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    window.scrollTo({ top:target, behavior:reducedMotion ? 'auto' : 'smooth' })
+    window.scrollTo({ top:target, behavior:behaviorOverride ?? (reducedMotion ? 'auto' : 'smooth') })
   }
   return target
 }
@@ -198,7 +198,7 @@ export function CompanionPanel({ act, phase, zh }) {
       </div>}
       {page===1 && <div className="companion-presets">
         <aside className="companion-preset-list"><h4>{zh?'预设':'Presets'}</h4>{presetOrder.map(id=>presets.find(item=>item.id===id)).filter(Boolean).map(item=><div role="button" aria-pressed={selectedPresetId===item.id} tabIndex={0} onClick={()=>{setSelectedPresetId(item.id);setEditingPreset(false)}} onKeyDown={event=>event.key==='Enter'&&setSelectedPresetId(item.id)} className={'preset-entry'+(selectedPresetId===item.id?' selected':'')} key={item.id}>{item.name}</div>)}<div className="companion-preset-actions"><button className="primary" onClick={addPreset}>{zh?'新建预设':'New preset'}</button><div><button disabled={!selectedPreset} onClick={()=>{setDraftPresetName(selectedPreset?.name||'');setEditingPreset(true)}}>{zh?'重命名':'Rename'}</button><button disabled={!selectedPreset} onClick={removePreset}>{zh?'删除':'Delete'}</button></div><div><button aria-label={zh?'优先级上移':'Move preset up'} disabled={!selectedPreset||presetOrder.indexOf(selectedPresetId)===0} onClick={()=>movePreset(-1)}>{zh?'↑ 优先':'↑ Order'}</button><button aria-label={zh?'优先级下移':'Move preset down'} disabled={!selectedPreset||presetOrder.indexOf(selectedPresetId)===presetOrder.length-1} onClick={()=>movePreset(1)}>{zh?'↓ 优先':'↓ Order'}</button><button disabled={!selectedPreset} onClick={()=>selectedPreset&&updateSelectedPreset({enabled:!selectedPreset.enabled})}>{selectedPreset?.enabled?(zh?'停用':'Disable'):(zh?'启用':'Enable')}</button></div></div>{editingPreset&&<div className="companion-rename"><input aria-label="Preset name" value={draftPresetName} onChange={event=>setDraftPresetName(event.target.value)} onKeyDown={event=>event.key==='Enter'&&savePresetName()}/><button onClick={savePresetName}>{zh?'保存':'Save'}</button></div>}</aside>
-        <div className="companion-preset-content"><div className="companion-view-heading"><h4>{presetTab==='components'?(zh?'此预设中的组件 · 从上到下为显示顺序':'Components in this preset · Ordered top to bottom'):(zh?'使用此预设的宿主':'Hosts using this preset')}</h4><div className="companion-tabs"><button aria-pressed={presetTab==='components'} className={presetTab==='components'?'active':''} onClick={()=>setPresetTab('components')}>{zh?'组件':'Components'}</button><button aria-pressed={presetTab==='hosts'} className={presetTab==='hosts'?'active':''} onClick={()=>setPresetTab('hosts')}>{zh?'宿主':'Hosts'}</button></div></div>
+        <div className="companion-preset-content"><div className="companion-view-heading"><h4 className={`companion-view-heading__title companion-view-heading__title--${presetTab}`}>{presetTab==='components'?(zh?'此预设中的组件 · 从上到下为显示顺序':'Components in this preset · Ordered top to bottom'):(zh?'使用此预设的宿主':'Hosts using this preset')}</h4><div className="companion-tabs"><button aria-pressed={presetTab==='components'} className={presetTab==='components'?'active':''} onClick={()=>setPresetTab('components')}>{zh?'组件':'Components'}</button><button aria-pressed={presetTab==='hosts'} className={presetTab==='hosts'?'active':''} onClick={()=>setPresetTab('hosts')}>{zh?'宿主':'Hosts'}</button></div></div>
           <div className="companion-preset-items">{presetTab==='components' ? selectedPreset?.components.map((name,index)=>{const row=componentRows.find(item=>item.name===name);return <div role="button" aria-pressed={selectedPresetItem===name} tabIndex={0} onClick={()=>setSelectedPresetItem(name)} className={'companion-entry'+(selectedPresetItem===name?' selected':'')} key={`${name}-${index}`}><img src={row?.image} alt=""/><div><b>BAP Aurora {name}</b><small>{zh?'本地项目':'Local project'}</small><small>{zh?'可用 · 实例':'Ready · Instance'} {index+1}</small></div></div>}) : selectedPreset?.bound&&<div role="button" tabIndex={0} aria-pressed={selectedPresetItem==='host'} className={'companion-entry'+(selectedPresetItem==='host'?' selected':'')} onClick={()=>setSelectedPresetItem('host')}><img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'本地项目':'Local project'}</small><small>{zh?'当前壁纸':'Current wallpaper'}</small></div></div>}</div>
           <div className="companion-preset-bottom">{presetTab==='components'?<><button className="primary" disabled={!selectedPreset} onClick={addNextComponent}>{zh?'添加组件':'Add component'}</button><div className="companion-preset-row"><button disabled={!selectedPreset||!selectedPreset.components.includes(selectedPresetItem)} onClick={()=>changePresetComponent(selectedPresetItem,false)}>{zh?'移除':'Remove'}</button><button disabled={!selectedPreset||selectedPreset.components.indexOf(selectedPresetItem)<=0} onClick={()=>movePresetComponent(-1)}>{zh?'上移':'Move up'}</button><button disabled={!selectedPreset||selectedPreset.components.indexOf(selectedPresetItem)<0||selectedPreset.components.indexOf(selectedPresetItem)>=selectedPreset.components.length-1} onClick={()=>movePresetComponent(1)}>{zh?'下移':'Move down'}</button></div></>:<><button className="primary" disabled={!selectedPreset} onClick={()=>{updateSelectedPreset({bound:true});setPresetStatus(zh?'已添加壁纸':'Wallpaper added')}}>{zh?'添加宿主':'Add host'}</button><div className="companion-preset-row"><button className={selectedPreset?.bound?'primary':''} disabled={!selectedPreset} onClick={()=>{updateSelectedPreset({bound:true});setPresetStatus(zh?'已设为全局预设':'Set as global preset')}}>{zh?'设为全局':'Set global'}</button><button disabled={!selectedPreset?.bound} onClick={()=>{updateSelectedPreset({bound:false});setPresetStatus(zh?'已移除宿主':'Host removed')}}>{zh?'移除宿主':'Remove host'}</button></div></>}{editingPreset&&<span className="companion-feedback">{zh?'请在左侧保存预设名称':'Save the preset name on the left'}</span>}<small>{presetStatus||`${zh?'全局':'Global'}: ${selectedPreset?.name??'—'} · ${zh?'宿主专用设置':'Host overrides'}: ${selectedPreset?.bound?1:0}`}</small></div>
         </div>
@@ -237,6 +237,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
     if (!('IntersectionObserver' in window)) return
     let observer
     let alignFrame
+    let resizeFrame
     const settlePendingAct = () => {
       const pending = actTransitionRef.current
       if (!pending) return
@@ -288,12 +289,24 @@ export default function Scrollytelling({ lang = 'zh' }) {
       observer = new IntersectionObserver(onEntries, { rootMargin:`-${topInset}px 0px -${bottomInset}px 0px`, threshold:0 })
       nodes.forEach(node => observer.observe(node))
     }
+    const onResize = () => {
+      observeAtViewportCenter()
+      cancelAnimationFrame(resizeFrame)
+      resizeFrame = requestAnimationFrame(() => {
+        const bounds = root.getBoundingClientRect()
+        const anchor = storyAnchorY(root)
+        if (bounds.top > anchor || bounds.bottom < anchor) return
+        const targetAct = actTransitionRef.current?.act ?? sceneRef.current.act
+        alignStoryStep(root, refs.current[targetAct], 'auto')
+      })
+    }
     observeAtViewportCenter()
-    window.addEventListener('resize', observeAtViewportCenter)
+    window.addEventListener('resize', onResize)
     return () => {
       observer?.disconnect()
-      window.removeEventListener('resize', observeAtViewportCenter)
+      window.removeEventListener('resize', onResize)
       cancelAnimationFrame(alignFrame)
+      cancelAnimationFrame(resizeFrame)
       clearTimeout(actTransitionTimerRef.current)
       settleActTransitionRef.current = null
       beginActTransitionRef.current = null

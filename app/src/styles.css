@@ -1273,3 +1273,34 @@ html.en .zh { display: none; }
   .story-frame.act-0 .live-focus,.story-frame.act-1 .live-focus,.story-frame.act-2 .live-focus { aspect-ratio:1.42; }
   .story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { padding:2px 3px;font-size:5px; }
 }
+
+@media(max-width:560px) {
+  .daybreak-progress header { gap:2px;font-size:clamp(4px,1.8cqw,6px);letter-spacing:.04em; }
+  .daybreak-progress header i { width:4px;height:4px;flex:none; }
+  .daybreak-progress header time { font-size:clamp(4px,1.8cqw,6px);white-space:nowrap; }
+  .daybreak-analog { grid-template-columns:38% minmax(0,1fr);gap:4%; }
+  .daybreak-analog__details { gap:8%;overflow:hidden; }
+  .daybreak-analog__details>span { min-width:0;max-width:100%;overflow:hidden;font-size:clamp(4px,1.6cqw,6px);letter-spacing:.02em; }
+  .daybreak-analog__details>span i { width:4px;height:4px;flex:0 0 4px; }
+  .daybreak-analog__details>strong { font-size:clamp(7px,4cqw,12px);overflow-wrap:anywhere; }
+  .daybreak-analog__details>small { display:none; }
+  .daybreak-analog__dial>i.hour { width:3px; }
+  .daybreak-analog__dial>i.minute { width:2px; }
+  .daybreak-analog__dial>i.pin { width:6px;height:6px; }
+  .story-control.act-3 { aspect-ratio:1.42;max-height:96%; }
+  .quickstart__visual--panel .story-control.act-3 { aspect-ratio:1.42;max-height:96%; }
+  .story-control.act-3 .companion-view-heading__title { min-width:0;max-width:100%;overflow:hidden;font-size:0!important;line-height:1;white-space:nowrap; }
+  .story-control.act-3 .companion-view-heading__title--components::after { content:"预设组件";font-size:7px; }
+  .story-control.act-3 .companion-view-heading__title--hosts::after { content:"已绑定宿主";font-size:7px; }
+  html.en .story-control.act-3 .companion-view-heading__title--components::after { content:"Preset items"; }
+  html.en .story-control.act-3 .companion-view-heading__title--hosts::after { content:"Bound hosts"; }
+  .story-control.act-3 .companion-property-row>span { min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+}
+
+@media(max-width:360px) {
+  .story-frame { aspect-ratio:1.25/1; }
+  .story-control.act-3,.quickstart__visual--panel .story-control.act-3 { aspect-ratio:1.25;max-height:96%; }
+  .story-control.act-3 .control-status { display:none; }
+  .story-control.act-3 .story-control__sidebar { padding:4% 5%; }
+  .story-control.act-3 .control-brand { margin-bottom:8%; }
+}
