@@ -1580,3 +1580,9 @@ html.en .zh { display: none; }
   .daybreak-analog__details hr { margin:0; }
   .daybreak-analog__details>small { display:block;font-size:max(5px,3.3cqw);line-height:1.15;white-space:normal; }
 }
+
+@media (min-width:561px) {
+  .story-frame.act-0 .live-focus__actions button,
+  .story-frame.act-1 .live-focus__actions button,
+  .story-frame.act-2 .live-focus__actions button { font-size:clamp(5px,.5vw,7px);padding:2px 3px; }
+}
