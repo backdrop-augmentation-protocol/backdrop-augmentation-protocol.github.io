@@ -15,6 +15,8 @@ const futureWorks = [
   { title:'BAP Aurora Focus', image:'./works/aurora-focus.png', alt:'Aurora Focus preview' },
 ]
 
+const maxScenePhase = actIndex => actIndex === 0 ? 3 : actIndex >= 1 && actIndex <= 3 ? 2 : 0
+
 function LiveClock({ zh }) {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
@@ -71,6 +73,7 @@ function DemoTimeWidget({ zh }) {
 
 function CompanionPanel({ act, phase, zh }) {
   const page = act === 3 ? phase : 2
+  const layoutAct = Math.min(act, 3)
   const componentRows = ['Clock', 'Calendar', 'Focus'].map(name => ({ name, image:`./works/aurora-${name.toLowerCase()}.png` }))
   const [selectedInstalled,setSelectedInstalled] = useState('host')
   const [refreshNotice,setRefreshNotice] = useState('')
@@ -153,7 +156,7 @@ function CompanionPanel({ act, phase, zh }) {
       ? <><h5>{zh?'组件属性':'Component properties'}</h5>{selectField('locale',zh?'语言':'Language',selectedSettings.locale,[{value:'system',label:zh?'系统':'System'},{value:'zh-CN',label:'简体中文'},{value:'en-US',label:'English'}],value=>setComponentValue('locale',value))}{selectField('dateFormat',zh?'日期格式':'Date format',selectedSettings.dateFormat,[{value:'long',label:zh?'完整':'Long'},{value:'short',label:zh?'简短':'Short'},{value:'numeric',label:zh?'数字':'Numeric'}],value=>setComponentValue('dateFormat',value))}{selectField('weekStart',zh?'每周起始日':'First day of week',selectedSettings.weekStart,[{value:'monday',label:zh?'星期一':'Monday'},{value:'sunday',label:zh?'星期日':'Sunday'}],value=>setComponentValue('weekStart',value))}{toggleField('showAdjacentDays',zh?'显示相邻月份日期':'Show adjacent month dates',selectedSettings.showAdjacentDays,value=>setComponentValue('showAdjacentDays',value))}{selectField('appearance',zh?'外观':'Appearance',selectedSettings.appearance,[{value:'glass',label:zh?'玻璃卡片':'Glass card'},{value:'transparent',label:zh?'透明':'Transparent'}],value=>setComponentValue('appearance',value))}{componentRangeField('fontScale',zh?'文字大小':'Text size',.5,1.5,.01,value=>`${Number(value).toFixed(2)}`)}</>
       : <><h5>{zh?'组件属性':'Component properties'}</h5>{selectField('mode',zh?'计时模式':'Timer mode',selectedSettings.mode,[{value:'focus',label:zh?'专注':'Focus'},{value:'countdown',label:zh?'倒计时':'Countdown'}],value=>setComponentValue('mode',value))}{componentRangeField('duration',zh?'时长（分钟）':'Duration (minutes)',5,120,5,value=>`${value} min`)}{selectField('appearance',zh?'外观':'Appearance',selectedSettings.appearance,[{value:'glass',label:zh?'玻璃卡片':'Glass card'},{value:'transparent',label:zh?'透明':'Transparent'}],value=>setComponentValue('appearance',value))}{componentRangeField('fontScale',zh?'文字大小':'Text size',.5,1.5,.01,value=>`${Number(value).toFixed(2)}`)}</>
   const catalogCard = (id,title,subtitle,image) => <div role="button" tabIndex={0} aria-pressed={selectedInstalled===id} onClick={()=>setSelectedInstalled(id)} onKeyDown={event=>event.key==='Enter'&&setSelectedInstalled(id)} className={'companion-entry'+(selectedInstalled===id?' selected':'')+(id==='component-Focus'?' companion-entry--last':'')} key={id}><img src={image} alt=""/><div><b>{title}</b><small>{subtitle}</small></div></div>
-  return <div className={`story-control act-${act} page-${page}`} aria-label="BAP Companion">
+  return <div className={`story-control act-${layoutAct}${act > 3 ? ' exiting' : ''} page-${page}`} aria-label="BAP Companion">
     <div className="story-control__title"><img src="./icon-256.png" alt=""/>BAP Companion <span><i/><i/><i/></span></div>
     <div className="story-control__sidebar">
       <div className="control-brand"><img src="./icon-256.png" alt=""/><div><b>BAP Companion</b><small>{zh?'壁纸管理器':'Wallpaper manager'}</small></div></div>
@@ -200,14 +203,24 @@ export default function Scrollytelling({ lang = 'zh' }) {
   const sceneRef = useRef({ act: 0, phase: 0 })
   const lastInputRef = useRef(0)
   const touchStartRef = useRef(null)
+  const actTransitionRef = useRef(null)
   sceneRef.current = { act, phase: scenePhase }
-  useEffect(() => { setScenePhase(0) }, [act])
   useEffect(() => {
     const nodes = refs.current.filter(Boolean)
     if (!('IntersectionObserver' in window)) return
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (entry.isIntersecting) setAct(Number(entry.target.dataset.act))
-    }), { rootMargin: '-44% 0px -44% 0px', threshold: 0 })
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries.filter(item => item.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0]
+      if (!entry) return
+      const nextAct = Number(entry.target.dataset.act)
+      const currentAct = sceneRef.current.act
+      if (nextAct === currentAct) return
+      const pending = actTransitionRef.current
+      const nextPhase = pending?.act === nextAct ? pending.phase : nextAct < currentAct ? maxScenePhase(nextAct) : 0
+      actTransitionRef.current = null
+      sceneRef.current = { act: nextAct, phase: nextPhase }
+      setScenePhase(nextPhase)
+      setAct(nextAct)
+    }, { rootMargin: '-44% 0px -44% 0px', threshold: 0 })
     nodes.forEach(node => observer.observe(node))
     return () => observer.disconnect()
   }, [])
@@ -217,7 +230,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
     const moveScene = direction => {
       const { act: currentAct, phase } = sceneRef.current
       if (currentAct > 3) return false
-      const maxPhase = currentAct === 0 ? 3 : 2
+      const maxPhase = maxScenePhase(currentAct)
       if (performance.now() - lastInputRef.current < 380) return true
       const nextPhase = phase + direction
       lastInputRef.current = performance.now()
@@ -228,6 +241,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       }
       const nextAct = currentAct + direction
       if (nextAct >= 0 && nextAct < refs.current.length) {
+        actTransitionRef.current = { act: nextAct, phase: direction < 0 ? maxScenePhase(nextAct) : 0 }
         refs.current[nextAct]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
         return true
       }
@@ -243,7 +257,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       if (touchStartRef.current === null) return
       const distance = touchStartRef.current - event.touches[0].clientY
       const { act: currentAct, phase } = sceneRef.current
-      const maxPhase = currentAct === 0 ? 3 : 2
+      const maxPhase = maxScenePhase(currentAct)
       const hasScene = currentAct <= 3 && (distance > 0 ? phase < maxPhase || currentAct < 4 : phase > 0 || currentAct > 0)
       if (hasScene && Math.abs(distance) > 48) event.preventDefault()
     }

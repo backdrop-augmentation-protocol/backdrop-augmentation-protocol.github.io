@@ -659,6 +659,26 @@ html.en .zh { display: none; }
 .story-desktop.act-3 .story-widget--focus.featured{width:var(--focus-width,45%)}
 @media(max-width:560px){.story-desktop.act-3 .story-widget--focus.featured{left:3%;right:auto;bottom:25%;width:40%;transform:none}.story-control{width:55%}}
 
+/* Keep the live Focus component visually identical in acts one and two. */
+.story-frame.act-1 .live-focus { aspect-ratio:1.78;padding:4% 5% 3%; }
+.story-frame.act-1 .live-focus__body { gap:4%;padding:2% 0; }
+.story-frame.act-1 .live-focus__dial { box-sizing:border-box;width:43%;flex:0 0 43%;border-width:2px; }
+.story-frame.act-1 .live-focus__dial strong { line-height:1.1; }
+.story-frame.act-1 .live-focus__dial small { line-height:1.2; }
+.story-frame.act-1 .live-focus__actions { gap:3px; }
+.story-frame.act-1 .live-focus__actions>div { display:flex;flex-wrap:wrap;gap:3px;width:100%;max-width:100%; }
+.story-frame.act-1 .live-focus__actions button { font-size:clamp(5px,.54vw,7px);padding:3px 4px; }
+@media(max-width:560px) {
+  .story-frame.act-1 .live-focus { aspect-ratio:1.55;padding:4%; }
+  .story-frame.act-1 .live-focus__dial { width:43%;flex-basis:43%; }
+  .story-frame.act-1 .live-focus__dial small,.story-frame.act-1 .live-focus__foot { display:none; }
+  .story-frame.act-1 .live-focus__actions button { padding:2px 3px;font-size:5px; }
+}
+
+/* Keep the Companion close-up in place while it fades under the fifth-act overlay. */
+.story-control.act-3.exiting { opacity:0;pointer-events:none; }
+.story-control.act-3.exiting .companion-installed,.story-control.act-3.exiting .companion-presets,.story-control.act-3.exiting .companion-desktop { animation:none; }
+
 .story-future__brand{position:absolute;right:7%;bottom:7%;display:flex;align-items:center;gap:8px;color:#fff;font-size:10px;letter-spacing:.04em;text-shadow:0 2px 12px #071225}.story-future__brand img{width:22px;height:22px;border-radius:6px}.story-future__brand b{font-size:13px;letter-spacing:.12em}.story-future__brand span{font-size:7px;color:#f1e9e4;letter-spacing:.08em}.story-desktop.act-4 .story-widget{opacity:.08;filter:blur(6px);transform:scale(.96)}
 @media(max-width:560px){.story-future__brand{right:5%;bottom:5%;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:55%}.story-future__brand span{font-size:5px}.story-future__brand img{width:18px;height:18px}}
 
