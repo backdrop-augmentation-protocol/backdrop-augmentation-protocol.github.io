@@ -1585,4 +1585,8 @@ html.en .zh { display: none; }
   .story-frame.act-0 .live-focus__actions button,
   .story-frame.act-1 .live-focus__actions button,
   .story-frame.act-2 .live-focus__actions button { font-size:clamp(5px,.5vw,7px);padding:2px 3px; }
+
+  .story-control.act-3 .control-brand { font-size:1.1em; }
+  .story-control.act-3 .control-nav { font-size:.98em; }
+  .story-control.act-3 .control-banner strong { font-size:1.5em; }
 }
