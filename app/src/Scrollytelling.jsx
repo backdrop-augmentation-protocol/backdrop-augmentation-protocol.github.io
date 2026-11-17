@@ -243,6 +243,9 @@ export default function Scrollytelling({ lang = 'zh' }) {
       sceneRef.current = pending
       setScenePhase(pending.phase)
       setAct(pending.act)
+      if ((pending.act === 0 && pending.phase === 0) || (pending.act === refs.current.length - 1 && pending.phase === maxScenePhase(pending.act))) {
+        lastInputRef.current = performance.now()
+      }
     }
     settleActTransitionRef.current = settlePendingAct
     const beginActTransition = (nextAct, direction) => {
@@ -303,7 +306,12 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const atBoundary = direction < 0
         ? currentAct === 0 && phase === 0
         : currentAct === refs.current.length - 1 && phase === maxPhase
-      if (atBoundary) return false
+      if (atBoundary) {
+        const now = performance.now()
+        if (now - lastInputRef.current >= 900) return false
+        lastInputRef.current = now
+        return true
+      }
       if (actTransitionRef.current) return true
       if (performance.now() - lastInputRef.current < 820) return true
       const nextPhase = phase + direction
@@ -331,15 +339,6 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const activeRect = activeStep?.getBoundingClientRect()
       const isSceneAligned = activeRect && Math.abs(activeRect.top+activeRect.height/2-anchor) <= Math.max(80,Math.min(150,window.innerHeight*.16))
       if (!isStoryAtAnchor || (!isSceneAligned && !actTransitionRef.current) || event.target?.closest?.('input,select,textarea,[contenteditable="true"]')) return
-      const pending = actTransitionRef.current
-      const leavingStory = pending && (
-        pending.act === 0 && pending.phase === 0 && direction < 0 ||
-        pending.act === refs.current.length - 1 && pending.phase === maxScenePhase(pending.act) && direction > 0
-      )
-      if (leavingStory) {
-        settleActTransitionRef.current?.()
-        return
-      }
       if (moveScene(direction)) {
         event.preventDefault()
       }
