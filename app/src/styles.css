@@ -968,7 +968,7 @@ html.en .zh { display: none; }
 .companion-download>.eyebrow { margin-bottom:18px; }
 .companion-download h1 { font-size:clamp(40px,6vw,68px);letter-spacing:-.045em;margin:0; }
 .companion-download__lead { max-width:56ch;margin:18px auto 48px;color:var(--muted);font-size:clamp(16px,2vw,20px); }
-.companion-release { position:relative;max-width:760px;margin:0 auto;padding:clamp(24px,5vw,46px);text-align:left;border:1px solid #d6e2f4;border-radius:26px;background:#ffffffcc;backdrop-filter:blur(7px);box-shadow:0 32px 90px -42px #163e78a3; }
+.companion-release { position:relative;max-width:760px;margin:0 auto;padding:clamp(24px,5vw,46px);text-align:left;border:1px solid #d6e2f4;border-radius:26px;background:#ffffffb3;backdrop-filter:blur(7px);box-shadow:0 32px 90px -42px #163e78a3; }
 .companion-release__identity { display:flex;align-items:center;gap:19px; }
 .companion-release__identity>img { width:72px;height:72px;border-radius:18px;box-shadow:0 8px 22px #0c183733; }
 .companion-release__label { margin:0;color:var(--muted);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase; }
