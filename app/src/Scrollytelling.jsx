@@ -204,34 +204,52 @@ export default function Scrollytelling({ lang = 'zh' }) {
   const lastInputRef = useRef(0)
   const touchStartRef = useRef(null)
   const actTransitionRef = useRef(null)
+  const actTransitionTimerRef = useRef(null)
   sceneRef.current = { act, phase: scenePhase }
   useEffect(() => {
     const nodes = refs.current.filter(Boolean)
     if (!('IntersectionObserver' in window)) return
-    const observer = new IntersectionObserver(entries => {
+    let observer
+    const onEntries = entries => {
       const entry = entries.filter(item => item.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0]
       if (!entry) return
       const nextAct = Number(entry.target.dataset.act)
       const currentAct = sceneRef.current.act
       if (nextAct === currentAct) return
       const pending = actTransitionRef.current
+      if (pending?.act === nextAct) {
+        actTransitionRef.current = null
+        clearTimeout(actTransitionTimerRef.current)
+        actTransitionTimerRef.current = null
+      }
       const nextPhase = pending?.act === nextAct ? pending.phase : nextAct < currentAct ? maxScenePhase(nextAct) : 0
-      actTransitionRef.current = null
       sceneRef.current = { act: nextAct, phase: nextPhase }
       setScenePhase(nextPhase)
       setAct(nextAct)
-    }, { rootMargin: '-44% 0px -44% 0px', threshold: 0 })
-    nodes.forEach(node => observer.observe(node))
-    return () => observer.disconnect()
+    }
+    const observeAtViewportCenter = () => {
+      observer?.disconnect()
+      const margin = Math.round(window.innerHeight * .44)
+      observer = new IntersectionObserver(onEntries, { rootMargin: `-${margin}px 0px -${margin}px 0px`, threshold: 0 })
+      nodes.forEach(node => observer.observe(node))
+    }
+    observeAtViewportCenter()
+    window.addEventListener('resize', observeAtViewportCenter)
+    return () => {
+      observer?.disconnect()
+      window.removeEventListener('resize', observeAtViewportCenter)
+      clearTimeout(actTransitionTimerRef.current)
+    }
   }, [])
   useEffect(() => {
     const root = storyRef.current
     if (!root) return
     const moveScene = direction => {
       const { act: currentAct, phase } = sceneRef.current
+      if (actTransitionRef.current) return true
+      if (performance.now() - lastInputRef.current < 820) return true
       if (currentAct > 3) return false
       const maxPhase = maxScenePhase(currentAct)
-      if (performance.now() - lastInputRef.current < 380) return true
       const nextPhase = phase + direction
       lastInputRef.current = performance.now()
       if (nextPhase >= 0 && nextPhase <= maxPhase) {
@@ -242,6 +260,10 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const nextAct = currentAct + direction
       if (nextAct >= 0 && nextAct < refs.current.length) {
         actTransitionRef.current = { act: nextAct, phase: direction < 0 ? maxScenePhase(nextAct) : 0 }
+        actTransitionTimerRef.current = setTimeout(() => {
+          actTransitionRef.current = null
+          actTransitionTimerRef.current = null
+        }, 1800)
         refs.current[nextAct]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
         return true
       }
