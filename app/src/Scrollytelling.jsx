@@ -411,10 +411,10 @@ export default function Scrollytelling({ lang = 'zh' }) {
           <img className={'story-aurora story-aurora--act2-one' + (act === 2 && scenePhase === 1 ? ' is-active' : '')} src="./works/background-placeholder-03.svg" alt="" aria-hidden="true"/>
           <img className={'story-aurora story-aurora--act2-two' + (act === 2 && scenePhase === 2 ? ' is-active' : '')} src="./works/background-placeholder-04.svg" alt="" aria-hidden="true"/>
           <div className="story-vignette"/>
-          <div className={'story-widget story-widget--clock' + (showClock ? ' visible' : '')}><LiveClock zh={zh}/></div>
-          <div className={'story-widget story-widget--calendar' + (showCalendar ? ' visible' : '')}><LiveCalendar zh={zh}/></div>
-          <div className={'story-widget story-widget--focus' + (showFocus ? ' visible' : '') + (act === 3 ? ' featured' : '') + (act >= 2 && focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*visualScale/112}%`,'--focus-opacity':visualOpacity/100}}><LiveFocus zh={zh}/></div>
-          <div className={'story-third-works' + (act===2&&scenePhase>0?' visible':'')}><div className="story-third-works__daybreak"><DaybreakProgress/><DaybreakAnalogClock/></div><DemoTimeWidget zh={zh}/></div>
+          <div className={'story-widget story-widget--clock' + (showClock ? ' visible' : '')}><LiveClock zh={zh}/><img className="mobile-component-still" src={`./works/mobile/aurora-clock-${lang}.webp`} alt=""/></div>
+          <div className={'story-widget story-widget--calendar' + (showCalendar ? ' visible' : '')}><LiveCalendar zh={zh}/><img className="mobile-component-still" src={`./works/mobile/aurora-calendar-${lang}.webp`} alt=""/></div>
+          <div className={'story-widget story-widget--focus' + (showFocus ? ' visible' : '') + (act === 3 ? ' featured' : '') + (act >= 2 && focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*visualScale/112}%`,'--focus-opacity':visualOpacity/100}}><LiveFocus zh={zh}/><img className="mobile-component-still" src={`./works/mobile/aurora-focus-${lang}.webp`} alt=""/></div>
+          <div className={'story-third-works' + (act===2&&scenePhase>0?' visible':'')}><div className="story-third-works__daybreak"><DaybreakProgress/><DaybreakAnalogClock/><img className="mobile-daybreak-still mobile-daybreak-still--progress" src="./works/mobile/daybreak-progress.webp" alt=""/><img className="mobile-daybreak-still mobile-daybreak-still--analog" src="./works/mobile/daybreak-analog.webp" alt=""/></div><DemoTimeWidget zh={zh}/><img className="mobile-demo-still" src={`./works/mobile/demo-time-${lang}.webp`} alt=""/></div>
           <div className={'story-future' + (act >= 4 ? ' visible' : '')}>
             <div className="story-future__works">
               {futureWorks.map(work => <article className="future-work" key={work.title}>
@@ -427,6 +427,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
         </div>
         <div className={'story-miniworks' + (act === 1 ? ' visible' : '')}><span>INDEPENDENT WORKS</span><div><img src="./works/aurora-clock.png" alt=""/><img src="./works/aurora-calendar.png" alt=""/><img src="./works/aurora-focus.png" alt=""/></div><small>Aurora Clock · Calendar · Focus</small></div>
         <CompanionPanel act={act} phase={scenePhase} zh={zh}/>
+        {act === 3 && <img className="mobile-companion-still" src={`./works/mobile/companion-${scenePhase}-${lang}.webp`} alt={zh ? 'BAP Companion 界面' : 'BAP Companion interface'}/>}
       </div>
       <div className="story-progress" aria-hidden="true"><span style={{transform:`scaleX(${(act + 1) / acts.length})`}}/></div>
     </div>
@@ -463,6 +464,7 @@ function SteamWorkshopPreview() {
 }
 
 function QuickStartArtwork({ step, zh, companionUrl }) {
+  const lang = zh ? 'zh' : 'en'
   const companionPhase = step === 3 ? 1 : step === 4 ? 0 : 2
   return <div className="quickstart__stage" aria-label={zh ? '壁纸用户快速上手画面' : 'Wallpaper user quick start visuals'}>
     <div className="story-frame quickstart__frame">
@@ -474,10 +476,10 @@ function QuickStartArtwork({ step, zh, companionUrl }) {
       <div className={`quickstart__visual quickstart__visual--companion-icon${step === 2 ? ' active' : ''}`} aria-hidden={step !== 2}>
         <a className="quickstart-companion-card" href={companionUrl} target="_blank" rel="noopener noreferrer" tabIndex={step === 2 ? 0 : -1}><img src="./icon-512.png" alt="BAP Companion"/><strong>BAP Companion</strong><span>{zh ? '下载并启动' : 'Download and launch'}</span></a>
       </div>
-      {[3,4,5].map((panelStep)=><div className={`quickstart__visual quickstart__visual--panel${step === panelStep ? ' active' : ''}`} aria-hidden={step !== panelStep} inert={step !== panelStep ? '' : undefined} key={panelStep}><CompanionPanel act={3} phase={panelStep===3?1:panelStep===4?0:2} zh={zh}/></div>)}
+      {[3,4,5].map((panelStep)=><div className={`quickstart__visual quickstart__visual--panel${step === panelStep ? ' active' : ''}`} aria-hidden={step !== panelStep} inert={step !== panelStep ? '' : undefined} key={panelStep}><CompanionPanel act={3} phase={panelStep===3?1:panelStep===4?0:2} zh={zh}/><img className="mobile-companion-still" src={`./works/mobile/companion-${panelStep===3?1:panelStep===4?0:2}-${lang}.webp`} alt=""/></div>)}
       <div className={`quickstart__visual quickstart__visual--desktop${step === 6 ? ' active' : ''}`} aria-hidden={step !== 6}>
         <div className="story-frame quickstart__finished-desktop act-1"><div className="story-desktop act-1"><img className="story-aurora story-aurora--base" src="./works/aurora-scene.png" alt=""/><div className="story-vignette"/></div>
-          <div className="story-widget story-widget--clock visible"><LiveClock zh={zh}/></div><div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/></div><div className="story-widget story-widget--focus visible"><LiveFocus zh={zh}/></div>
+          <div className="story-widget story-widget--clock visible"><LiveClock zh={zh}/><img className="mobile-component-still" src={`./works/mobile/aurora-clock-${lang}.webp`} alt=""/></div><div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/><img className="mobile-component-still" src={`./works/mobile/aurora-calendar-${lang}.webp`} alt=""/></div><div className="story-widget story-widget--focus visible"><LiveFocus zh={zh}/><img className="mobile-component-still" src={`./works/mobile/aurora-focus-${lang}.webp`} alt=""/></div>
         </div>
       </div>
     </div>

@@ -1591,3 +1591,31 @@ html.en .zh { display: none; }
   .story-control.act-3 .control-nav { font-size:.98em; }
   .story-control.act-3 .control-banner strong { font-size:1.5em; }
 }
+
+.story-frame .mobile-component-still,
+.story-frame .mobile-daybreak-still,
+.story-frame .mobile-demo-still,
+.story-frame .mobile-companion-still,
+.quickstart__visual--panel .mobile-companion-still { display:none; }
+@media (max-width:560px) {
+  .story-frame .story-widget--calendar { width:34%; }
+  .story-frame.act-0 .story-widget--focus.visible,
+  .story-frame.act-1 .story-widget--focus.visible,
+  .story-frame.act-2 .story-widget--focus.visible { width:43%; }
+  .story-frame .story-widget .live-clock,
+  .story-frame .story-widget .live-calendar,
+  .story-frame .story-widget .live-focus,
+  .story-third-works__daybreak .daybreak-progress,
+  .story-third-works__daybreak .daybreak-analog,
+  .story-third-works>.demo-time-widget,
+  .story-frame.act-3>.story-control,
+  .quickstart__visual--panel .story-control { display:none; }
+  .story-frame .mobile-component-still { display:block;width:100%;height:auto; }
+  .story-third-works__daybreak .mobile-daybreak-still { display:block;position:absolute;width:48%;height:auto; }
+  .mobile-daybreak-still--progress { left:3%;top:5%; }
+  .mobile-daybreak-still--analog { right:3%;bottom:5%; }
+  .story-frame .mobile-demo-still { display:block;position:absolute;left:4%;bottom:8%;width:43%;height:auto;opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.15,1); }
+  .story-desktop.act-2.phase-2 .mobile-demo-still { opacity:1;transform:translateY(0); }
+  .story-frame.act-3>.mobile-companion-still,
+  .quickstart__visual--panel .mobile-companion-still { display:block;position:absolute;z-index:4;left:2%;top:50%;width:96%;height:auto;transform:translateY(-50%);pointer-events:none; }
+}
