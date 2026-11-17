@@ -261,6 +261,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
   useEffect(() => {
     const root = storyRef.current
     if (!root) return
+    const storySection = root.closest('#story') ?? root
     const moveScene = direction => {
       const { act: currentAct, phase } = sceneRef.current
       if (actTransitionRef.current) return true
@@ -290,8 +291,13 @@ export default function Scrollytelling({ lang = 'zh' }) {
       return false
     }
     const onWheel = event => {
+      if (event.ctrlKey) return
       const direction = Math.sign(event.deltaY)
       if (!direction) return
+      const bounds = storySection.getBoundingClientRect()
+      const edgeRoom = Math.min(window.innerHeight * .16, 140)
+      const isStoryInRange = bounds.bottom > -edgeRoom && bounds.top < window.innerHeight + edgeRoom
+      if (!isStoryInRange || event.target?.closest?.('input,select,textarea,[contenteditable="true"]')) return
       if (moveScene(direction)) event.preventDefault()
     }
     const onTouchStart = event => { touchStartRef.current = event.touches[0]?.clientY ?? null }
@@ -310,12 +316,12 @@ export default function Scrollytelling({ lang = 'zh' }) {
       touchStartRef.current = null
       if (Math.abs(delta) > 48) moveScene(Math.sign(delta))
     }
-    root.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('wheel', onWheel, { passive: false, capture: true })
     root.addEventListener('touchstart', onTouchStart, { passive: true })
     root.addEventListener('touchmove', onTouchMove, { passive: false })
     root.addEventListener('touchend', onTouchEnd, { passive: true })
     return () => {
-      root.removeEventListener('wheel', onWheel)
+      window.removeEventListener('wheel', onWheel, true)
       root.removeEventListener('touchstart', onTouchStart)
       root.removeEventListener('touchmove', onTouchMove)
       root.removeEventListener('touchend', onTouchEnd)
