@@ -659,22 +659,6 @@ html.en .zh { display: none; }
 .story-desktop.act-3 .story-widget--focus.featured{width:var(--focus-width,45%)}
 @media(max-width:560px){.story-desktop.act-3 .story-widget--focus.featured{left:3%;right:auto;bottom:25%;width:40%;transform:none}.story-control{width:55%}}
 
-/* Keep the live Focus component visually identical in acts one and two. */
-.story-frame.act-1 .live-focus { aspect-ratio:1.78;padding:4% 5% 3%; }
-.story-frame.act-1 .live-focus__body { gap:4%;padding:2% 0; }
-.story-frame.act-1 .live-focus__dial { box-sizing:border-box;width:43%;flex:0 0 43%;border-width:2px; }
-.story-frame.act-1 .live-focus__dial strong { line-height:1.1; }
-.story-frame.act-1 .live-focus__dial small { line-height:1.2; }
-.story-frame.act-1 .live-focus__actions { gap:3px; }
-.story-frame.act-1 .live-focus__actions>div { display:flex;flex-wrap:wrap;gap:3px;width:100%;max-width:100%; }
-.story-frame.act-1 .live-focus__actions button { font-size:clamp(5px,.54vw,7px);padding:3px 4px; }
-@media(max-width:560px) {
-  .story-frame.act-1 .live-focus { aspect-ratio:1.55;padding:4%; }
-  .story-frame.act-1 .live-focus__dial { width:43%;flex-basis:43%; }
-  .story-frame.act-1 .live-focus__dial small,.story-frame.act-1 .live-focus__foot { display:none; }
-  .story-frame.act-1 .live-focus__actions button { padding:2px 3px;font-size:5px; }
-}
-
 /* Keep the Companion close-up in place while it fades under the fifth-act overlay. */
 .story-control.act-3.exiting { opacity:0;pointer-events:none; }
 .story-control.act-3.exiting .companion-installed,.story-control.act-3.exiting .companion-presets,.story-control.act-3.exiting .companion-desktop { animation:none; }
@@ -1121,3 +1105,20 @@ html.en .zh { display: none; }
 @keyframes companionViewIn {from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .story-control.act-3 .companion-installed,.story-control.act-3 .companion-presets,.story-control.act-3 .companion-desktop {animation:companionViewIn .38s ease both;}
 @media(prefers-reduced-motion:reduce) {.story-control.act-3 .companion-installed,.story-control.act-3 .companion-presets,.story-control.act-3 .companion-desktop {animation:none;}}
+
+/* Use act three's Focus sizing and layout throughout the first three acts. */
+.story-frame.act-0 .story-widget--focus.visible,.story-frame.act-1 .story-widget--focus.visible,.story-frame.act-2 .story-widget--focus.visible { left:4%;right:auto;top:auto;bottom:8%;width:32%; }
+.story-frame.act-0 .live-focus,.story-frame.act-1 .live-focus,.story-frame.act-2 .live-focus { aspect-ratio:1.78;padding:5% 6% 4%; }
+.story-frame.act-0 .live-focus__body,.story-frame.act-1 .live-focus__body,.story-frame.act-2 .live-focus__body { gap:4%;padding:2% 0; }
+.story-frame.act-0 .live-focus__dial,.story-frame.act-1 .live-focus__dial,.story-frame.act-2 .live-focus__dial { box-sizing:border-box;width:43%;flex:0 0 43%;border-width:3px; }
+.story-frame.act-0 .live-focus__dial strong,.story-frame.act-1 .live-focus__dial strong,.story-frame.act-2 .live-focus__dial strong { font-size:clamp(13px,9cqw,26px);line-height:1.1; }
+.story-frame.act-0 .live-focus__dial small,.story-frame.act-1 .live-focus__dial small,.story-frame.act-2 .live-focus__dial small { display:block;max-width:88%;font-size:clamp(5px,3.1cqw,8px);line-height:1.2; }
+.story-frame.act-0 .live-focus__dial span,.story-frame.act-1 .live-focus__dial span,.story-frame.act-2 .live-focus__dial span { font-size:clamp(6px,3.4cqw,9px); }
+.story-frame.act-0 .live-focus__actions,.story-frame.act-1 .live-focus__actions,.story-frame.act-2 .live-focus__actions { gap:4px; }
+.story-frame.act-0 .live-focus__actions>div,.story-frame.act-1 .live-focus__actions>div,.story-frame.act-2 .live-focus__actions>div { display:flex;flex-wrap:wrap;gap:3px;width:100%;max-width:100%; }
+.story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { font-size:clamp(5px,.62vw,8px);padding:4px 6px; }
+@media(max-width:560px) {
+  .story-frame.act-0 .story-widget--focus.visible,.story-frame.act-1 .story-widget--focus.visible,.story-frame.act-2 .story-widget--focus.visible { left:3%;width:32%; }
+  .story-frame.act-0 .live-focus,.story-frame.act-1 .live-focus,.story-frame.act-2 .live-focus { aspect-ratio:1.42; }
+  .story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { padding:2px 3px;font-size:5px; }
+}
