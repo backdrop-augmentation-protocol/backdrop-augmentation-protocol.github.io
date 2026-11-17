@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import Scrollytelling from './Scrollytelling.jsx'
+import Scrollytelling, { QuickStartStory } from './Scrollytelling.jsx'
+
+const COMPANION_DOWNLOAD_URL = 'https://github.com/backdrop-augmentation-protocol/companion/releases/latest'
 
 // Bilingual helper: <T zh="..." en="..." />
 const T = ({ zh, en }) => (
@@ -74,7 +76,7 @@ export default function App() {
                 <svg className="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M9 12l2 2 4-4" /></svg>
                 <T zh="官方作品" en="Official works" />
               </a>
-              <a className="nav__quick-btn" href="https://github.com/backdrop-augmentation-protocol/companion/releases/latest" target="_blank" rel="noopener">
+              <a className="nav__quick-btn" href={COMPANION_DOWNLOAD_URL} target="_blank" rel="noopener">
                 <T zh="下载 Companion" en="Companion" />
               </a>
               <a className="nav__quick-btn" href="#faq">
@@ -117,7 +119,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ============ SCROLLYTELLING (5 acts) ============ */}
+      {/* ============ DISCOVER BAP ============ */}
       <section className="section reveal" id="story">
         <div className="wrap">
           <header className="sec-head">
@@ -125,6 +127,17 @@ export default function App() {
             <h2><T zh="从一张壁纸，展开更多可能" en="One wallpaper. More ways to make it yours." /></h2>
           </header>
       <Scrollytelling lang={lang} />
+        </div>
+      </section>
+
+      {/* ============ QUICK START ============ */}
+      <section className="section reveal" id="quickstart">
+        <div className="wrap">
+          <header className="sec-head">
+            <p className="kicker"><T zh="初探 BAP" en="Getting started with BAP" /></p>
+            <h2><T zh="快速上手" en="Quick start" /></h2>
+          </header>
+          <QuickStartStory lang={lang} companionUrl={COMPANION_DOWNLOAD_URL} />
         </div>
       </section>
 

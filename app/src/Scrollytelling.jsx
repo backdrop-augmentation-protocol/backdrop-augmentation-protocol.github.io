@@ -362,3 +362,103 @@ export default function Scrollytelling({ lang = 'zh' }) {
     </article>)}</div>
   </div>
 }
+
+const wallpaperUserSteps = [
+  { zh:'在Steam上购买Wallpaper Engine。', en:'Purchase Wallpaper Engine on Steam.' },
+  { zh:'在Steam创意工坊找到Backdrop Augmentation Protocol官方账号，浏览并订阅您感兴趣的壁纸与组件。', en:'Find the official Backdrop Augmentation Protocol account on Steam Workshop, then browse and subscribe to wallpapers and components you like.' },
+  { zh:'下载并启动 BAP Companion。', en:'Download and launch BAP Companion.' },
+  { zh:'在 BAP Companion 新建预设并绑定对应的壁纸与组件实例。', en:'Create a preset in BAP Companion and bind the wallpaper and component instances you want to use.' },
+  { zh:'在 BAP Companion 的「已安装」界面切换到目标宿主。', en:'In BAP Companion, switch to your host wallpaper from Installed.' },
+  { zh:'最后通过 BAP Companion 的桌面功能对壁纸与组件组合进行实时调整。', en:'Finally, use Desktop in BAP Companion to adjust the wallpaper and component combination in real time.' },
+  { zh:'大功告成！您成功构建了自己的专属桌面。', en:'All set! You have built a desktop of your own.' },
+]
+
+function SteamWorkshopPreview() {
+  const works = [
+    { image:'./works/aurora-focus.png', title:'BAP Aurora Focus' },
+    { image:'./works/aurora-clock.png', title:'BAP Aurora Clock' },
+    { image:'./works/aurora-calendar.png', title:'BAP Aurora Calendar' },
+    { image:'./works/aurora-scene.png', title:'BAP Aurora' },
+  ]
+  return <div className="steam-workshop" aria-label="Steam Workshop BAP official works">
+    <div className="steam-workshop__bar"><img src="./works/steam-icon.png" alt=""/><b>STEAM</b><span>商店　库　社区</span><small>Wallpaper Engine</small></div>
+    <div className="steam-workshop__heading"><img src="./icon-256.png" alt=""/><div><strong>Backdrop Augmentation Protocol</strong><span>创意工坊物品　›　Wallpaper Engine</span></div></div>
+    <nav className="steam-workshop__tabs" aria-label="Steam Workshop sections"><span>截图</span><span>艺术作品</span><span>视频</span><b>创意工坊物品</b><span>周边产品</span><span>合集</span><span>指南</span></nav>
+    <div className="steam-workshop__content"><aside><strong>创意工坊筛选</strong><span>Wallpaper Engine</span><span>Backdrop Augmentation Protocol</span><hr/><small>作品类型</small><span>壁纸</span><span>组件</span></aside><div className="steam-workshop__grid">{works.map(work=><article key={work.title}><img src={work.image} alt=""/><strong>{work.title}</strong><small>Wallpaper Engine</small></article>)}</div></div>
+  </div>
+}
+
+function QuickStartArtwork({ step, zh, companionUrl }) {
+  const companionPhase = step === 3 ? 1 : step === 4 ? 0 : 2
+  return <div className="quickstart__stage" aria-label={zh ? '壁纸用户快速上手画面' : 'Wallpaper user quick start visuals'}>
+    <div className="story-frame quickstart__frame">
+      <div className="story-frame__glow"/>
+      <div className={`quickstart__visual quickstart__visual--app${step === 0 ? ' active' : ''}`} aria-hidden={step !== 0}>
+        <div className="quickstart-app-card"><span className="quickstart-app-card__logo"><img src="./works/wallpaper-engine-logo.svg" alt="Wallpaper Engine"/></span><div><small>STEAM APP</small><strong>Wallpaper Engine</strong><span>{zh ? '动态壁纸应用' : 'Live wallpaper app'}</span></div></div>
+      </div>
+      <div className={`quickstart__visual quickstart__visual--workshop${step === 1 ? ' active' : ''}`} aria-hidden={step !== 1}><SteamWorkshopPreview/></div>
+      <div className={`quickstart__visual quickstart__visual--companion-icon${step === 2 ? ' active' : ''}`} aria-hidden={step !== 2}>
+        <a className="quickstart-companion-card" href={companionUrl} target="_blank" rel="noopener noreferrer" tabIndex={step === 2 ? 0 : -1}><img src="./icon-512.png" alt="BAP Companion"/><strong>BAP Companion</strong><span>{zh ? '下载并启动' : 'Download and launch'}</span></a>
+      </div>
+      {[3,4,5].map((panelStep)=><div className={`quickstart__visual quickstart__visual--panel${step === panelStep ? ' active' : ''}`} aria-hidden={step !== panelStep} inert={step !== panelStep ? '' : undefined} key={panelStep}><CompanionPanel act={3} phase={panelStep===3?1:panelStep===4?0:2} zh={zh}/></div>)}
+      <div className={`quickstart__visual quickstart__visual--desktop${step === 6 ? ' active' : ''}`} aria-hidden={step !== 6}>
+        <div className="story-frame quickstart__finished-desktop act-1"><div className="story-desktop act-1"><img className="story-aurora story-aurora--base" src="./works/aurora-scene.png" alt=""/><div className="story-vignette"/></div>
+          <div className="story-widget story-widget--clock visible"><LiveClock zh={zh}/></div><div className="story-widget story-widget--calendar visible"><LiveCalendar zh={zh}/></div><div className="story-widget story-widget--focus visible"><LiveFocus zh={zh}/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+export function QuickStartStory({ lang = 'zh', companionUrl }) {
+  const zh = lang === 'zh'
+  const [route, setRoute] = useState(null)
+  const [activeStep, setActiveStep] = useState(0)
+  const stepRefs = useRef([])
+  useEffect(() => {
+    if (route !== 'wallpaper') return
+    const frame = requestAnimationFrame(() => stepRefs.current[0]?.scrollIntoView({ behavior:'smooth', block:'center' }))
+    let frameId = 0
+    const updateStep = () => {
+      cancelAnimationFrame(frameId)
+      frameId = requestAnimationFrame(() => {
+        const center = window.innerHeight / 2
+        let closest = 0
+        let closestDistance = Infinity
+        stepRefs.current.forEach((node,index) => {
+          if (!node) return
+          const rect = node.getBoundingClientRect()
+          const distance = Math.abs(rect.top + rect.height / 2 - center)
+          if (distance < closestDistance) { closest = index; closestDistance = distance }
+        })
+        setActiveStep(current => current === closest ? current : closest)
+      })
+    }
+    window.addEventListener('scroll', updateStep, { passive:true })
+    window.addEventListener('resize', updateStep)
+    updateStep()
+    return () => {
+      cancelAnimationFrame(frame)
+      cancelAnimationFrame(frameId)
+      window.removeEventListener('scroll', updateStep)
+      window.removeEventListener('resize', updateStep)
+    }
+  }, [route])
+
+  return <div className="quickstart">
+    <div className="quickstart__routes" role="group" aria-label={zh ? '选择快速上手路线' : 'Choose a quick start path'}>
+      <button type="button" className={`quickstart__route${route === 'wallpaper' ? ' selected' : ''}`} aria-pressed={route === 'wallpaper'} onClick={() => setRoute('wallpaper')}>
+        <span className="quickstart__route-icon"><img src="./works/steam-icon.png" alt=""/></span><span className="quickstart__route-copy"><strong>{zh ? '壁纸用户' : 'Wallpaper user'}</strong><small>{zh ? '订阅作品，组合桌面' : 'Subscribe and compose'}</small></span><span className="quickstart__route-arrow" aria-hidden="true">→</span>
+      </button>
+      <button type="button" className="quickstart__route quickstart__route--soon" disabled title={zh ? '创作者快速上手指南准备中' : 'Creator guide is being prepared'}>
+        <span className="quickstart__route-icon"><img src="./icon-256.png" alt=""/></span><span className="quickstart__route-copy"><strong>{zh ? '作品创作者' : 'Work creator'}</strong><small>{zh ? '创作者路线准备中' : 'Creator guide coming soon'}</small></span><span className="quickstart__route-arrow" aria-hidden="true">↗</span>
+      </button>
+    </div>
+    {route === 'wallpaper' && <div className="quickstart__story">
+      <QuickStartArtwork step={activeStep} zh={zh} companionUrl={companionUrl}/>
+      <div className="quickstart__steps">{wallpaperUserSteps.map((item,index)=><article className={`quickstart__step${activeStep===index?' active':''}`} key={item.zh} ref={node=>stepRefs.current[index]=node} aria-current={activeStep===index?'step':undefined}>
+        <p>{index===2 ? <><span className="zh">下载并启动 </span><span className="en">Download and launch </span><a href={companionUrl} target="_blank" rel="noopener noreferrer">BAP Companion</a><span className="zh">。</span></> : <><span className="zh">{item.zh}</span><span className="en">{item.en}</span></>}</p>
+      </article>)}</div>
+    </div>}
+  </div>
+}
