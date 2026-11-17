@@ -1304,3 +1304,70 @@ html.en .zh { display: none; }
   .story-control.act-3 .story-control__sidebar { padding:4% 5%; }
   .story-control.act-3 .control-brand { margin-bottom:8%; }
 }
+
+@media(max-width:560px) {
+  .live-clock,.live-calendar { container-type:inline-size; }
+  .live-clock .live-clock__face { gap:4px;font-size:clamp(6px,5.5cqw,9px);letter-spacing:.08em; }
+  .live-clock .live-clock__face .live-dot { width:4px;height:4px;flex:none; }
+  .live-clock .live-clock__time { font-size:clamp(16px,21cqw,26px); }
+  .live-clock .live-clock__date { font-size:clamp(6px,5.7cqw,9px); }
+  .live-clock .live-clock__foot { font-size:clamp(5px,4.5cqw,7px);letter-spacing:.08em; }
+  .live-calendar .live-calendar__top b { font-size:clamp(6px,7cqw,9px);letter-spacing:.05em; }
+  .live-calendar button { font-size:clamp(6px,7cqw,9px);padding:2px 4px; }
+  .live-calendar .live-calendar__heading { gap:2px; }
+  .live-calendar .live-calendar__heading strong { font-size:clamp(9px,12cqw,15px); }
+  .live-calendar .live-calendar__heading nav { gap:2px; }
+  .live-calendar .live-calendar__heading nav button { padding:1px 3px;font-size:clamp(7px,8cqw,10px); }
+  .live-calendar>small { font-size:clamp(6px,6.5cqw,8px); }
+  .live-calendar .live-calendar__grid { gap:1px;margin-top:6%; }
+  .live-calendar .live-calendar__grid b { font-size:clamp(6px,7cqw,8px); }
+  .live-calendar .live-calendar__grid span { font-size:clamp(6px,8cqw,9px); }
+  .live-calendar .live-calendar__foot { font-size:clamp(5px,5.5cqw,7px);letter-spacing:.04em; }
+  .story-frame .live-focus__top { font-size:clamp(6px,5.5cqw,9px);letter-spacing:.08em; }
+  .story-frame .live-focus__top small { padding:2px 4px; }
+  .story-frame .live-focus__dial strong { font-size:clamp(12px,10cqw,20px); }
+  .story-frame .live-focus__dial span { font-size:clamp(6px,5.5cqw,8px);letter-spacing:.08em; }
+  .story-frame .live-focus__dial small { font-size:clamp(5px,4cqw,7px); }
+  .story-frame .live-focus__actions button { padding:3px 4px;font-size:clamp(6px,5.5cqw,8px); }
+  .story-frame .live-focus__foot { font-size:clamp(5px,4.5cqw,7px); }
+  .daybreak-progress__ring strong { font-size:clamp(11px,8cqw,18px); }
+  .daybreak-progress__ring small,.daybreak-progress__stats small { font-size:clamp(5px,4cqw,7px); }
+  .daybreak-progress__stats>strong { font-size:clamp(13px,11cqw,24px); }
+  .daybreak-progress__stats>span { font-size:clamp(5px,4.5cqw,8px); }
+  .story-desktop { container-type:inline-size; }
+  .demo-time-widget small { font-size:clamp(5px,1.2cqw,8px); }
+  .demo-time-widget strong { font-size:clamp(8px,3.2cqw,20px); }
+  .demo-time-widget span { font-size:clamp(6px,1.6cqw,10px); }
+}
+
+/* Scale component typography from each preview's own width at every breakpoint. */
+.live-clock,.live-calendar { container-type:inline-size; }
+.story-desktop { container-type:inline-size; }
+.live-clock .live-clock__face { font-size:clamp(6px,2.6cqw,11px); }
+.live-clock .live-clock__time { font-size:clamp(14px,15cqw,58px); }
+.live-clock .live-clock__date { font-size:clamp(6px,4.1cqw,12px); }
+.live-clock .live-clock__foot { font-size:clamp(5px,2.4cqw,8px); }
+.live-calendar .live-calendar__top b { font-size:clamp(6px,6cqw,11px); }
+.live-calendar button { font-size:clamp(6px,6cqw,10px); }
+.live-calendar .live-calendar__heading strong { font-size:clamp(10px,13cqw,20px); }
+.live-calendar .live-calendar__heading nav button { font-size:clamp(7px,8cqw,14px); }
+.live-calendar>small { font-size:clamp(6px,5.5cqw,10px); }
+.live-calendar .live-calendar__grid b { font-size:clamp(6px,6.5cqw,11px); }
+.live-calendar .live-calendar__grid span { font-size:clamp(6px,7.5cqw,12px); }
+.live-calendar .live-calendar__foot { font-size:clamp(5px,3.8cqw,8px); }
+.story-frame .live-focus__top { font-size:clamp(6px,3.7cqw,10px); }
+.story-frame.act-0 .live-focus__dial strong,.story-frame.act-1 .live-focus__dial strong,.story-frame.act-2 .live-focus__dial strong { font-size:clamp(10px,8cqw,28px); }
+.story-frame .live-focus__dial span { font-size:clamp(6px,5cqw,9px); }
+.story-frame .live-focus__dial small { font-size:clamp(5px,3.7cqw,8px); }
+.story-frame.act-0 .live-focus__actions button,.story-frame.act-1 .live-focus__actions button,.story-frame.act-2 .live-focus__actions button { font-size:clamp(5px,5cqw,9px);padding:clamp(1px,1cqw,3px) clamp(1px,1.5cqw,4px); }
+.story-frame .live-focus__actions,.story-frame .live-focus__actions>div { gap:2px; }
+.story-frame .live-focus__foot { font-size:clamp(5px,3.5cqw,8px); }
+.daybreak-progress__ring strong { font-size:clamp(10px,8cqw,36px); }
+.daybreak-progress__ring small,.daybreak-progress__stats small { font-size:clamp(5px,2.4cqw,8px); }
+.daybreak-progress__stats>strong { font-size:clamp(12px,12cqw,46px); }
+.daybreak-progress__stats>span { font-size:clamp(5px,2.7cqw,9px); }
+.daybreak-analog__details>span { font-size:clamp(5px,2.1cqw,10px); }
+.daybreak-analog__details>strong { font-size:clamp(8px,4.7cqw,22px); }
+.story-desktop .demo-time-widget small { font-size:clamp(5px,1.2cqw,10px); }
+.story-desktop .demo-time-widget strong { font-size:clamp(8px,3.2cqw,80px); }
+.story-desktop .demo-time-widget span { font-size:clamp(6px,1.6cqw,16px); }
