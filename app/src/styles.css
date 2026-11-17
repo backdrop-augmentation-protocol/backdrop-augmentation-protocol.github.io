@@ -871,3 +871,63 @@ html.en .zh { display: none; }
   .story-frame.act-1 .story-widget--focus.visible { width:43%; }
 }
 .story-frame.act-1 .story-desktop { opacity:1;filter:none;transform:none; }
+
+/* Third act: move from Aurora's completed composition into independent works. */
+.story-aurora--act2-one,.story-aurora--act2-two { z-index:0;opacity:0;transition:opacity .85s ease,transform 2s cubic-bezier(.2,.7,.15,1); }
+.story-aurora--act2-one.is-active,.story-aurora--act2-two.is-active { opacity:1; }
+.story-desktop.act-2.phase-0 .story-aurora--alt-two { opacity:1; }
+.story-desktop.act-2.phase-1 .story-aurora--act2-one,.story-desktop.act-2.phase-2 .story-aurora--act2-two { opacity:1; }
+.story-desktop.act-2.phase-1 .story-widget--clock,.story-desktop.act-2.phase-1 .story-widget--calendar,.story-desktop.act-2.phase-1 .story-widget--focus,
+.story-desktop.act-2.phase-2 .story-widget--clock,.story-desktop.act-2.phase-2 .story-widget--calendar,.story-desktop.act-2.phase-2 .story-widget--focus { opacity:0;filter:blur(5px);transform:translate3d(0,20px,0) scale(.96);pointer-events:none; }
+.story-third-works { position:absolute;inset:0;z-index:3;opacity:0;pointer-events:none;transition:opacity .5s ease; }
+.story-third-works.visible { opacity:1; }
+.story-third-works__daybreak { position:absolute;inset:0;opacity:0;transition:opacity .7s ease; }
+.story-desktop.act-2.phase-1 .story-third-works__daybreak { opacity:1; }
+.daybreak-progress,.daybreak-analog { position:absolute;top:12%;width:38%;aspect-ratio:1.78;border:1px solid #fff0d8c9;border-radius:clamp(12px,2vw,26px);background:linear-gradient(135deg,#fff9edf0,#f4e4c9e8);box-shadow:0 20px 60px #452d2140,inset 0 1px #ffffffd9;color:#44372f;font-family:"Segoe UI",Inter,system-ui,sans-serif;overflow:hidden;container-type:inline-size; }
+.daybreak-progress { left:5%;padding:3.2%; }
+.daybreak-progress header { display:flex;align-items:center;justify-content:space-between;gap:6px;margin:0 0 3%;font-size:clamp(5px,2.1cqw,10px);letter-spacing:.12em;color:#927968; }
+.daybreak-progress header span,.daybreak-analog__details>span { display:flex;align-items:center;gap:7px;font-weight:700;white-space:nowrap; }
+.daybreak-progress header i,.daybreak-analog__details>span i { width:7px;height:7px;border-radius:50%;background:#ba7042; }
+.daybreak-progress header time { font-size:clamp(6px,2.8cqw,13px);letter-spacing:0;text-align:right; }
+.daybreak-progress__body { display:grid;grid-template-columns:.8fr 1.2fr;align-items:center;gap:6%;height:78%; }
+.daybreak-progress__ring { position:relative;aspect-ratio:1;width:100%;display:grid;place-items:center; }
+.daybreak-progress__ring svg { position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg); }
+.daybreak-progress__ring circle { fill:none;stroke:#a9846440;stroke-width:3; }
+.daybreak-progress__ring circle.progress { stroke:#ba7042;stroke-linecap:round;stroke-dasharray:502.655;transition:stroke-dashoffset .7s ease; }
+.daybreak-progress__ring>div { display:grid;justify-items:center;gap:3px; }
+.daybreak-progress__ring strong { font-size:clamp(20px,8cqw,36px);font-weight:250;line-height:1; }
+.daybreak-progress__ring small,.daybreak-progress__stats small { color:#927968;font-size:clamp(4px,1.5cqw,8px);font-weight:700;letter-spacing:.13em; }
+.daybreak-progress__stats { display:grid;gap:5%;min-width:0; }
+.daybreak-progress__stats>strong { font-size:clamp(21px,12cqw,48px);font-weight:250;line-height:1;font-variant-numeric:tabular-nums; }
+.daybreak-progress__stats>span { font-size:clamp(5px,1.8cqw,9px);color:#806959;white-space:nowrap; }
+.daybreak-progress__stats>div { height:3px;background:#ad8c6a42;border-radius:9px;overflow:hidden; }
+.daybreak-progress__stats>div i { display:block;height:100%;background:#ba7042;border-radius:inherit;transition:width .7s ease; }
+.daybreak-analog { right:5%;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:5%;padding:3%; }
+.daybreak-analog__dial { position:relative;width:100%;aspect-ratio:1;border-radius:50%;border:1px solid #b88b586e;background:radial-gradient(circle at 36% 28%,#fffdf6,#f3e4c7 78%);box-shadow:inset 0 0 0 5px #fff8e5,inset 0 0 0 7px #d6b88888; }
+.daybreak-analog__dial>i:not(.hour):not(.minute):not(.pin) { position:absolute;left:50%;top:50%;width:1px;height:5%;background:#7f6a5d8a;transform-origin:center center; }
+.daybreak-analog__dial>i.major { width:2px;height:8%;background:#b5652e; }
+.daybreak-analog__dial>i.hour,.daybreak-analog__dial>i.minute { position:absolute;left:50%;top:50%;z-index:2;border-radius:8px;transform-origin:50% 100%; }
+.daybreak-analog__dial>i.hour { width:4px;height:25%;margin:-25% 0 0 -2px;background:#42362e; }
+.daybreak-analog__dial>i.minute { width:3px;height:34%;margin:-34% 0 0 -1.5px;background:#725445; }
+.daybreak-analog__dial>i.pin { position:absolute;left:50%;top:50%;z-index:3;width:9px;height:9px;border-radius:50%;background:#b5652e;transform:translate(-50%,-50%); }
+.daybreak-analog__details { min-width:0;display:grid;gap:12%; }
+.daybreak-analog__details>span { font-size:clamp(5px,2.1cqw,10px);letter-spacing:.12em;color:#8e7566;white-space:nowrap; }
+.daybreak-analog__details>strong { font-size:clamp(9px,4.7cqw,22px);font-weight:300;line-height:1.15;color:#44362e; }
+.daybreak-analog__details hr { width:100%;border:0;border-top:1px solid #b5652e55; }
+.daybreak-analog__details>small { font-size:clamp(4px,1.7cqw,8px);letter-spacing:.15em;color:#967d6a; }
+.demo-time-widget { position:absolute;left:5%;bottom:8%;display:grid;gap:2px;color:#fff;text-shadow:0 3px 15px #0008;opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.15,1);font-family:"Segoe UI",system-ui,sans-serif; }
+.story-desktop.act-2.phase-2 .demo-time-widget { opacity:1;transform:translateY(0); }
+.demo-time-widget small { font-size:clamp(5px,.55vw,10px);letter-spacing:.18em;opacity:.68; }
+.demo-time-widget strong { font-size:clamp(34px,7.5vw,100px);font-weight:200;letter-spacing:.03em;line-height:.95;font-variant-numeric:tabular-nums; }
+.demo-time-widget span { font-size:clamp(8px,1.1vw,16px);font-weight:300;opacity:.9; }
+@media(max-width:560px) {
+  .daybreak-progress,.daybreak-analog { top:9%;width:44%; }
+  .daybreak-progress { left:3%;padding:3%; }
+  .daybreak-analog { right:3%;padding:3%; }
+  .daybreak-progress__stats>span { font-size:4px; }
+  .daybreak-analog__details>strong { font-size:clamp(7px,4.7cqw,16px); }
+  .daybreak-progress__ring strong { font-size:clamp(17px,8cqw,28px); }
+  .demo-time-widget { left:4%;bottom:8%; }
+  .demo-time-widget strong { font-size:clamp(30px,12vw,56px); }
+  .demo-time-widget span { font-size:clamp(7px,2.2vw,10px); }
+}

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 const acts = [
   { title: ['A new desktop experience.', '崭新的桌面体验。'], body: ['BAP uses runtime injection. Components are mounted dynamically onto a complete wallpaper instead of being bundled into the wallpaper itself.', 'BAP采用运行时注入机制。组件不再集成在壁纸作品中，而是在原有完整壁纸上动态挂载，带给你不一样的桌面体验。'] },
   { title: ['Works connect across creators.', '跨作品互联互通。'], body: ['BAP defines a shared protocol so wallpapers can work together. One component can be mounted on different wallpapers, and one wallpaper can host multiple components.', 'BAP通过协议统一的规范，让壁纸间互联互通。「同个组件挂载于不同壁纸」与「同个壁纸挂载多种组件」成为可能。'] },
-  { tag: ['03 / YOUR DESKTOP', '03 / 你的桌面'], title: ['Choose what belongs in your scene.', '由你决定，哪些作品加入桌面。'], body: ['BAP Companion organizes installed components, instances and presets. Your host remains the canvas.', 'BAP Companion 管理已安装组件、实例与预设；动态壁纸仍是桌面的画布。'] },
+  { tag: ['03 / YOUR DESKTOP', '03 / 你的桌面'], title: ['A desktop made your way.', '高度自定义的桌面。'], body: ['Components and wallpapers are independent. Replace what does not fit, then combine works from different creators to make a desktop that feels like yours.', '组件与壁纸相互独立，哪不满意换哪里。订阅各个创作者的作品，组合和搭配出只属于你独一无二的桌面。'] },
   { tag: ['04 / IN YOUR HANDS', '04 / 随心调整'], title: ['Arrange it. Tune it. Make it yours.', '重新摆放、细致调整，成为你的桌面。'], body: ['Change a component’s position, scale or opacity, then see your composition settle into place.', '调整组件位置、大小与透明度，让桌面组合逐渐成为你喜欢的样子。'] },
   { tag: ['05 / MORE WORKS', '05 / \u66f4\u591a\u4f5c\u54c1'], title: ['Start with Aurora. More works can join.', '\u4ece Aurora \u7cfb\u5217\u5f00\u59cb\uff0c\u66f4\u591a\u517c\u5bb9\u4f5c\u54c1\u4f1a\u9646\u7eed\u52a0\u5165\u3002'], body: ['Hosts and components are independent works you can combine.', 'Host \u548c Component \u5404\u81ea\u72ec\u7acb\uff0c\u53ef\u4ee5\u81ea\u7531\u7ec4\u5408\u3002'] },
 ]
@@ -44,6 +44,29 @@ function LiveFocus({ zh }) {
   const clock=`${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}`
   const toggle=()=>{if(remaining===0)setRemaining(minutes*60);setRunning(value=>!value)}
   return <div className="live-focus"><div className="live-focus__top"><span>AURORA / FOCUS</span><small>{running?(zh?'专注中':'FOCUSING'):remaining===0?(zh?'已完成':'DONE'):(zh?'就绪':'READY')}</small></div><div className="live-focus__body"><div className="live-focus__dial"><span>{zh?'专注':'FOCUS'}</span><strong>{clock}</strong><small>{zh?'留一点时间，专注当下。':'A little room to breathe.'}</small></div><div className="live-focus__actions"><div>{[15,25,45,60].map(value=><button className={minutes===value?'selected':''} key={value} onClick={()=>{setMinutes(value);setRemaining(value*60);setRunning(false)}}>{value}m</button>)}</div><button className="focus-start" onClick={toggle}>{running?(zh?'暂停':'Pause'):remaining===0?(zh?'重新开始':'Start again'):(zh?'开始专注':'Start focus')}</button><button onClick={()=>{setRemaining(minutes*60);setRunning(false)}}>{zh?'重置':'Reset'}</button></div></div></div>
+}
+
+function DaybreakProgress() {
+  const [now, setNow] = useState(() => new Date())
+  useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
+  const percent = Math.floor((now.getHours() * 60 + now.getMinutes()) / 14.4)
+  const date = new Intl.DateTimeFormat('en-US', { weekday:'long', month:'long', day:'numeric' }).format(now)
+  const time = new Intl.DateTimeFormat('en-GB', { hour:'2-digit', minute:'2-digit' }).format(now)
+  return <div className="daybreak-progress"><header><span><i/> YOUR DAY, IN VIEW</span><time>{date}</time></header><div className="daybreak-progress__body"><div className="daybreak-progress__ring"><svg viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="80"/><circle className="progress" cx="90" cy="90" r="80" style={{strokeDashoffset:502.655*(1-percent/100)}}/></svg><div><strong>{percent}%</strong><small>OF YOUR DAY</small></div></div><div className="daybreak-progress__stats"><small>LOCAL TIME</small><strong>{time}</strong><span>TIME PASSED　{now.getHours()}h {now.getMinutes()}m</span><span>UNTIL MIDNIGHT　{23-now.getHours()}h {59-now.getMinutes()}m</span><div><i style={{width:`${percent}%`}}/></div></div></div></div>
+}
+
+function DaybreakAnalogClock() {
+  const [now, setNow] = useState(() => new Date())
+  useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
+  const hour = now.getHours()%12 + now.getMinutes()/60
+  const minute = now.getMinutes() + now.getSeconds()/60
+  return <div className="daybreak-analog"><div className="daybreak-analog__dial">{Array.from({length:60},(_,i)=><i key={i} className={i%5===0?'major':''} style={{transform:`translate(-50%,-50%) rotate(${i*6}deg) translateY(-43%)`}}/>)}<i className="hour" style={{transform:`rotate(${hour*30}deg)`}}/><i className="minute" style={{transform:`rotate(${minute*6}deg)`}}/><i className="pin"/></div><div className="daybreak-analog__details"><span><i/> DAYBREAK · LOCAL TIME</span><strong>{new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric'}).format(now)}</strong><hr/><small>A QUIET MOMENT, WELL KEPT</small></div></div>
+}
+
+function DemoTimeWidget({ zh }) {
+  const [now,setNow] = useState(() => new Date())
+  useEffect(() => { const timer = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(timer) }, [])
+  return <div className="demo-time-widget"><small>BAP TIME WIDGET</small><strong>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now)}</strong><span>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(now)}</span></div>
 }
 
 function CompanionPanel({ act, zh, focusOn, setFocusOn, focusMoved, setFocusMoved, presetName, setPresetName, scale, setScale, opacity, setOpacity }) {
@@ -116,7 +139,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
     if (!root) return
     const moveScene = direction => {
       const { act: currentAct, phase } = sceneRef.current
-      if (currentAct > 1) return false
+      if (currentAct > 2) return false
       const maxPhase = currentAct === 0 ? 3 : 2
       if (performance.now() - lastInputRef.current < 380) return true
       const nextPhase = phase + direction
@@ -144,7 +167,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const distance = touchStartRef.current - event.touches[0].clientY
       const { act: currentAct, phase } = sceneRef.current
       const maxPhase = currentAct === 0 ? 3 : 2
-      const hasScene = currentAct <= 1 && (distance > 0 ? phase < maxPhase || currentAct < 4 : phase > 0 || currentAct > 0)
+      const hasScene = currentAct <= 2 && (distance > 0 ? phase < maxPhase || currentAct < 4 : phase > 0 || currentAct > 0)
       if (hasScene && Math.abs(distance) > 48) event.preventDefault()
     }
     const onTouchEnd = event => {
@@ -165,23 +188,26 @@ export default function Scrollytelling({ lang = 'zh' }) {
       root.removeEventListener('touchend', onTouchEnd)
     }
   }, [])
-  const showClock = act !== 0 || scenePhase >= 1
-  const showCalendar = act !== 0 || scenePhase >= 2
-  const showFocus = act < 2 ? act === 1 || scenePhase >= 3 : focusOn
+  const showClock = act === 2 ? scenePhase === 0 : act !== 0 || scenePhase >= 1
+  const showCalendar = act === 2 ? scenePhase === 0 : act !== 0 || scenePhase >= 2
+  const showFocus = act === 2 ? scenePhase === 0 && focusOn : act < 2 ? act === 1 || scenePhase >= 3 : focusOn
   const visualScale = act < 2 ? 112 : scale
   const visualOpacity = act < 2 ? 82 : opacity
   return <div className="story story--cinematic" ref={storyRef} data-scene-act={act} data-scene-phase={scenePhase}>
     <div className="story__stage" aria-label="Aurora desktop composition changes as you scroll">
       <div className={`story-frame act-${act}`}>
         <div className="story-frame__glow"/>
-        <div className={`story-desktop act-${act} ${act === 1 ? `phase-${scenePhase}` : ''}`}>
-          <img className={'story-aurora story-aurora--base' + (act === 1 && scenePhase > 0 ? ' is-away' : '')} src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights wallpaper"/>
+        <div className={`story-desktop act-${act} ${act <= 2 ? `phase-${scenePhase}` : ''}`}>
+          <img className={'story-aurora story-aurora--base' + ((act === 1 && scenePhase > 0 || act === 2) ? ' is-away' : '')} src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights wallpaper"/>
           <img className={'story-aurora story-aurora--alt-one' + (act === 1 && scenePhase === 1 ? ' is-active' : '')} src="./works/background-placeholder-01.svg" alt="" aria-hidden="true"/>
-          <img className={'story-aurora story-aurora--alt-two' + (act === 1 && scenePhase === 2 ? ' is-active' : '')} src="./works/background-placeholder-02.svg" alt="" aria-hidden="true"/>
+          <img className={'story-aurora story-aurora--alt-two' + ((act === 1 && scenePhase === 2) || (act === 2 && scenePhase === 0) ? ' is-active' : '')} src="./works/background-placeholder-02.svg" alt="" aria-hidden="true"/>
+          <img className={'story-aurora story-aurora--act2-one' + (act === 2 && scenePhase === 1 ? ' is-active' : '')} src="./works/background-placeholder-03.svg" alt="" aria-hidden="true"/>
+          <img className={'story-aurora story-aurora--act2-two' + (act === 2 && scenePhase === 2 ? ' is-active' : '')} src="./works/background-placeholder-04.svg" alt="" aria-hidden="true"/>
           <div className="story-vignette"/>
           <div className={'story-widget story-widget--clock' + (showClock ? ' visible' : '')}><LiveClock zh={zh}/></div>
           <div className={'story-widget story-widget--calendar' + (showCalendar ? ' visible' : '')}><LiveCalendar zh={zh}/></div>
           <div className={'story-widget story-widget--focus' + (showFocus ? ' visible' : '') + (act === 3 ? ' featured' : '') + (act >= 2 && focusMoved?' moved':'')} style={{'--focus-width':`${(act===3?34:26)*visualScale/112}%`,'--focus-opacity':visualOpacity/100}}><LiveFocus zh={zh}/></div>
+          <div className={'story-third-works' + (act===2&&scenePhase>0?' visible':'')}><div className="story-third-works__daybreak"><DaybreakProgress/><DaybreakAnalogClock/></div><DemoTimeWidget zh={zh}/></div>
           <div className={'story-future' + (act >= 4 ? ' visible' : '')}>
             <div className="story-future__works">
               {futureWorks.map(work => <article className="future-work" key={work.title}>
