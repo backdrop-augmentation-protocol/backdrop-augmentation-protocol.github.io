@@ -69,42 +69,91 @@ function DemoTimeWidget({ zh }) {
   return <div className="demo-time-widget"><small>BAP TIME WIDGET</small><strong>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now)}</strong><span>{new Intl.DateTimeFormat(zh?'zh-CN':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(now)}</span></div>
 }
 
-function CompanionPanel({ act, phase, zh, focusOn, setFocusOn, presetName, scale, setScale, opacity, setOpacity }) {
+function CompanionPanel({ act, phase, zh, scale, setScale, opacity, setOpacity }) {
   const page = act === 3 ? phase : 2
   const componentRows = ['Clock', 'Calendar', 'Focus'].map(name => ({ name, image:`./works/aurora-${name.toLowerCase()}.png` }))
+  const [selectedInstalled,setSelectedInstalled] = useState('host')
+  const [refreshNotice,setRefreshNotice] = useState('')
+  const [presets,setPresets] = useState([{id:1,name:'Aurora Desktop',enabled:true,components:['Clock','Calendar','Focus'],bound:true}])
+  const [selectedPresetId,setSelectedPresetId] = useState(1)
+  const [presetTab,setPresetTab] = useState('components')
+  const [selectedPresetItem,setSelectedPresetItem] = useState('Clock')
+  const [editingPreset,setEditingPreset] = useState(false)
+  const [draftPresetName,setDraftPresetName] = useState('')
+  const [selectedDesktopComponent,setSelectedDesktopComponent] = useState('Focus')
+  const [layoutX,setLayoutX] = useState(50)
+  const [layoutY,setLayoutY] = useState(50)
+  const selectedPreset = presets.find(item => item.id === selectedPresetId)
   const pageName = [zh?'已安装':'Installed', zh?'预设':'Presets', zh?'桌面':'Desktop'][page] || 'Desktop'
-  const thumbnail = name => <img src={`./works/aurora-${name.toLowerCase()}.png`} alt=""/>
+  const selectedCatalogItem = selectedInstalled === 'host'
+    ? {name:'BAP Aurora',image:'./works/aurora-scene.png',kind:zh?'壁纸':'Wallpaper',id:'org.bap.official.aurora'}
+    : (() => { const name=selectedInstalled.replace('component-',''); const item=componentRows.find(row=>row.name===name); return {name:`Aurora ${name}`,image:item?.image,kind:zh?'组件':'Component',id:`org.bap.official.aurora-${name.toLowerCase()}`} })()
+  const flash = message => { setRefreshNotice(message); window.setTimeout(()=>setRefreshNotice(''),1800) }
+  const updateSelectedPreset = update => setPresets(items=>items.map(item=>item.id===selectedPresetId?{...item,...update}:item))
+  const addPreset = () => {
+    const id=Date.now()
+    const name=zh?`新建预设 ${presets.length+1}`:`New preset ${presets.length+1}`
+    setPresets(items=>[...items,{id,name,enabled:true,components:[],bound:false}])
+    setSelectedPresetId(id);setEditingPreset(false)
+  }
+  const savePresetName = () => { if(draftPresetName.trim()) updateSelectedPreset({name:draftPresetName.trim()});setEditingPreset(false) }
+  const removePreset = () => {
+    const remaining=presets.filter(item=>item.id!==selectedPresetId)
+    setPresets(remaining);setSelectedPresetId(remaining[0]?.id??-1);setEditingPreset(false)
+  }
+  const changePresetComponent = (name,add) => {
+    if(!selectedPreset)return
+    const next=add?[...selectedPreset.components,name]:selectedPreset.components.filter(item=>item!==name)
+    updateSelectedPreset({components:next})
+  }
+  const movePresetComponent = direction => {
+    if(!selectedPreset)return
+    const index=selectedPreset.components.indexOf(selectedPresetItem)
+    const target=index+direction
+    if(index<0||target<0||target>=selectedPreset.components.length)return
+    const next=[...selectedPreset.components];[next[index],next[target]]=[next[target],next[index]]
+    updateSelectedPreset({components:next})
+  }
+  const addNextComponent = () => {
+    const next=componentRows.find(item=>!selectedPreset?.components.includes(item.name))
+    if(next){changePresetComponent(next.name,true);setSelectedPresetItem(next.name)}else flash(zh?'组件已全部加入':'All components are already added')
+  }
+  const pageAction = () => {
+    if(page===0){setSelectedInstalled('host');flash(zh?'已刷新':'Refreshed')}
+    if(page===1)addPreset()
+    if(page===2)flash(zh?'属性已刷新':'Properties refreshed')
+  }
+  const catalogCard = (id,title,subtitle,image) => <div role="button" tabIndex={0} aria-pressed={selectedInstalled===id} onClick={()=>setSelectedInstalled(id)} onKeyDown={event=>event.key==='Enter'&&setSelectedInstalled(id)} className={'companion-entry'+(selectedInstalled===id?' selected':'')+(id==='component-Focus'?' companion-entry--last':'')} key={id}><img src={image} alt=""/><div><b>{title}</b><small>{subtitle}</small></div></div>
   return <div className={`story-control act-${act} page-${page}`} aria-label="BAP Companion">
     <div className="story-control__title"><img src="./icon-256.png" alt=""/>BAP Companion <span><i/><i/><i/></span></div>
     <div className="story-control__sidebar">
       <div className="control-brand"><img src="./icon-256.png" alt=""/><div><b>BAP Companion</b><small>{zh?'壁纸管理器':'Wallpaper manager'}</small></div></div>
       <nav className="control-nav">
-        {[zh?'已安装':'Installed',zh?'预设':'Presets',zh?'桌面':'Desktop',zh?'设置':'Settings'].map((name,index)=><div className={page===index?'selected':''} key={name}><i>{['▦','▤','▣','⚙'][index]}</i>{name}</div>)}
+        {[zh?'已安装':'Installed',zh?'预设':'Presets',zh?'桌面':'Desktop',zh?'设置':'Settings'].map((name,index)=><div className={page===index?'selected':''} key={name}>{name}</div>)}
       </nav>
       <div className="control-status"><b>BAP</b><small><i/> {zh?'服务正在运行':'Service running'}</small></div>
     </div>
     <div className="story-control__main">
-      <div className="control-banner"><div><strong>{pageName}</strong><small>{page===0?(zh?'浏览已安装的壁纸与组件':'Browse installed wallpapers and components'):page===1?(zh?'将组件与壁纸整理为预设方案':'Organize components and wallpapers into presets'):(zh?'查看当前壁纸及运行中的组件':'Current wallpaper and running components')}</small></div><button>{page===0?(zh?'刷新':'Refresh'):page===1?(zh?'新增预设':'New preset'):(zh?'刷新属性':'Refresh properties')}</button></div>
+      <div className="control-banner"><div><strong>{pageName}</strong><small>{page===0?(zh?'浏览已安装的壁纸与组件':'Browse installed wallpapers and components'):page===1?(zh?'将组件与壁纸整理为预设方案':'Organize components and wallpapers into presets'):(zh?'查看当前壁纸及运行中的组件':'Current wallpaper and running components')}</small></div>{page!==1&&<button onClick={pageAction}>{refreshNotice|| (page===0?(zh?'刷新':'Refresh'):(zh?'刷新属性':'Refresh properties'))}</button>}</div>
       {page===0 && <div className="companion-installed">
         <div className="companion-catalog">
-          <section><h4>{zh?'壁纸':'Wallpapers'} <small>01</small></h4><div className="companion-entry selected"><img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'本地项目 · 可用':'Local project · Ready'}</small></div></div></section>
-          <section><h4>{zh?'组件':'Components'} <small>03</small></h4>{componentRows.map(({name,image})=><div className={'companion-entry'+(name==='Focus'?' companion-entry--last':'')} key={name}><img src={image} alt=""/><div><b>Aurora {name}</b><small>{zh?'本地项目 · 可用':'Local project · Ready'}</small></div></div>)}<div className="companion-more-mobile">{zh?'＋ 还有 1 个组件':'＋ 1 more component'}</div></section>
+          <section><h4>{zh?'壁纸':'Wallpapers'} <small>01</small></h4>{catalogCard('host','BAP Aurora',zh?'本地项目 · 可用':'Local project · Ready','./works/aurora-scene.png')}</section>
+          <section><h4>{zh?'组件':'Components'} <small>03</small></h4>{componentRows.map(({name,image})=>catalogCard(`component-${name}`,`Aurora ${name}`,zh?'本地项目 · 可用':'Local project · Ready',image))}<div className="companion-more-mobile">{zh?'＋ 还有 1 个组件':'＋ 1 more component'}</div></section>
         </div>
-        <aside className="companion-detail"><h4>{zh?'详情':'Details'}</h4><img src="./works/aurora-scene.png" alt=""/><b>BAP Aurora</b><span>{zh?'来源：本地项目':'Source: Local project'}</span><span>{zh?'状态：可用':'Status: Ready'}</span><span>{zh?'BAP 标识':'BAP ID'}: org.bap.official.aurora</span><button>{zh?'切换到此壁纸':'Switch wallpaper'}</button></aside>
+        <aside className="companion-detail"><h4>{zh?'详情':'Details'}</h4><img src={selectedCatalogItem.image} alt=""/><b>{selectedCatalogItem.name}</b><span>{zh?'来源：本地项目':'Source: Local project'}</span><span>{zh?'状态：可用':'Status: Ready'}</span><span>{selectedCatalogItem.kind} · {selectedCatalogItem.id}</span><button onClick={()=>flash(zh?'已选择此作品':'Work selected')}>{zh?'切换到此壁纸':'Switch wallpaper'}</button></aside>
       </div>}
       {page===1 && <div className="companion-presets">
-        <aside className="companion-preset-list"><h4>{zh?'预设':'Presets'}</h4><div className="preset-entry selected">{presetName||'Aurora Desktop'}<small>{zh?'已启用':'Enabled'}</small></div><button>{zh?'＋ 新建预设':'＋ New preset'}</button><div className="companion-button-row"><button>{zh?'重命名':'Rename'}</button><button>{zh?'删除':'Delete'}</button></div></aside>
-        <div className="companion-preset-content"><div className="companion-view-heading"><div><h4>{zh?'所选组件':'Selected components'}</h4><small>{zh?'决定此预设包含哪些作品与实例':'Choose the works and instances in this preset'}</small></div><div className="companion-tabs"><b>{zh?'组件':'Components'}</b><span>{zh?'壁纸':'Wallpapers'}</span></div></div>
-          {componentRows.map(({name,image},index)=><div className="companion-entry" key={name}><img src={image} alt=""/><div><b>Aurora {name}</b><small>{zh?'实例':'Instance'} 0{index+1} · {zh?'本地项目':'Local project'}</small></div><span className="companion-check">✓</span></div>)}
-          <div className="companion-button-row"><button>{zh?'移除':'Remove'}</button><button>{zh?'上移':'Move up'}</button><button>{zh?'下移':'Move down'}</button></div>
-          <div className="companion-bound-host"><b>{zh?'绑定壁纸':'Bound wallpaper'}</b><div className="companion-entry"> <img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'当前壁纸':'Current wallpaper'}</small></div><span className="companion-check">✓</span></div></div>
+        <aside className="companion-preset-list"><h4>{zh?'预设':'Presets'}</h4>{presets.map(item=><div role="button" aria-pressed={selectedPresetId===item.id} tabIndex={0} onClick={()=>{setSelectedPresetId(item.id);setEditingPreset(false)}} onKeyDown={event=>event.key==='Enter'&&setSelectedPresetId(item.id)} className={'preset-entry'+(selectedPresetId===item.id?' selected':'')} key={item.id}>{item.name}<small>{item.enabled?(zh?'已启用':'Enabled'):(zh?'已禁用':'Disabled')}</small></div>)}<button onClick={addPreset}>{zh?'＋ 新建预设':'＋ New preset'}</button><div className="companion-button-row">{editingPreset?<><input aria-label="Preset name" value={draftPresetName} onChange={event=>setDraftPresetName(event.target.value)} onKeyDown={event=>event.key==='Enter'&&savePresetName()}/><button onClick={savePresetName}>{zh?'保存':'Save'}</button></>:<button disabled={!selectedPreset} onClick={()=>{setDraftPresetName(selectedPreset?.name||'');setEditingPreset(true)}}>{zh?'重命名':'Rename'}</button>}<button disabled={!selectedPreset} onClick={removePreset}>{zh?'删除':'Delete'}</button></div><div className="companion-button-row"><button disabled={!selectedPreset} onClick={()=>selectedPreset&&updateSelectedPreset({enabled:!selectedPreset.enabled})}>{selectedPreset?.enabled?(zh?'停用':'Disable'):(zh?'启用':'Enable')}</button></div></aside>
+        <div className="companion-preset-content"><div className="companion-view-heading"><div><h4>{presetTab==='components'?(zh?'所选组件':'Selected components'):(zh?'绑定壁纸':'Bound wallpapers')}</h4><small>{zh?'决定此预设包含哪些作品与实例':'Choose the works and instances in this preset'}</small></div><div className="companion-tabs"><button aria-pressed={presetTab==='components'} className={presetTab==='components'?'active':''} onClick={()=>setPresetTab('components')}>{zh?'组件':'Components'}</button><button aria-pressed={presetTab==='hosts'} className={presetTab==='hosts'?'active':''} onClick={()=>setPresetTab('hosts')}>{zh?'壁纸':'Wallpapers'}</button></div></div>
+          {presetTab==='components' ? <>{selectedPreset?.components.map((name,index)=>{const row=componentRows.find(item=>item.name===name);return <div role="button" aria-pressed={selectedPresetItem===name} tabIndex={0} onClick={()=>setSelectedPresetItem(name)} className={'companion-entry'+(selectedPresetItem===name?' selected':'')} key={`${name}-${index}`}><img src={row?.image} alt=""/><div><b>Aurora {name}</b><small>{zh?'实例':'Instance'} 0{index+1} · {zh?'本地项目':'Local project'}</small></div></div>})}<div className="companion-button-row"><button disabled={!selectedPreset||!selectedPreset.components.includes(selectedPresetItem)} onClick={()=>changePresetComponent(selectedPresetItem,false)}>{zh?'移除':'Remove'}</button><button disabled={!selectedPreset||selectedPreset.components.indexOf(selectedPresetItem)<=0} onClick={()=>movePresetComponent(-1)}>{zh?'上移':'Move up'}</button><button disabled={!selectedPreset||selectedPreset.components.indexOf(selectedPresetItem)<0||selectedPreset.components.indexOf(selectedPresetItem)>=selectedPreset.components.length-1} onClick={()=>movePresetComponent(1)}>{zh?'下移':'Move down'}</button><button disabled={!selectedPreset} onClick={addNextComponent}>{zh?'＋ 添加组件':'＋ Add component'}</button></div></> : <>{selectedPreset?.bound&&<div role="button" tabIndex={0} aria-pressed={selectedPresetItem==='host'} className={'companion-entry'+(selectedPresetItem==='host'?' selected':'')} onClick={()=>setSelectedPresetItem('host')}><img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'已绑定到此预设':'Bound to this preset'}</small></div></div>}<button disabled={!selectedPreset} onClick={()=>updateSelectedPreset({bound:!selectedPreset?.bound})}>{selectedPreset?.bound?(zh?'移除壁纸':'Remove wallpaper'):(zh?'＋ 添加壁纸':'＋ Add wallpaper')}</button></>}
+          {presetTab==='components'&&<div className="companion-bound-host"><b>{zh?'绑定壁纸':'Bound wallpaper'}</b>{selectedPreset?.bound?<div role="button" tabIndex={0} className="companion-entry selected" onClick={()=>setPresetTab('hosts')}><img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'当前壁纸':'Current wallpaper'}</small></div></div>:<button onClick={()=>{updateSelectedPreset({bound:true});setPresetTab('hosts')}}>{zh?'＋ 添加壁纸':'＋ Add wallpaper'}</button>}</div>}
         </div>
       </div>}
       {page===2 && <div className="companion-desktop">
-        <section className="companion-runtime"><h4>{zh?'当前壁纸':'Current wallpaper'}</h4><div className="companion-entry selected"><img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'正在运行':'Running'}</small></div><span className="companion-check">●</span></div><h4>{zh?'运行中的组件':'Running components'}</h4>
-          {componentRows.map(({name,image},index)=><div className={'companion-entry'+(name==='Focus'&&!focusOn?' disabled':'')} key={name} onClick={()=>name==='Focus'&&setFocusOn(v=>!v)}><img src={image} alt=""/><div><b>Aurora {name}</b><small>{zh?'实例':'Instance'} 0{index+1} · {focusOn||name!=='Focus'?(zh?'运行中':'Running'):(zh?'已禁用':'Disabled')}</small></div></div>)}
+        <section className="companion-runtime"><h4>{zh?'当前壁纸':'Current wallpaper'}</h4><div role="button" tabIndex={0} className="companion-entry selected" onClick={()=>flash(zh?'当前壁纸已选中':'Current wallpaper selected')}><img src="./works/aurora-scene.png" alt=""/><div><b>BAP Aurora</b><small>{zh?'正在运行':'Running'}</small></div></div><h4>{zh?'运行中的组件':'Running components'}</h4>
+          {componentRows.map(({name,image},index)=><div role="button" tabIndex={0} className={'companion-entry'+(name===selectedDesktopComponent?' selected':'')} key={name} onClick={()=>setSelectedDesktopComponent(name)} onKeyDown={event=>event.key==='Enter'&&setSelectedDesktopComponent(name)}><img src={image} alt=""/><div><b>Aurora {name}</b><small>{zh?'实例':'Instance'} 0{index+1} · {zh?'运行中':'Running'}</small></div></div>)}
         </section>
-        <section className="companion-properties"><h4>{zh?'组件属性':'Component properties'}</h4><p>{zh?'Aurora Focus · 实例 03':'Aurora Focus · Instance 03'}</p><small>{zh?'布局与外观':'Layout and appearance'}</small><label>{zh?'缩放':'Scale'}<input type="range" min="80" max="140" value={scale} onChange={e=>setScale(Number(e.target.value))}/><em>{scale}%</em></label><label>{zh?'透明度':'Opacity'}<input type="range" min="35" max="100" value={opacity} onChange={e=>setOpacity(Number(e.target.value))}/><em>{opacity}%</em></label><label>{zh?'位置 X':'Position X'}<input type="range" min="0" max="100" defaultValue="50"/><em>50%</em></label><label>{zh?'位置 Y':'Position Y'}<input type="range" min="0" max="100" defaultValue="50"/><em>50%</em></label></section>
+        <section className="companion-properties"><h4>{zh?'组件属性':'Component properties'}</h4><p>Aurora {selectedDesktopComponent} · {zh?'实例':'Instance'} 0{componentRows.findIndex(item=>item.name===selectedDesktopComponent)+1}</p><small>{zh?'布局与外观':'Layout and appearance'}</small><label>{zh?'缩放':'Scale'}<input type="range" min="80" max="140" value={scale} onChange={e=>setScale(Number(e.target.value))}/><em>{scale}%</em></label><label>{zh?'透明度':'Opacity'}<input type="range" min="35" max="100" value={opacity} onChange={e=>setOpacity(Number(e.target.value))}/><em>{opacity}%</em></label><label>{zh?'位置 X':'Position X'}<input type="range" min="0" max="100" value={layoutX} onChange={e=>setLayoutX(Number(e.target.value))}/><em>{layoutX}%</em></label><label>{zh?'位置 Y':'Position Y'}<input type="range" min="0" max="100" value={layoutY} onChange={e=>setLayoutY(Number(e.target.value))}/><em>{layoutY}%</em></label></section>
       </div>}
     </div>
   </div>
@@ -115,7 +164,6 @@ export default function Scrollytelling({ lang = 'zh' }) {
   const [scenePhase, setScenePhase] = useState(0)
   const [focusOn, setFocusOn] = useState(true)
   const [focusMoved, setFocusMoved] = useState(false)
-  const [presetName, setPresetName] = useState('')
   const [scale, setScale] = useState(112)
   const [opacity, setOpacity] = useState(82)
   const refs = useRef([])
@@ -219,7 +267,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
           </div>
         </div>
         <div className={'story-miniworks' + (act === 1 ? ' visible' : '')}><span>INDEPENDENT WORKS</span><div><img src="./works/aurora-clock.png" alt=""/><img src="./works/aurora-calendar.png" alt=""/><img src="./works/aurora-focus.png" alt=""/></div><small>Aurora Clock · Calendar · Focus</small></div>
-        <CompanionPanel act={act} phase={scenePhase} zh={zh} focusOn={focusOn} setFocusOn={setFocusOn} presetName={presetName} scale={scale} setScale={setScale} opacity={opacity} setOpacity={setOpacity}/>
+        <CompanionPanel act={act} phase={scenePhase} zh={zh} scale={scale} setScale={setScale} opacity={opacity} setOpacity={setOpacity}/>
       </div>
       <div className="story-progress" aria-hidden="true"><span style={{transform:`scaleX(${(act + 1) / acts.length})`}}/></div>
     </div>

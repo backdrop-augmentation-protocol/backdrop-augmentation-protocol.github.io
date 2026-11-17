@@ -947,9 +947,9 @@ html.en .zh { display: none; }
 .story-control.act-3 .control-brand div {min-width:0;display:grid;gap:3px;}
 .story-control.act-3 .control-brand small {font-size:.82em;color:#9ab0d0;font-weight:400;}
 .story-control.act-3 .control-nav {display:grid;gap:4px;}
+.story-control.act-3 .control-nav {pointer-events:none;user-select:none;}
 .story-control.act-3 .control-nav>div {display:flex;align-items:center;gap:9%;padding:4% 7%;border-radius:8px;color:#9ab0d0;white-space:nowrap;}
 .story-control.act-3 .control-nav>div.selected {background:#143961;color:#eaf3ff;}
-.story-control.act-3 .control-nav>div i {width:1.2em;color:#22d3ff;font-size:1.1em;font-style:normal;text-align:center;}
 .story-control.act-3 .control-status {display:grid;gap:7px;margin-top:auto;padding:9%;border:1px solid #284572;border-radius:10px;background:linear-gradient(135deg,#102b61,#33225e);}
 .story-control.act-3 .control-status>b {color:#22d3ff;font-size:1.1em;}
 .story-control.act-3 .control-status>small {color:#9ab0d0;font-size:.82em;}
@@ -993,7 +993,6 @@ html.en .zh { display: none; }
 .story-control.act-3 .companion-view-heading small {color:#9ab0d0;font-size:.78em;}
 .story-control.act-3 .companion-tabs {display:flex;gap:5px;}
 .story-control.act-3 .companion-tabs>* {padding:.55em .9em;border-radius:7px;color:#9ab0d0;}
-.story-control.act-3 .companion-tabs>b {background:#1a6bff;color:#fff;}
 .story-control.act-3 .companion-preset-content>.companion-entry {flex:1;min-height:0;}
 .story-control.act-3 .companion-check {color:#22d3ff;font-weight:700;}
 .story-control.act-3 .companion-bound-host {margin-top:auto;padding-top:1%;border-top:1px solid #284572;}
@@ -1009,6 +1008,16 @@ html.en .zh { display: none; }
 .story-control.act-3 .companion-runtime .companion-entry.disabled {opacity:.42;}
 .story-control.act-3 .companion-more-mobile {display:none;}
 .story-control.act-3 .story-control__foot {display:none;}
+.story-control.act-3 button {cursor:pointer;transition:filter .16s ease,transform .16s ease,border-color .16s ease;}
+.story-control.act-3 button:hover:not(:disabled) {filter:brightness(1.16);border-color:#4a79b9;}
+.story-control.act-3 button:active:not(:disabled) {transform:translateY(1px);}
+.story-control.act-3 button:disabled {opacity:.45;cursor:default;}
+.story-control.act-3 .companion-entry[role="button"],.story-control.act-3 .preset-entry[role="button"] {cursor:pointer;transition:background .16s ease,border-color .16s ease;}
+.story-control.act-3 .companion-entry[role="button"]:hover,.story-control.act-3 .preset-entry[role="button"]:hover {border-color:#397cb6;background:#10274a;}
+.story-control.act-3 .companion-tabs>button {border:1px solid #284572;background:transparent;color:#9ab0d0;}
+.story-control.act-3 .companion-tabs>button.active {background:#1a6bff;border-color:#477eff;color:#fff;}
+.story-control.act-3 .companion-properties input {cursor:pointer;}
+.story-control.act-3 .companion-preset-list input {min-width:0;width:100%;padding:.55em;border:1px solid #397cb6;border-radius:6px;background:#0a1c3b;color:#eaf3ff;font:inherit;}
 @media(max-width:560px) {
   .story-control.act-3 {width:96%;left:2%;aspect-ratio:1.45;max-height:94%;font-size:8px;}
   .story-control.act-3 .story-control__sidebar {padding:6% 5%;}
