@@ -16,6 +16,9 @@ const futureWorks = [
 ]
 
 const maxScenePhase = actIndex => actIndex === 0 ? 3 : actIndex >= 1 && actIndex <= 3 ? 2 : 0
+const storyBoundaryHoldMs = 900
+const storyWheelCooldownMs = 820
+const storyTouchCooldownMs = 560
 
 const storyAnchorY = root => {
   if (window.innerWidth <= 900) return window.innerHeight / 2
@@ -300,7 +303,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
     const root = storyRef.current
     if (!root) return
     const storySection = root.closest('#story') ?? root
-    const moveScene = direction => {
+    const moveScene = (direction, input = 'wheel') => {
       const { act: currentAct, phase } = sceneRef.current
       const maxPhase = maxScenePhase(currentAct)
       const atBoundary = direction < 0
@@ -308,12 +311,13 @@ export default function Scrollytelling({ lang = 'zh' }) {
         : currentAct === refs.current.length - 1 && phase === maxPhase
       if (atBoundary) {
         const now = performance.now()
-        if (now - lastInputRef.current >= 900) return false
+        if (now - lastInputRef.current >= storyBoundaryHoldMs) return false
         lastInputRef.current = now
         return true
       }
       if (actTransitionRef.current) return true
-      if (performance.now() - lastInputRef.current < 820) return true
+      const cooldown = input === 'touch' ? storyTouchCooldownMs : storyWheelCooldownMs
+      if (performance.now() - lastInputRef.current < cooldown) return true
       const nextPhase = phase + direction
       lastInputRef.current = performance.now()
       if (nextPhase >= 0 && nextPhase <= maxPhase) {
@@ -349,7 +353,10 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const distance = touchStartRef.current - event.touches[0].clientY
       const { act: currentAct, phase } = sceneRef.current
       const maxPhase = maxScenePhase(currentAct)
-      const hasScene = distance > 0 ? currentAct < 4 : currentAct > 0 && (phase > 0 || currentAct > 0)
+      const holdingBoundary = performance.now() - lastInputRef.current < storyBoundaryHoldMs
+      const hasScene = distance > 0
+        ? currentAct < 4 || currentAct === refs.current.length - 1 && phase === maxPhase && holdingBoundary
+        : currentAct > 0 || phase > 0 || currentAct === 0 && phase === 0 && holdingBoundary
       if (hasScene && Math.abs(distance) > 48) event.preventDefault()
     }
     const onTouchEnd = event => {
@@ -357,7 +364,7 @@ export default function Scrollytelling({ lang = 'zh' }) {
       const end = event.changedTouches[0]?.clientY
       const delta = end === undefined ? 0 : touchStartRef.current - end
       touchStartRef.current = null
-      if (Math.abs(delta) > 48) moveScene(Math.sign(delta))
+      if (Math.abs(delta) > 48) moveScene(Math.sign(delta),'touch')
     }
     window.addEventListener('wheel', onWheel, { passive: false, capture: true })
     root.addEventListener('touchstart', onTouchStart, { passive: true })
@@ -466,7 +473,8 @@ export function QuickStartStory({ lang = 'zh', companionUrl }) {
   const stepRefs = useRef([])
   useEffect(() => {
     if (route !== 'wallpaper') return
-    const frame = requestAnimationFrame(() => stepRefs.current[0]?.scrollIntoView({ behavior:'smooth', block:'center' }))
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+    const frame = requestAnimationFrame(() => stepRefs.current[0]?.scrollIntoView({ behavior, block:'center' }))
     let frameId = 0
     const updateStep = () => {
       cancelAnimationFrame(frameId)
