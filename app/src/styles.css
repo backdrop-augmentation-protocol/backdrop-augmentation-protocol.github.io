@@ -1399,3 +1399,53 @@ html.en .zh { display: none; }
   .story-control.act-3 { width:96%;left:2%;max-height:94%;font-size:clamp(7px,1cqw,10px); }
   .story-control.act-3 .companion-entry>img { width:17%; }
 }
+
+/* Keep Companion controls, hit areas and spacing in step with its real UI scale. */
+.story-control.act-3 {
+  --companion-stroke:max(1px,.07em);
+  --companion-panel-radius:.86em;
+  --companion-control-radius:.56em;
+  --companion-card-radius:.5em;
+  --companion-gap-xs:.25em;
+  --companion-gap-sm:.4em;
+  --companion-gap-md:.6em;
+  box-shadow:0 .9cqw 2.6cqw #02091399;
+}
+.story-control.act-3 .story-control__title,
+.story-control.act-3 .companion-catalog,
+.story-control.act-3 .companion-detail,
+.story-control.act-3 .companion-preset-list,
+.story-control.act-3 .companion-preset-content,
+.story-control.act-3 .companion-runtime,
+.story-control.act-3 .companion-properties { border-width:var(--companion-stroke);border-radius:var(--companion-panel-radius); }
+.story-control.act-3 .control-banner { border-width:var(--companion-stroke);border-radius:var(--companion-panel-radius); }
+.story-control.act-3 .companion-entry,
+.story-control.act-3 .preset-entry { border-width:var(--companion-stroke);border-radius:var(--companion-card-radius); }
+.story-control.act-3 .companion-entry>img,
+.story-control.act-3 .companion-detail>img { border-radius:var(--companion-gap-xs); }
+.story-control.act-3 button { border-width:var(--companion-stroke);border-radius:var(--companion-control-radius);padding:.625em 1.06em;min-height:2.2em;line-height:1.1; }
+.story-control.act-3 .control-nav { gap:var(--companion-gap-xs); }
+.story-control.act-3 .control-nav>div { min-height:2.75em;border-radius:var(--companion-control-radius); }
+.story-control.act-3 .control-status { gap:var(--companion-gap-sm);border-width:var(--companion-stroke);border-radius:var(--companion-panel-radius); }
+.story-control.act-3 .companion-catalog h4,
+.story-control.act-3 .companion-detail h4,
+.story-control.act-3 .companion-preset-list h4,
+.story-control.act-3 .companion-preset-content h4,
+.story-control.act-3 .companion-runtime h4,
+.story-control.act-3 .companion-properties h4 { gap:var(--companion-gap-sm); }
+.story-control.act-3 .companion-tabs { gap:var(--companion-gap-sm); }
+.story-control.act-3 .companion-tabs>button,
+.story-control.act-3 .companion-preset-actions button,
+.story-control.act-3 .companion-preset-row button { border-radius:var(--companion-control-radius);min-height:2.2em; }
+.story-control.act-3 .companion-preset-actions { gap:var(--companion-gap-sm);padding-top:var(--companion-gap-md); }
+.story-control.act-3 .companion-preset-actions>div { gap:var(--companion-gap-sm); }
+.story-control.act-3 .companion-preset-row { gap:var(--companion-gap-sm); }
+.story-control.act-3 .companion-preset-bottom { gap:var(--companion-gap-sm); }
+.story-control.act-3 .companion-property-row { column-gap:var(--companion-gap-sm);row-gap:var(--companion-gap-xs); }
+.story-control.act-3 .companion-property-row button { width:1.8em;height:1.8em;min-height:1.8em;padding:0;border-radius:.4em; }
+.story-control.act-3 .companion-select-field select,
+.story-control.act-3 .companion-preset-list input { border-width:var(--companion-stroke);border-radius:var(--companion-control-radius); }
+.story-control.act-3 .companion-color-button i { border-radius:.3em; }
+.story-control.act-3 .companion-properties input[type="range"] { height:1.2em;margin:.25em 0; }
+.story-control.act-3 .companion-properties input[type="range"]::-webkit-slider-runnable-track { height:.22em;border-radius:1em; }
+.story-control.act-3 .companion-properties input[type="range"]::-webkit-slider-thumb { width:1em;height:1em;margin-top:-.39em;border-radius:50%; }
