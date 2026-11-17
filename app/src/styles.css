@@ -1372,3 +1372,30 @@ html.en .zh { display: none; }
 .story-desktop .demo-time-widget small { font-size:clamp(5px,1.2cqw,10px); }
 .story-desktop .demo-time-widget strong { font-size:clamp(8px,3.2cqw,80px); }
 .story-desktop .demo-time-widget span { font-size:clamp(6px,1.6cqw,16px); }
+
+/* Companion previews scale from the real desktop window proportions. */
+.story-control.act-3,.quickstart__visual--panel .story-control { aspect-ratio:1.54; }
+.story-control.act-3 { max-height:99%;border-radius:clamp(4px,1.2cqw,16px);font-size:clamp(7px,1cqw,16px); }
+.story-control.act-3 .story-control__title { font-size:clamp(7px,1.3cqw,16px); }
+.story-control.act-3 .control-brand { font-size:clamp(7px,1.15cqw,15px); }
+.story-control.act-3 .control-nav { font-size:clamp(6px,.85cqw,13px); }
+.story-control.act-3 .control-status { font-size:clamp(7px,.9cqw,14px); }
+.story-control.act-3 .control-status>small { font-size:.78em; }
+.story-control.act-3 .control-banner { gap:1.2cqw; }
+.story-control.act-3 .control-banner strong { font-size:clamp(5px,1.6cqw,24px); }
+.story-control.act-3 .control-banner small { font-size:.8em; }
+.story-control.act-3 .companion-entry>img { width:26%; }
+.story-control.act-3 .companion-entry>div { gap:.35cqw; }
+.story-control.act-3 .companion-entry b { font-size:.92em; }
+.story-control.act-3 .companion-entry small,.story-control.act-3 .companion-detail span { font-size:.78em; }
+.story-control.act-3 .companion-catalog h4,.story-control.act-3 .companion-detail h4,.story-control.act-3 .companion-preset-list h4,.story-control.act-3 .companion-preset-content h4,.story-control.act-3 .companion-runtime h4,.story-control.act-3 .companion-properties h4 { font-size:1.1em; }
+.story-control.act-3 .companion-tabs,.story-control.act-3 .companion-preset-items,.story-control.act-3 .companion-preset-bottom,.story-control.act-3 .companion-preset-row { gap:.7cqw; }
+.story-control.act-3 .companion-preset-actions button,.story-control.act-3 .companion-preset-row button { font-size:.78em; }
+.story-control.act-3 .companion-property-row { font-size:.76em; }
+.story-control.act-3 .companion-select-field,.story-control.act-3 .companion-toggle-field { font-size:.8em; }
+.story-control.act-3 .companion-preset-bottom>small { font-size:.72em; }
+@media(max-width:560px) {
+  .story-control.act-3,.quickstart__visual--panel .story-control { aspect-ratio:1.54; }
+  .story-control.act-3 { width:96%;left:2%;max-height:94%;font-size:clamp(7px,1cqw,10px); }
+  .story-control.act-3 .companion-entry>img { width:17%; }
+}
