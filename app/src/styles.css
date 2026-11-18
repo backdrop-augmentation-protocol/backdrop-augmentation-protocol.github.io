@@ -1596,6 +1596,7 @@ html.en .zh { display: none; }
 .story-frame .mobile-daybreak-still,
 .story-frame .mobile-demo-still,
 .story-frame .mobile-companion-still,
+.quickstart__visual--workshop .mobile-workshop-still,
 .quickstart__visual--panel .mobile-companion-still { display:none; }
 @media (max-width:560px) {
   .story-frame .story-widget--calendar { width:34%; }
@@ -1610,6 +1611,8 @@ html.en .zh { display: none; }
   .story-third-works>.demo-time-widget,
   .story-frame.act-3>.story-control,
   .quickstart__visual--panel .story-control { display:none; }
+  .quickstart__visual--workshop .steam-workshop { display:none; }
+  .quickstart__visual--workshop .mobile-workshop-still { display:block;width:94%;height:auto;max-height:94%;object-fit:contain; }
   .story-frame .mobile-component-still { display:block;width:100%;height:auto; }
   .story-third-works__daybreak .mobile-daybreak-still { display:block;position:absolute;width:48%;height:auto; }
   .mobile-daybreak-still--progress { left:3%;top:5%; }
