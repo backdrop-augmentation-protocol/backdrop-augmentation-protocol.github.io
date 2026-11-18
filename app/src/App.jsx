@@ -191,9 +191,9 @@ export default function App() {
             <p className="kicker"><T zh="真实作品" en="Showcase" /></p>
             <h2><T zh="看看组合能做什么" en="See what combining looks like" /></h2>
             <p className="sec-lead">
-              <span className="zh">Aurora 首批官方作品现已进入发行准备。作品将独立发布；目前尚未开放 Workshop 订阅。</span>
-              <span className="en">The first official Aurora works are preparing for release. Each work will be published independently; Workshop subscriptions are not available yet.</span>
-            </p>
+            <span className="zh">Aurora 系列的四件官方作品，均可点击下方链接查看。</span>
+            <span className="en">Explore the four official Aurora works on Steam Workshop.</span>
+          </p>
           </header>
 
           <div className="cards">
@@ -201,50 +201,54 @@ export default function App() {
               <div className="card__preview card__preview--a card__preview--image">
                 <img src="./works/aurora-scene.png" alt="BAP Aurora blue and violet northern lights" />
                 <span className="card__tag">BAP Aurora · Host</span>
-                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
+
               </div>
               <div className="card__body">
                 <h3>BAP Aurora</h3>
                 <p><span className="zh">青蓝与紫色光流在深蓝夜幕中缓缓移动。一张完整的动态壁纸，也是一切组合的起点。</span><span className="en">Blue and violet light moves across the night. A complete wallpaper, and the starting point for every composition.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3839632948" target="_blank" rel="noopener noreferrer"><T zh="查看创意工坊页面 →" en="View Workshop page →" /></a>
               </div>
             </article>
             <article className="card reveal">
               <div className="card__preview card__preview--b card__preview--image">
                 <img src="./works/aurora-clock.png" alt="Official BAP Aurora Clock preview" />
                 <span className="card__tag">BAP Aurora Clock</span>
-                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
+
               </div>
               <div className="card__body">
                 <h3><span className="zh">独立时钟组件</span><span className="en">An independent clock component</span></h3>
                 <p><span className="zh">可单独运行，也可加入兼容的 Host。采用清晰克制的 Aurora 视觉语言。</span><span className="en">Runs on its own or joins a compatible host, in Aurora’s calm visual language.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3840042528" target="_blank" rel="noopener noreferrer"><T zh="查看创意工坊页面 →" en="View Workshop page →" /></a>
               </div>
             </article>
             <article className="card reveal">
               <div className="card__preview card__preview--c card__preview--image">
                 <img src="./works/aurora-calendar.png" alt="Official BAP Aurora Calendar preview" />
                 <span className="card__tag">BAP Aurora Calendar</span>
-                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
+
               </div>
               <div className="card__body">
                 <h3><span className="zh">一眼掌握日期</span><span className="en">Your calendar at a glance</span></h3>
                 <p><span className="zh">独立运行的交互式日历，可加入兼容 Host，并按自己的桌面布局调整。</span><span className="en">An interactive calendar that runs independently, joins compatible hosts and fits your layout.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3839650362" target="_blank" rel="noopener noreferrer"><T zh="查看创意工坊页面 →" en="View Workshop page →" /></a>
               </div>
             </article>
             <article className="card reveal">
               <div className="card__preview card__preview--c card__preview--image">
                 <img src="./works/aurora-focus.png" alt="Official BAP Aurora Focus preview" />
                 <span className="card__tag">BAP Aurora Focus</span>
-                <span className="card__badge"><T zh="待发布" en="Coming soon" /></span>
+
               </div>
               <div className="card__body">
                 <h3><span className="zh">留出专注时间</span><span className="en">Make room to focus</span></h3>
                 <p><span className="zh">独立专注计时器，可按习惯选择时长，并搭配兼容的动态壁纸。</span><span className="en">An independent focus timer with flexible sessions, ready to join a compatible wallpaper.</span></p>
+                <a className="card__link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3840056290" target="_blank" rel="noopener noreferrer"><T zh="查看创意工坊页面 →" en="View Workshop page →" /></a>
               </div>
             </article>
           </div>
           <p className="showcase__foot">
-            <span className="zh">Aurora 全系列仍在发行准备中，开放订阅后即可在此找到作品入口。</span>
-            <span className="en">The Aurora collection is preparing for release. Work links will be available here when subscriptions open.</span>
+            <span className="zh">点击作品卡片中的链接，可打开对应的 Steam 创意工坊页面。</span>
+            <span className="en">Use the links on each card to open its Steam Workshop page.</span>
           </p>
         </div>
       </section>
