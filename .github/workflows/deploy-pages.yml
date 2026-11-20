@@ -1,0 +1,52 @@
+name: Deploy BAP website
+
+on:
+  repository_dispatch:
+    types: [bap_companion_release_published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Companion release tag to sync (leave blank for the latest published release)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - uses: actions/configure-pages@v5
+      - name: Sync Companion release metadata
+        working-directory: app
+        env:
+          BAP_COMPANION_RELEASE_TAG: ${{ github.event.client_payload.tag || inputs.release_tag || '' }}
+        run: npm run sync:companion-release
+      - name: Install website dependencies
+        working-directory: app
+        run: npm ci
+      - name: Build website
+        working-directory: app
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: app/dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
