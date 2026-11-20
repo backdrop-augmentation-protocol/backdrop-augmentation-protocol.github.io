@@ -51,7 +51,7 @@ export default function CompanionDownloadPage({ lang, onToggleLanguage }) {
           </a>
           <a className="btn outline" href={release.releaseUrl} target="_blank" rel="noopener noreferrer"><T zh="查看发行说明" en="Release notes" /> ↗</a>
         </div>
-        <p className="companion-release__requirement"><T zh="运行要求：需安装 .NET 10 Desktop Runtime。" en="Requirement: .NET 10 Desktop Runtime." /></p>
+        <p className="companion-release__requirement"><T zh="无需单独安装 .NET Runtime。" en="No separate .NET runtime installation is required." /></p>
         {release.asset.sha256 && <details className="companion-release__checksum">
           <summary><T zh="校验下载文件" en="Verify download" /></summary>
           <code>SHA-256: {release.asset.sha256}</code>

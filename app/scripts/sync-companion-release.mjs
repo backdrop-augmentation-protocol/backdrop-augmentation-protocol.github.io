@@ -2,7 +2,11 @@ import { writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 
 const releasesUrl = 'https://api.github.com/repos/backdrop-augmentation-protocol/companion/releases?per_page=100'
-const response = await fetch(releasesUrl, {
+const requestedTag = process.env.BAP_COMPANION_RELEASE_TAG?.trim()
+const releaseUrl = requestedTag
+  ? `https://api.github.com/repos/backdrop-augmentation-protocol/companion/releases/tags/${encodeURIComponent(requestedTag)}`
+  : releasesUrl
+const response = await fetch(releaseUrl, {
   headers: {
     Accept: 'application/vnd.github+json',
     'User-Agent': 'BAP-website-release-sync'
@@ -13,7 +17,8 @@ if (!response.ok) {
   throw new Error(`GitHub release lookup failed (${response.status})`)
 }
 
-const releases = await response.json()
+const releaseData = await response.json()
+const releases = Array.isArray(releaseData) ? releaseData : [releaseData]
 const release = releases.find(item => !item.draft && item.published_at && item.assets.some(asset =>
   /^bap-companion-v\d+\.\d+\.\d+-win-x64\.zip$/i.test(asset.name)
 ))

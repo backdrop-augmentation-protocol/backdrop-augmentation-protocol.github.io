@@ -1,14 +1,14 @@
 {
-  "version": "0.2.1",
-  "tag": "v0.2.1",
-  "name": "BAP Companion v0.2.1 - Experimental Preview",
-  "releaseUrl": "https://github.com/backdrop-augmentation-protocol/companion/releases/tag/v0.2.1",
-  "publishedAt": "2026-11-14T14:33:47Z",
+  "version": "0.2.2",
+  "tag": "v0.2.2",
+  "name": "BAP Companion v0.2.2 - Experimental Preview",
+  "releaseUrl": "https://github.com/backdrop-augmentation-protocol/companion/releases/tag/v0.2.2",
+  "publishedAt": "2026-11-20T01:52:26Z",
   "prerelease": true,
   "asset": {
-    "name": "bap-companion-v0.2.1-win-x64.zip",
-    "downloadUrl": "https://github.com/backdrop-augmentation-protocol/companion/releases/download/v0.2.1/bap-companion-v0.2.1-win-x64.zip",
-    "size": 2526223,
-    "sha256": "55f0d6afbca2b7299ee90feb9130f79017441b48c37a46f63685249c87e51457"
+    "name": "bap-companion-v0.2.2-win-x64.zip",
+    "downloadUrl": "https://github.com/backdrop-augmentation-protocol/companion/releases/download/v0.2.2/bap-companion-v0.2.2-win-x64.zip",
+    "size": 124534182,
+    "sha256": "774b855833235453e10553de040424d75c4aef935d9c52f3f35f1654fe8e620a"
   }
 }
